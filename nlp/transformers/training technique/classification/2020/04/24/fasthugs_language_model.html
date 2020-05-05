@@ -1,0 +1,2075 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1"><!-- Begin Jekyll SEO tag v2.6.1 -->
+<title>FastHugs: Language Modelling with Tranformers and Fastai | ntentional</title>
+<meta name="generator" content="Jekyll v4.0.0" />
+<meta property="og:title" content="FastHugs: Language Modelling with Tranformers and Fastai" />
+<meta name="author" content="Morgan McGuire" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Train a transformer language model from scratch or fine-tune a pretrained one using fastai and Huggingface." />
+<meta property="og:description" content="Train a transformer language model from scratch or fine-tune a pretrained one using fastai and Huggingface." />
+<link rel="canonical" href="https://www.ntentional.com/nlp/transformers/training%20technique/classification/2020/04/24/fasthugs_language_model.html" />
+<meta property="og:url" content="https://www.ntentional.com/nlp/transformers/training%20technique/classification/2020/04/24/fasthugs_language_model.html" />
+<meta property="og:site_name" content="ntentional" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2020-04-24T00:00:00-05:00" />
+<script type="application/ld+json">
+{"author":{"@type":"Person","name":"Morgan McGuire"},"description":"Train a transformer language model from scratch or fine-tune a pretrained one using fastai and Huggingface.","@type":"BlogPosting","headline":"FastHugs: Language Modelling with Tranformers and Fastai","dateModified":"2020-04-24T00:00:00-05:00","datePublished":"2020-04-24T00:00:00-05:00","url":"https://www.ntentional.com/nlp/transformers/training%20technique/classification/2020/04/24/fasthugs_language_model.html","mainEntityOfPage":{"@type":"WebPage","@id":"https://www.ntentional.com/nlp/transformers/training%20technique/classification/2020/04/24/fasthugs_language_model.html"},"@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+<link rel="stylesheet" href="/assets/css/style.css"><link type="application/atom+xml" rel="alternate" href="https://www.ntentional.com/feed.xml" title="ntentional" /><link rel="shortcut icon" type="image/x-icon" href="/images/favicon.ico"><!-- Begin Jekyll SEO tag v2.6.1 -->
+<title>FastHugs: Language Modelling with Tranformers and Fastai | ntentional</title>
+<meta name="generator" content="Jekyll v4.0.0" />
+<meta property="og:title" content="FastHugs: Language Modelling with Tranformers and Fastai" />
+<meta name="author" content="Morgan McGuire" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Train a transformer language model from scratch or fine-tune a pretrained one using fastai and Huggingface." />
+<meta property="og:description" content="Train a transformer language model from scratch or fine-tune a pretrained one using fastai and Huggingface." />
+<link rel="canonical" href="https://www.ntentional.com/nlp/transformers/training%20technique/classification/2020/04/24/fasthugs_language_model.html" />
+<meta property="og:url" content="https://www.ntentional.com/nlp/transformers/training%20technique/classification/2020/04/24/fasthugs_language_model.html" />
+<meta property="og:site_name" content="ntentional" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2020-04-24T00:00:00-05:00" />
+<script type="application/ld+json">
+{"author":{"@type":"Person","name":"Morgan McGuire"},"description":"Train a transformer language model from scratch or fine-tune a pretrained one using fastai and Huggingface.","@type":"BlogPosting","headline":"FastHugs: Language Modelling with Tranformers and Fastai","dateModified":"2020-04-24T00:00:00-05:00","datePublished":"2020-04-24T00:00:00-05:00","url":"https://www.ntentional.com/nlp/transformers/training%20technique/classification/2020/04/24/fasthugs_language_model.html","mainEntityOfPage":{"@type":"WebPage","@id":"https://www.ntentional.com/nlp/transformers/training%20technique/classification/2020/04/24/fasthugs_language_model.html"},"@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+
+<link href="https://unpkg.com/@primer/css/dist/primer.css" rel="stylesheet" />
+<link rel="stylesheet" href="//use.fontawesome.com/releases/v5.0.7/css/all.css"><link type="application/atom+xml" rel="alternate" href="https://www.ntentional.com/feed.xml" title="ntentional" />
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js"></script>
+<script type="text/javascript">
+require.config({
+  paths: {
+    jquery: 'https://code.jquery.com/jquery-3.5.0.min',
+    plotly: 'https://cdn.plot.ly/plotly-latest.min'
+  },
+
+  shim: {
+    plotly: {
+      deps: ['jquery'],
+      exports: 'plotly'
+    }
+  }
+});
+</script>
+
+<script>
+function wrap_img(fn) {
+    if (document.attachEvent ? document.readyState === "complete" : document.readyState !== "loading") {
+        var elements = document.querySelectorAll(".post img");
+        Array.prototype.forEach.call(elements, function(el, i) {
+            if (el.getAttribute("title") && (el.className != "emoji")) {
+                const caption = document.createElement('figcaption');
+                var node = document.createTextNode(el.getAttribute("title"));
+                caption.appendChild(node);
+                const wrapper = document.createElement('figure');
+                wrapper.className = 'image';
+                el.parentNode.insertBefore(wrapper, el);
+                el.parentNode.removeChild(el);
+                wrapper.appendChild(el);
+                wrapper.appendChild(caption);
+            }
+        });
+    } else { document.addEventListener('DOMContentLoaded', fn); }
+}
+window.onload = wrap_img;
+</script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function(){
+    // add link icon to anchor tags
+    var elem = document.querySelectorAll(".anchor-link")
+    elem.forEach(e => (e.innerHTML = '<i class="fas fa-link fa-xs"></i>'));
+    });
+</script>
+</head><body><header class="site-header">
+
+  <div class="wrapper"><a class="site-title" rel="author" href="/">ntentional</a><nav class="site-nav">
+        <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+        <label for="nav-trigger">
+          <span class="menu-icon">
+            <svg viewBox="0 0 18 15" width="18px" height="15px">
+              <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"/>
+            </svg>
+          </span>
+        </label>
+
+        <div class="trigger"><a class="page-link" href="/about/">About Me</a><a class="page-link" href="/search/">Search</a><a class="page-link" href="/categories/">Tags</a></div>
+      </nav></div>
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title p-name" itemprop="name headline">FastHugs: Language Modelling with Tranformers and Fastai</h1><p class="page-description">Train a transformer language model from scratch or fine-tune a pretrained one using fastai and Huggingface.</p><p class="post-meta post-meta-title"><time class="dt-published" datetime="2020-04-24T00:00:00-05:00" itemprop="datePublished">
+        Apr 24, 2020
+      </time>• 
+          <span itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <span class="p-author h-card" itemprop="name">Morgan McGuire</span></span>
+       • <span class="read-time" title="Estimated read time">
+    
+    
+      35 min read
+    
+</span></p>
+
+    
+      <p class="category-tags"><i class="fas fa-tags category-tags-icon"></i></i> 
+      
+        <a class="category-tags-link" href="/categories/#NLP">NLP</a>
+        &nbsp;
+      
+        <a class="category-tags-link" href="/categories/#transformers">transformers</a>
+        &nbsp;
+      
+        <a class="category-tags-link" href="/categories/#training technique">training technique</a>
+        &nbsp;
+      
+        <a class="category-tags-link" href="/categories/#classification">classification</a>
+        
+      
+      </p>
+    
+
+    
+      
+        <div class="pb-5 d-flex flex-wrap flex-justify-end">
+          <div class="px-2">
+
+    <a href="https://github.com/morganmcg1/ntentional/tree/master/_notebooks/2020-04-24-fasthugs_language_model.ipynb" role="button" target="_blank">
+<img class="notebook-badge-image" src="/assets/badges/github.svg" alt="View On GitHub">
+    </a>
+</div>
+
+          <div class="px-2">
+    <a href="https://mybinder.org/v2/gh/morganmcg1/ntentional/master?filepath=_notebooks%2F2020-04-24-fasthugs_language_model.ipynb" target="_blank">
+        <img class="notebook-badge-image" src="/assets/badges/binder.svg" alt="Open In Binder"/>
+    </a>
+</div>
+
+          <div class="px-2">
+    <a href="https://colab.research.google.com/github/morganmcg1/ntentional/blob/master/_notebooks/2020-04-24-fasthugs_language_model.ipynb" target="_blank">
+        <img class="notebook-badge-image" src="/assets/badges/colab.svg" alt="Open In Colab"/>
+    </a>
+</div>
+        </div>
+      </header>
+
+  <div class="post-content e-content" itemprop="articleBody">
+    <!--
+#################################################
+### THIS FILE WAS AUTOGENERATED! DO NOT EDIT! ###
+#################################################
+# file to edit: _notebooks/2020-04-24-fasthugs_language_model.ipynb
+-->
+
+<div class="container" id="notebook-container">
+        
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>This aims to be an end-to-end description with code of how to train a transformer language model using fastai (v2) and HuggingFace, enjoy!</p>
+<h2 id="TL;DR">TL;DR<a class="anchor-link" href="#TL;DR"> </a></h2><p>Main interesting bits in this notebook:</p>
+<ul>
+<li>Provides full code to train a transformer (RoBERTa) using a Masked Language Model task</li>
+<li>Utilise's many of HuggingFace's tokenizer features within fastai</li>
+<li>Make predictions of masked tokens like this:</li>
+</ul>
+<p><img src="/images/copied_from_nb/my_icons/fastai_logo.png" alt="image" title="RoBERTa" /></p>
+<h2 id="Before-we-get-started">Before we get started<a class="anchor-link" href="#Before-we-get-started"> </a></h2><ul>
+<li>First off, huge thanks as always to both the Fastai and HuggingFace teams for giving so much back to the community by open-sourcing so much</li>
+<li><p>For an example of <strong>text sequence classification</strong> using HuggingFace and fastai, have a look at my previous notebook <a href="https://github.com/morganmcg1/fasthugs/blob/master/fasthugs_seq_classification.ipynb"><strong>here</strong></a></p>
+</li>
+<li><p>This tutorial is heavily based on HuggingFace's <a href="https://huggingface.co/blog/how-to-train">"How to train a new language model from scratch using Transformers and Tokenizers"</a>  tutorial, I highly recommend checking that out too. I try and highlight throughout where code has been used, borrowed or inspired by HuggingFace's code.</p>
+</li>
+</ul>
+<h2 id="MLM-Tranform">MLM Tranform<a class="anchor-link" href="#MLM-Tranform"> </a></h2><p>I feel the most useful thing in this notebook is the <code>MLMTokensLabels</code> transform*. This carries out the Masked Language Model task that RoBERTa was originally trained on.</p>
+<p>This will take tokens ids (tokens after the have been numericalized), select a subset and either mask a certain amount of them (for prediction) or replace them with other random token ids (for regularisation). This transform also creates our labels by copying the input token ids and masking the tokens that do <strong>not</strong> need to be predicted, so that no loss is calculated on them.</p>
+<p>Note the if you wish to train BERT or other transformer language models you will probably need to use a different task, e.g. BERT was trained on 2 tasks simultaneously, MLM and Next Sentence Prediction (NSP). Have a look at any blog posts or arxiv paper of the transformer of interest to find which task was used to pretrain it.</p>
+<p>*This transform code is a re-write of the <code>mask_tokens</code> function used in HugginFace's tutorial, <a href="https://github.com/huggingface/transformers/blob/a21d4fa410dc3b4c62f93aa0e6bbe4b75a101ee9/examples/run_language_modeling.py#L66">code here</a></p>
+<h2 id="Pretraining-+-Fine-Tuning:">Pretraining + Fine-Tuning:<a class="anchor-link" href="#Pretraining-+-Fine-Tuning:"> </a></h2><p>As shown in ULMFit, MultiFiT, and elsewhere, you will get better results on your downstream task if you first fine-tune your pretrained model with the text of the same domain as your pretrained task. e.g. training an IMDB movie review classifier who's language model was trained on wikipedia text.
+
+<center>
+    <div class="jekyll-twitter-plugin"><blockquote class="twitter-tweet"><p lang="en" dir="ltr">1/ Really excited about this one! &quot;Don&#39;t Stop Pretraining: Adapt Language Models to Domains and Tasks&quot; is live! With <a href="https://twitter.com/anmarasovic?ref_src=twsrc%5Etfw">@anmarasovic</a>, <a href="https://twitter.com/swabhz?ref_src=twsrc%5Etfw">@swabhz</a> , <a href="https://twitter.com/kylelostat?ref_src=twsrc%5Etfw">@kylelostat</a> , <a href="https://twitter.com/i_beltagy?ref_src=twsrc%5Etfw">@i_beltagy</a> , Doug Downey, and <a href="https://twitter.com/nlpnoah?ref_src=twsrc%5Etfw">@nlpnoah</a>, to appear at ACL2020. <br />Paper: <a href="https://t.co/hVbSQYnclk">https://t.co/hVbSQYnclk</a> <br />Code: <a href="https://t.co/7wKgE1mUme">https://t.co/7wKgE1mUme</a></p>&mdash; Suchin Gururangan (@ssgrn) <a href="https://twitter.com/ssgrn/status/1253498613558243328?ref_src=twsrc%5Etfw">April 24, 2020</a></blockquote>
+<script async="" src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+</div>
+</center>
+</p>
+<h2 id="Using-a-Custom-Tokenizer?">Using a Custom Tokenizer?<a class="anchor-link" href="#Using-a-Custom-Tokenizer?"> </a></h2><p>This code has not been tested using a custom tokenizer. You may want to do so if your text is very specific to a certain domain. If so then you'll have to add a number of attributes to your tokenzier to be able to use the code here. I really recommend the <a href="https://huggingface.co/blog/how-to-train">HuggingFace language model tutorial linked above</a> for an example of training your own tokenizer with your own dataset</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Data">Data<a class="anchor-link" href="#Data"> </a></h2><p>We'll use the <code>IMDB_SAMPLE</code> here, pretending we are fine-tuning our transformer model before doing sentiment classification on IMDB. If you are pretraining a language model from scratch you'd aim to use a larger, more generic source like a wikipedia dataset. fastai have the full <code>WikiText103</code> (100 million tokens) dataset available for easy download here if you'd like to train an enligh language model from scratch:</p>
+<p><code>path = untar_data(URLs.WIKITEXT)</code></p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="HuggingFace-Auto-Classes">HuggingFace Auto Classes<a class="anchor-link" href="#HuggingFace-Auto-Classes"> </a></h2><p>HuggingFace have a numer of useful <a href="https://huggingface.co/transformers/model_doc/auto.html">"Auto" classes</a> that enable you to create different models and tokenizers by changing just the model name.</p>
+<ul>
+<li><code>AutoModelWithLMHead</code> will define our Language model for us. This can either be a pretrained model or a randomly initialised model</li>
+<li><code>AutoTokenizer</code> will load our tokenizer and enable us grab our vocab</li>
+<li><code>AutoConfig</code> will define the model architecture and settings, note that we use the pretrained config here for ease of use, but one can easily modify this config if needed</li>
+<li><code>model_name</code> is the model architecture (and optionally model weights) you'd like to use.<ul>
+<li>Language Models tested so far with this notebook: <code>roberta-base</code></li>
+<li>You can find all of HuggingFace's models at <a href="https://huggingface.co/models">https://huggingface.co/models</a>, most, but not all of them are supported by <code>AutoModel</code>,<code>AutoConfig</code> and <code>AutoTokenizer</code></li>
+</ul>
+</li>
+</ul>
+<p>We can now easily call whichever transformer we like as below:</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">model_name</span> <span class="o">=</span> <span class="s1">&#39;roberta-base&#39;</span> 
+<span class="n">lm_model_class</span> <span class="o">=</span> <span class="n">AutoModelWithLMHead</span> 
+<span class="n">config_dict</span> <span class="o">=</span> <span class="n">AutoConfig</span><span class="o">.</span><span class="n">from_pretrained</span><span class="p">(</span><span class="n">model_name</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="HuggingFace-Tokenizer-&amp;-Vocab">HuggingFace Tokenizer &amp; Vocab<a class="anchor-link" href="#HuggingFace-Tokenizer-&amp;-Vocab"> </a></h2><p>We use <code>AutoTokenizer</code> to generate our pretrained tokenizer. HuggingFace's <code>get_vocab</code> returns a <code>token : index</code> dict however Fastai expects <code>vocab</code> to be a list. Therefore we need to convert this dict to a list to be able to use it in fastai</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<details class="description">
+      <summary class="btn btn-sm" data-open="Hide Code" data-close="Show Code"></summary>
+        <p><div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1">#collapse</span>
+<span class="n">tokenizer</span> <span class="o">=</span> <span class="n">AutoTokenizer</span><span class="o">.</span><span class="n">from_pretrained</span><span class="p">(</span><span class="n">model_name</span><span class="p">)</span>
+<span class="n">tokenizer_vocab</span><span class="o">=</span><span class="n">tokenizer</span><span class="o">.</span><span class="n">get_vocab</span><span class="p">()</span> 
+<span class="n">tokenizer_vocab_ls</span> <span class="o">=</span> <span class="p">[</span><span class="n">k</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">tokenizer_vocab</span><span class="o">.</span><span class="n">items</span><span class="p">(),</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">item</span><span class="p">:</span> <span class="n">item</span><span class="p">[</span><span class="mi">1</span><span class="p">])]</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Tokenizer &quot;</span><span class="si">{</span><span class="n">tokenizer</span><span class="o">.</span><span class="vm">__class__</span><span class="si">}</span><span class="s1">&quot; vocab length is : </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">tokenizer_vocab_ls</span><span class="p">)</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+</p>
+    </details>
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>Tokenizer &#34;&lt;class &#39;transformers.tokenization_roberta.RobertaTokenizer&#39;&gt;&#34; vocab length is : 50265
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h4 id="Special-Tokens">Special Tokens<a class="anchor-link" href="#Special-Tokens"> </a></h4><p>Its always good to know what special tokens your tokenizer takes, lets have a look:</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">tokenizer</span><span class="o">.</span><span class="n">special_tokens_map</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>{&#39;bos_token&#39;: &#39;&lt;s&gt;&#39;,
+ &#39;eos_token&#39;: &#39;&lt;/s&gt;&#39;,
+ &#39;unk_token&#39;: &#39;&lt;unk&gt;&#39;,
+ &#39;sep_token&#39;: &#39;&lt;/s&gt;&#39;,
+ &#39;pad_token&#39;: &#39;&lt;pad&gt;&#39;,
+ &#39;cls_token&#39;: &#39;&lt;s&gt;&#39;,
+ &#39;mask_token&#39;: &#39;&lt;mask&gt;&#39;}</pre>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="FastHugs-Tokenizer">FastHugs Tokenizer<a class="anchor-link" href="#FastHugs-Tokenizer"> </a></h2><p>This tokenizer wrapper is initialised with the pretrained HF tokenizer, you can also specify the max_seq_len if you want longer/shorter sequences. Given text it returns tokens and adds separator tokens depending on the model type being used.</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<details class="description">
+      <summary class="btn btn-sm" data-open="Hide Code" data-close="Show Code"></summary>
+        <p><div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># collapse</span>
+<span class="k">class</span> <span class="nc">FastHugsTokenizer</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot; </span>
+<span class="sd">        transformer_tokenizer : takes the tokenizer that has been loaded from the tokenizer class</span>
+<span class="sd">        model_name : model type set by the user</span>
+<span class="sd">        max_seq_len : override default sequence length, typically 512 for bert-like models.</span>
+<span class="sd">                           `transformer_tokenizer.max_len_single_sentence` and `transformer_tokenizer.max_len_sentences_pair` </span>
+<span class="sd">                           both account for the need to add additional special tokens, i.e. for RoBERTa-base </span>
+<span class="sd">                           max_len_single_sentence==510, leaving space for the 2 additional special tokens </span>
+<span class="sd">                           to be added for the model&#39;s default 512 positional embeddings</span>
+<span class="sd">        pair : whether a single sentence (sequence) or pair of sentences are used</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            - Tokenized text, up to the max sequence length set by the user or the tokenzier default</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">transformer_tokenizer</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">model_name</span><span class="o">=</span><span class="s1">&#39;roberta&#39;</span><span class="p">,</span> <span class="n">max_seq_len</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> 
+                 <span class="n">pretrained</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">pair</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span> 
+        <span class="bp">self</span><span class="o">.</span><span class="n">model_name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">tok</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">max_seq_len</span><span class="o">=</span><span class="n">model_name</span><span class="p">,</span> <span class="n">transformer_tokenizer</span><span class="p">,</span> <span class="n">max_seq_len</span>
+        <span class="k">if</span> <span class="n">pretrained</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">max_seq_len</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">pair</span><span class="p">:</span> <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">max_seq_len</span><span class="o">&lt;=</span><span class="bp">self</span><span class="o">.</span><span class="n">tok</span><span class="o">.</span><span class="n">max_len_sentences_pair</span><span class="p">,</span> <span class="s1">&#39;WARNING: max_seq_len needs to be less than or equal to transformer_tokenizer.max_len_sentences_pair&#39;</span>
+                <span class="k">else</span><span class="p">:</span> <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">max_seq_len</span><span class="o">&lt;=</span><span class="bp">self</span><span class="o">.</span><span class="n">tok</span><span class="o">.</span><span class="n">max_len_single_sentence</span><span class="p">,</span> <span class="s1">&#39;WARNING: max_seq_len needs to be less than or equal to transformer_tokenizer.max_len_single_sentence&#39;</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">pair</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">max_seq_len</span><span class="o">=</span><span class="n">ifnone</span><span class="p">(</span><span class="n">max_seq_len</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">tok</span><span class="o">.</span><span class="n">max_len_sentences_pair</span><span class="p">)</span> 
+                <span class="k">else</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">max_seq_len</span><span class="o">=</span><span class="n">ifnone</span><span class="p">(</span><span class="n">max_seq_len</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">tok</span><span class="o">.</span><span class="n">max_len_single_sentence</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">do_tokenize</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">o</span><span class="p">:</span><span class="nb">str</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Returns tokenized text, adds prefix space if needed, limits the maximum sequence length&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="s1">&#39;roberta&#39;</span> <span class="ow">in</span> <span class="n">model_name</span><span class="p">:</span> <span class="n">tokens</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">tok</span><span class="o">.</span><span class="n">tokenize</span><span class="p">(</span><span class="n">o</span><span class="p">,</span> <span class="n">add_prefix_space</span><span class="o">=</span><span class="kc">True</span><span class="p">)[:</span><span class="bp">self</span><span class="o">.</span><span class="n">max_seq_len</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span> <span class="n">tokens</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tok</span><span class="o">.</span><span class="n">tokenize</span><span class="p">(</span><span class="n">o</span><span class="p">)[:</span><span class="bp">self</span><span class="o">.</span><span class="n">max_seq_len</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">tokens</span>
+    
+    <span class="k">def</span> <span class="nf">de_tokenize</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">o</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Return string from tokens&quot;&quot;&quot;</span>
+        <span class="n">text</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">tok</span><span class="o">.</span><span class="n">convert_tokens_to_string</span><span class="p">(</span><span class="n">o</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">text</span>
+        
+    <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">items</span><span class="p">):</span> 
+        <span class="k">for</span> <span class="n">o</span> <span class="ow">in</span> <span class="n">items</span><span class="p">:</span> <span class="k">yield</span> <span class="bp">self</span><span class="o">.</span><span class="n">do_tokenize</span><span class="p">(</span><span class="n">o</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+</p>
+    </details>
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="The-Fastai-bit">The Fastai bit<a class="anchor-link" href="#The-Fastai-bit"> </a></h2><h3 id="fasthugstok-and-our-tok_fn"><code>fasthugstok</code> and our <code>tok_fn</code><a class="anchor-link" href="#fasthugstok-and-our-tok_fn"> </a></h3><p>Lets incorporate the <code>tokenizer</code> from HuggingFace into fastai-v2's framework by specifying a function called <code>fasthugstok</code> that we can then pass on to <code>Tokenizer.from_df</code>. (Note <code>.from_df</code> is the only method I have tested)</p>
+<h4 id="Max-Seqence-Length">Max Seqence Length<a class="anchor-link" href="#Max-Seqence-Length"> </a></h4><p><code>max_seq_len</code> is the longest sequece our tokenizer will output. We can also the max sequence length for the tokenizer by changing <code>max_seq_len</code>. It uses the tokenizer's default, typically <code>512</code>. <code>1024</code> or even <code>2048</code> can also be used depending on your GPU memory. Note when using pretrained models you won't be able to use a <code>max_seq_len</code> larger than the default.</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">max_seq_len</span> <span class="o">=</span> <span class="kc">None</span>  
+<span class="n">sentence_pair</span><span class="o">=</span><span class="kc">False</span>
+
+<span class="n">fasthugstok</span> <span class="o">=</span> <span class="n">partial</span><span class="p">(</span><span class="n">FastHugsTokenizer</span><span class="p">,</span> <span class="n">transformer_tokenizer</span><span class="o">=</span><span class="n">tokenizer</span><span class="p">,</span> <span class="n">model_name</span><span class="o">=</span><span class="n">model_name</span><span class="p">,</span> 
+                      <span class="n">max_seq_len</span><span class="o">=</span><span class="n">max_seq_len</span><span class="p">,</span> <span class="n">sentence_pair</span><span class="o">=</span><span class="n">sentence_pair</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>We create a <code>MLMTokenizer</code> class which inherits from fastai's <code>Tokenizer</code> in order to fully decode</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<details class="description">
+      <summary class="btn btn-sm" data-open="Hide Code" data-close="Show Code"></summary>
+        <p><div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1">#collapse</span>
+<span class="k">class</span> <span class="nc">MLMTokenizer</span><span class="p">(</span><span class="n">Tokenizer</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tokenizer</span><span class="p">,</span> <span class="n">rules</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">counter</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">lengths</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">sep</span><span class="o">=</span><span class="s1">&#39; &#39;</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span> 
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">tokenizer</span><span class="p">,</span> <span class="n">rules</span><span class="p">,</span> <span class="n">counter</span><span class="p">,</span> <span class="n">lengths</span><span class="p">,</span> <span class="n">mode</span><span class="p">,</span> <span class="n">sep</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">_detokenize1</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">o</span><span class="p">):</span><span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">tokenizer</span><span class="o">.</span><span class="n">de_tokenize</span><span class="p">(</span><span class="n">o</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">decodes</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">o</span><span class="p">):</span> <span class="k">return</span> <span class="n">TitledStr</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_detokenize1</span><span class="p">(</span><span class="n">o</span><span class="p">)))</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+</p>
+    </details>
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Set up fastai's <code>Tokenizer.from_df</code>, we pass <code>rules=[fix_html]</code> to clean up some of HTML messiness in our text. If you do not want any rules then you sould pass <code>rules=[]</code> to override fastai's default text processing rules</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<details class="description">
+      <summary class="btn btn-sm" data-open="Hide Code" data-close="Show Code"></summary>
+        <p><div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1">#collapse</span>
+<span class="n">fastai_tokenizer</span> <span class="o">=</span> <span class="n">MLMTokenizer</span><span class="o">.</span><span class="n">from_df</span><span class="p">(</span><span class="n">text_cols</span><span class="o">=</span><span class="s1">&#39;text&#39;</span><span class="p">,</span> <span class="n">res_col_name</span><span class="o">=</span><span class="s1">&#39;text&#39;</span><span class="p">,</span> <span class="n">tok_func</span><span class="o">=</span><span class="n">fasthugstok</span><span class="p">,</span> 
+                                     <span class="n">rules</span><span class="o">=</span><span class="p">[</span><span class="n">fix_html</span><span class="p">],</span> <span class="n">post_rules</span><span class="o">=</span><span class="p">[])</span>
+<span class="n">fastai_tokenizer</span><span class="o">.</span><span class="n">rules</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+</p>
+    </details>
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>[&lt;function fastai2.text.core.fix_html(x)&gt;]</pre>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="Add-Special-Tokens">Add Special Tokens<a class="anchor-link" href="#Add-Special-Tokens"> </a></h3><p>BERT-like transformers require special tokens to be added to the sequence, depending on the task, so we need a transform for those too</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="k">class</span> <span class="nc">AddSpecialTokens</span><span class="p">(</span><span class="n">Transform</span><span class="p">):</span>
+    <span class="s2">&quot;Add special token_ids to the numericalized tokens for Sequence Classification&quot;</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tokenizer</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tok</span><span class="o">=</span><span class="n">tokenizer</span>
+    <span class="k">def</span> <span class="nf">encodes</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">o</span><span class="p">):</span>
+        <span class="k">return</span><span class="p">(</span><span class="n">TensorText</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tok</span><span class="o">.</span><span class="n">build_inputs_with_special_tokens</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">o</span><span class="p">))))</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Create-MLM-Dataset">Create MLM Dataset<a class="anchor-link" href="#Create-MLM-Dataset"> </a></h2>
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<details class="description">
+      <summary class="btn btn-sm" data-open="Hide Code" data-close="Show Code"></summary>
+        <p><div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1">#collapse</span>
+<span class="k">class</span> <span class="nc">MLMTokensLabels</span><span class="p">(</span><span class="n">Transform</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        MLM task</span>
+<span class="sd">        - Select subset of input token ids, given by `mlm_probability`</span>
+<span class="sd">        - Mask a subset of these, `mask_token_prob`</span>
+<span class="sd">        - Replace half of the first subset with random tokens</span>
+<span class="sd">        - This code most comes from the `mask_tokens` function here https://github.com/huggingface/transformers/blob/a21d4fa410dc3b4c62f93aa0e6bbe4b75a101ee9/examples/run_language_modeling.py#L66</span>
+<span class="sd">        Returns: input ids and labels</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tokenizer</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">mlm_probability</span><span class="o">=</span><span class="mf">0.15</span><span class="p">,</span> <span class="n">mask_token_prob</span><span class="o">=</span><span class="mf">0.8</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tok</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">mlm_probability</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">mask_token_prob</span><span class="o">=</span><span class="n">tokenizer</span><span class="p">,</span> <span class="n">mlm_probability</span><span class="p">,</span> <span class="n">mask_token_prob</span>
+    
+    <span class="k">def</span> <span class="nf">_gen_probability_matrix</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">labels</span><span class="p">):</span>
+        <span class="c1"># We sample a few tokens in each sequence for masked-LM training (with probability mlm_probability, defaults to 0.15 in Bert/RoBERTa)</span>
+        <span class="n">probability_matrix</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">full</span><span class="p">(</span><span class="n">labels</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">mlm_probability</span><span class="p">)</span> 
+        <span class="n">special_tokens_mask</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tok</span><span class="o">.</span><span class="n">get_special_tokens_mask</span><span class="p">(</span><span class="n">labels</span><span class="o">.</span><span class="n">tolist</span><span class="p">(),</span> <span class="n">already_has_special_tokens</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">probability_matrix</span><span class="o">.</span><span class="n">masked_fill_</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="n">special_tokens_mask</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">bool</span><span class="p">),</span> <span class="n">value</span><span class="o">=</span><span class="mf">0.0</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">tok</span><span class="o">.</span><span class="n">_pad_token</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">padding_mask</span> <span class="o">=</span> <span class="n">labels</span><span class="o">.</span><span class="n">eq</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tok</span><span class="o">.</span><span class="n">pad_token_id</span><span class="p">)</span>
+            <span class="n">probability_matrix</span><span class="o">.</span><span class="n">masked_fill_</span><span class="p">(</span><span class="n">padding_mask</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="mf">0.0</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">probability_matrix</span>
+    
+    <span class="k">def</span> <span class="nf">_replace_with_mask</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">inputs</span><span class="p">,</span> <span class="n">labels</span><span class="p">,</span> <span class="n">masked_indices</span><span class="p">):</span>
+        <span class="c1"># for `mask_token_prob`% of the time, we replace masked input tokens with tokenizer.mask_token ([MASK])</span>
+        <span class="n">indices_replaced</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">bernoulli</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">full</span><span class="p">(</span><span class="n">labels</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">mask_token_prob</span><span class="p">))</span><span class="o">.</span><span class="n">bool</span><span class="p">()</span> <span class="o">&amp;</span> <span class="n">masked_indices</span>
+        <span class="n">inputs</span><span class="p">[</span><span class="n">indices_replaced</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tok</span><span class="o">.</span><span class="n">convert_tokens_to_ids</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tok</span><span class="o">.</span><span class="n">mask_token</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">inputs</span><span class="p">,</span> <span class="n">indices_replaced</span>
+    
+    <span class="k">def</span> <span class="nf">_replace_with_other</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">inputs</span><span class="p">,</span> <span class="n">labels</span><span class="p">,</span> <span class="n">masked_indices</span><span class="p">,</span> <span class="n">indices_replaced</span><span class="p">):</span>
+        <span class="c1"># 1-`mask_token_prob`)/210% of the time, we replace masked input tokens with random word</span>
+        <span class="n">indices_random</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">bernoulli</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">full</span><span class="p">(</span><span class="n">labels</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">))</span><span class="o">.</span><span class="n">bool</span><span class="p">()</span> <span class="o">&amp;</span> <span class="n">masked_indices</span> <span class="o">&amp;</span> <span class="o">~</span><span class="n">indices_replaced</span>
+        <span class="n">random_words</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tok</span><span class="p">),</span> <span class="n">labels</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">long</span><span class="p">)</span>
+        <span class="n">inputs</span><span class="p">[</span><span class="n">indices_random</span><span class="p">]</span> <span class="o">=</span> <span class="n">random_words</span><span class="p">[</span><span class="n">indices_random</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">inputs</span>
+    
+    <span class="k">def</span> <span class="nf">encodes</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">inputs</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">tok</span><span class="o">.</span><span class="n">mask_token</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;This tokenizer does not have a mask token which is necessary for masked language modeling.&quot;</span><span class="p">)</span>
+        <span class="n">labels</span> <span class="o">=</span> <span class="n">inputs</span><span class="o">.</span><span class="n">clone</span><span class="p">()</span>
+        
+        <span class="c1"># Get probability of whether a token will be masked</span>
+        <span class="n">probability_matrix</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_gen_probability_matrix</span><span class="p">(</span><span class="n">labels</span><span class="p">)</span>
+        
+        <span class="c1"># Create random mask indices according to probability matrix</span>
+        <span class="n">masked_indices</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">bernoulli</span><span class="p">(</span><span class="n">probability_matrix</span><span class="p">)</span><span class="o">.</span><span class="n">bool</span><span class="p">()</span>
+        
+        <span class="c1"># Mask the labels for indices that are NOT masked, we only compute loss on masked tokens</span>
+        <span class="n">labels</span><span class="p">[</span><span class="o">~</span><span class="n">masked_indices</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="mi">100</span>  
+        
+        <span class="c1"># Randomly replace with mask token</span>
+        <span class="n">inputs</span><span class="p">,</span> <span class="n">indices_replaced</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_replace_with_mask</span><span class="p">(</span><span class="n">inputs</span><span class="p">,</span> <span class="n">labels</span><span class="p">,</span> <span class="n">masked_indices</span><span class="p">)</span>
+        
+        <span class="c1"># Randomly replace with mask token</span>
+        <span class="n">inputs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_replace_with_other</span><span class="p">(</span><span class="n">inputs</span><span class="p">,</span> <span class="n">labels</span><span class="p">,</span> <span class="n">masked_indices</span><span class="p">,</span> <span class="n">indices_replaced</span><span class="p">)</span>
+        <span class="c1"># The rest of the time (10% of the time) we keep the masked input tokens unchanged</span>
+        <span class="k">return</span> <span class="p">(</span><span class="n">inputs</span><span class="p">,</span><span class="n">labels</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+</p>
+    </details>
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<details class="description">
+      <summary class="btn btn-sm" data-open="Hide Code" data-close="Show Code"></summary>
+        <p><div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># collapse</span>
+<span class="nd">@Numericalize</span>
+<span class="k">def</span> <span class="nf">decodes</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">o</span><span class="p">):</span>
+    <span class="s1">&#39;Add the ability to parse masks for the loss function, set as `-100`&#39;</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">o</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">):</span> <span class="n">o</span><span class="o">=</span><span class="n">o</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">tmp_vocab</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">vocab</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+    <span class="n">tmp_vocab</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;&lt;loss_mask&gt;&#39;</span><span class="p">)</span>
+    <span class="n">o</span><span class="o">=</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span> <span class="k">if</span> <span class="n">o_</span> <span class="o">==</span> <span class="o">-</span><span class="mi">100</span> <span class="k">else</span> <span class="n">o_</span> <span class="k">for</span> <span class="n">o_</span> <span class="ow">in</span> <span class="n">o</span><span class="p">]</span>
+    <span class="k">return</span> <span class="n">L</span><span class="p">(</span><span class="n">tmp_vocab</span><span class="p">[</span><span class="n">o_</span><span class="p">]</span> <span class="k">for</span> <span class="n">o_</span> <span class="ow">in</span> <span class="n">o</span> <span class="k">if</span> <span class="n">tmp_vocab</span><span class="p">[</span><span class="n">o_</span><span class="p">]</span> <span class="o">!=</span> <span class="n">PAD</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+</p>
+    </details>
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<details class="description">
+      <summary class="btn btn-sm" data-open="Hide Code" data-close="Show Code"></summary>
+        <p><div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># collapse</span>
+<span class="nd">@delegates</span><span class="p">(</span><span class="n">Datasets</span><span class="p">)</span>
+<span class="k">class</span> <span class="nc">Datasets</span><span class="p">(</span><span class="n">Datasets</span><span class="p">):</span>
+    <span class="s2">&quot;Doesn&#39;t create a tuple in __getitem__ as x is already a tuple&quot;</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">items</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">tfms</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">tls</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">n_inp</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">dl_type</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">items</span><span class="o">=</span><span class="n">items</span><span class="p">,</span> <span class="n">tfms</span><span class="o">=</span><span class="n">tfms</span><span class="p">,</span> <span class="n">tls</span><span class="o">=</span><span class="n">tls</span><span class="p">,</span> <span class="n">n_inp</span><span class="o">=</span><span class="n">n_inp</span><span class="p">,</span> <span class="n">dl_type</span><span class="o">=</span><span class="n">dl_type</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">it</span><span class="p">):</span>
+        <span class="c1"># same as Datasets.__getitem__ but not wrapped in a tuple</span>
+        <span class="n">res</span> <span class="o">=</span> <span class="p">[</span><span class="n">tl</span><span class="p">[</span><span class="n">it</span><span class="p">]</span> <span class="k">for</span> <span class="n">tl</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">tls</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">res</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">if</span> <span class="n">is_indexer</span><span class="p">(</span><span class="n">it</span><span class="p">)</span> <span class="k">else</span> <span class="nb">list</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="o">*</span><span class="n">res</span><span class="p">))</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+</p>
+    </details>
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Our dataset is now ready to be created, lets look at an some of our (x,y) that will be passed to the model. When <code>-100</code> is passed to our loss function (<code>nn.CrossEntropyLoss</code>) it will be ignored in the calculation. Our model will also ignore any padding tokens (usually defined as <code>1</code>) when passed to it.</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<details class="description">
+      <summary class="btn btn-sm" data-open="Hide Code" data-close="Show Code"></summary>
+        <p><div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1">#collapse-hide</span>
+<span class="n">splits</span> <span class="o">=</span> <span class="n">ColSplitter</span><span class="p">()(</span><span class="n">df</span><span class="p">)</span>
+<span class="n">tfms</span><span class="o">=</span><span class="p">[</span><span class="n">attrgetter</span><span class="p">(</span><span class="s2">&quot;text&quot;</span><span class="p">),</span> <span class="n">fastai_tokenizer</span><span class="p">,</span> <span class="n">Numericalize</span><span class="p">(</span><span class="n">vocab</span><span class="o">=</span><span class="n">tokenizer_vocab_ls</span><span class="p">),</span> 
+      <span class="n">AddSpecialTokens</span><span class="p">(</span><span class="n">tokenizer</span><span class="p">),</span> <span class="n">MLMTokensLabels</span><span class="p">(</span><span class="n">tokenizer</span><span class="p">)]</span>
+
+<span class="n">dsets</span> <span class="o">=</span> <span class="n">Datasets</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">splits</span><span class="o">=</span><span class="n">splits</span><span class="p">,</span> <span class="n">tfms</span><span class="o">=</span><span class="p">[</span><span class="n">tfms</span><span class="p">],</span> <span class="n">dl_type</span><span class="o">=</span><span class="n">SortedDL</span><span class="p">)</span>
+
+<span class="n">dsets</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">][:</span><span class="mi">20</span><span class="p">],</span> <span class="n">dsets</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">][:</span><span class="mi">20</span><span class="p">]</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+</p>
+    </details>
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_html rendered_html output_subarea ">
+
+</div>
+
+</div>
+
+<div class="output_area">
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>(tensor([    0,  1890,    12,  5225, 24320,    12,  8494, 18421, 50264,   328,
+         14938,  1774,   630,    75,   190,   356,    69, 50264, 32819,   784]),
+ tensor([ -100,  -100,  -100,  5225,  -100,  -100,  -100, 18421,  -100,  -100,
+          -100,  -100,  -100,    75,  -100,  -100,  -100,  4505,  -100,   784]))</pre>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Dataloader">Dataloader<a class="anchor-link" href="#Dataloader"> </a></h2><h3 id="Padding">Padding<a class="anchor-link" href="#Padding"> </a></h3><p>We need to make sure our padding is done correctly as some transformer models prefer padding on the left while others prefer it on the right. <code>tokenizer.padding_side</code> will tell us which side is correct. e.g., BERT, Roberta prefers padding to the right, so we set <code>pad_first=False</code></p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<details class="description">
+      <summary class="btn btn-sm" data-open="Hide Code" data-close="Show Code"></summary>
+        <p><div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1">#collapse</span>
+<span class="k">def</span> <span class="nf">pad_mlm_input</span><span class="p">(</span><span class="n">samples</span><span class="p">,</span> <span class="n">pad_idx</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">pad_fields</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">],</span> <span class="n">pad_first</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">max_seq_len</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">backwards</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+    <span class="s2">&quot;Function that collect `samples` and adds padding, modified `max_len_l` in fastai&#39;s `pad_input`&quot;</span>
+    <span class="n">pad_fields</span> <span class="o">=</span> <span class="n">L</span><span class="p">(</span><span class="n">pad_fields</span><span class="p">)</span>
+    <span class="c1">#max_len_l = ifnone(max_seq_len, pad_fields.map(lambda f: max([len(s[f]) for s in samples])))</span>
+    <span class="n">max_len_l</span> <span class="o">=</span> <span class="n">pad_fields</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">f</span><span class="p">:</span> <span class="n">max_seq_len</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">backwards</span><span class="p">:</span> <span class="n">pad_first</span> <span class="o">=</span> <span class="ow">not</span> <span class="n">pad_first</span>
+    <span class="k">def</span> <span class="nf">_f</span><span class="p">(</span><span class="n">field_idx</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">):</span> <span class="n">x</span><span class="o">=</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="c1">## Added this line too, removes tuple if present</span>
+        <span class="k">if</span> <span class="n">field_idx</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">pad_fields</span><span class="p">:</span> <span class="k">return</span> <span class="n">x</span>
+        <span class="n">idx</span> <span class="o">=</span> <span class="n">pad_fields</span><span class="o">.</span><span class="n">items</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">field_idx</span><span class="p">)</span> <span class="c1">#TODO: remove items if L.index is fixed</span>
+        <span class="n">sl</span> <span class="o">=</span> <span class="nb">slice</span><span class="p">(</span><span class="o">-</span><span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">),</span> <span class="n">sys</span><span class="o">.</span><span class="n">maxsize</span><span class="p">)</span> <span class="k">if</span> <span class="n">pad_first</span> <span class="k">else</span> <span class="nb">slice</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>
+        <span class="n">pad</span> <span class="o">=</span>  <span class="n">x</span><span class="o">.</span><span class="n">new_zeros</span><span class="p">(</span><span class="n">max_len_l</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span><span class="o">-</span><span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span><span class="o">+</span><span class="n">pad_idx</span>
+        <span class="n">x1</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">cat</span><span class="p">([</span><span class="n">pad</span><span class="p">,</span> <span class="n">x</span><span class="p">]</span> <span class="k">if</span> <span class="n">pad_first</span> <span class="k">else</span> <span class="p">[</span><span class="n">x</span><span class="p">,</span> <span class="n">pad</span><span class="p">])</span>
+        <span class="k">if</span> <span class="n">backwards</span><span class="p">:</span> <span class="n">x1</span> <span class="o">=</span> <span class="n">x1</span><span class="o">.</span><span class="n">flip</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">retain_type</span><span class="p">(</span><span class="n">x1</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span>
+    <span class="k">return</span> <span class="p">[</span><span class="nb">tuple</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">idxx</span><span class="p">:</span> <span class="n">_f</span><span class="p">(</span><span class="o">*</span><span class="n">idxx</span><span class="p">),</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">s</span><span class="p">)))</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">samples</span><span class="p">]</span>
+
+<span class="k">def</span> <span class="nf">transformer_mlm_padding</span><span class="p">(</span><span class="n">tokenizer</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">max_seq_len</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">sentence_pair</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span> 
+    <span class="s1">&#39;Uses `pad_fields=[0,1]` to pad both input and label&#39;</span>
+    <span class="k">if</span> <span class="n">tokenizer</span><span class="o">.</span><span class="n">padding_side</span> <span class="o">==</span> <span class="s1">&#39;right&#39;</span><span class="p">:</span> <span class="n">pad_first</span><span class="o">=</span><span class="kc">False</span>
+    <span class="k">else</span><span class="p">:</span> <span class="n">pad_first</span><span class="o">=</span><span class="kc">True</span>
+    <span class="n">max_seq_len</span> <span class="o">=</span> <span class="n">ifnone</span><span class="p">(</span><span class="n">max_seq_len</span><span class="p">,</span> <span class="n">tokenizer</span><span class="o">.</span><span class="n">max_len</span><span class="p">)</span> 
+    <span class="k">return</span> <span class="n">partial</span><span class="p">(</span><span class="n">pad_mlm_input</span><span class="p">,</span> <span class="n">pad_fields</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">],</span> <span class="n">pad_first</span><span class="o">=</span><span class="n">pad_first</span><span class="p">,</span> 
+                   <span class="n">pad_idx</span><span class="o">=</span><span class="n">tokenizer</span><span class="o">.</span><span class="n">pad_token_id</span><span class="p">,</span> <span class="n">max_seq_len</span><span class="o">=</span><span class="n">max_seq_len</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+</p>
+    </details>
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<details class="description">
+      <summary class="btn btn-sm" data-open="Hide Code" data-close="Show Code"></summary>
+        <p><div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1">#collapse</span>
+<span class="n">padding</span><span class="o">=</span><span class="n">transformer_mlm_padding</span><span class="p">(</span><span class="n">tokenizer</span><span class="p">)</span>
+
+<span class="n">bs</span><span class="o">=</span><span class="mi">4</span>
+<span class="n">dls</span> <span class="o">=</span> <span class="n">dsets</span><span class="o">.</span><span class="n">dataloaders</span><span class="p">(</span><span class="n">bs</span><span class="o">=</span><span class="n">bs</span><span class="p">,</span> <span class="n">before_batch</span><span class="o">=</span><span class="p">[</span><span class="n">padding</span><span class="p">])</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+</p>
+    </details>
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h4 id="Check-our-batch">Check our batch<a class="anchor-link" href="#Check-our-batch"> </a></h4><p>We can see our special RoBERTa tokens (<code>'&lt;s&gt;'</code>, <code>'&lt;/s&gt;'</code>), which translate to <code>0, 2</code> in its vocab, have been added to the start and end of each sequence in the batch. Your can look at these indices in <code>tokenizer.get_vocab()</code> to confirm this. We can also see that most of the tokens in our target (<code>text_</code>) are masked out as we only want to calculate the loss on the ~15% of the <code>text</code> tokens that have been masked.</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<details class="description">
+      <summary class="btn btn-sm" data-open="Hide Code" data-close="Show Code"></summary>
+        <p><div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1">#collapse</span>
+<span class="n">b</span><span class="o">=</span><span class="n">dls</span><span class="o">.</span><span class="n">one_batch</span><span class="p">()</span>
+<span class="n">b</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">size</span><span class="p">(),</span> <span class="n">b</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">size</span><span class="p">()</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+</p>
+    </details>
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>(torch.Size([4, 512]), torch.Size([4, 512]))</pre>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<details class="description">
+      <summary class="btn btn-sm" data-open="Hide Code" data-close="Show Code"></summary>
+        <p><div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1">#collapse</span>
+<span class="n">dls</span><span class="o">.</span><span class="n">show_batch</span><span class="p">()</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+</p>
+    </details>
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_html rendered_html output_subarea ">
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>text</th>
+      <th>text_</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>&lt;s&gt; I&lt;mask&gt; fortunate enough to meet&lt;mask&gt; Pal segregatedand still have my DS:TMlishing&lt;mask&gt; autographed by&lt;mask&gt;&lt;mask&gt; at a convention shortly&lt;mask&gt; the release, and asked him why he chose to do the film "camp". Before&lt;mask&gt; could answer, two studio flacks intercepted and lectured me on how the studio "knew best" and how "no one will take such&lt;mask&gt; film seriously". I had been reading the Bantam reprints for&lt;mask&gt; couple of years thanks&lt;mask&gt; a&lt;mask&gt; (ComiCon attendees of the 1970s will recall 357hawk and his band? I was in&lt;mask&gt; couple&lt;mask&gt; years of that withnd), and had higher hopes than what we&lt;mask&gt;.&lt;mask&gt;\nThe flacks insisted that no high adventure would ever be&lt;mask&gt; seriously, and so doing 'camp&lt;mask&gt; was the&lt;mask&gt; way. Several other fans jumped in gap my&lt;mask&gt;, with Pal listening as best he could. At the end of the little event, Pal&lt;mask&gt; up to&lt;mask&gt; and apologized,&lt;mask&gt; he could have done more and better.\n\nSTAR WARS put the lie to</td>
+      <td>&lt;loss_mask&gt;&lt;loss_mask&gt; was&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt; George&lt;loss_mask&gt; (&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;OB poster&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt; him)&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt; after&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt; he&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt; "&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt; a&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt; a&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt; to&lt;loss_mask&gt; friend&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt; Black&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt; a&lt;loss_mask&gt; of&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt; him&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt; hopes&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt; got&lt;loss_mask&gt;\n&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt; done&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;'&lt;loss_mask&gt;&lt;loss_mask&gt; only&lt;loss_mask&gt;.&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt; on&lt;loss_mask&gt; side&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt; came&lt;loss_mask&gt;&lt;loss_mask&gt; us&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt; wishing&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;,&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;'s&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt; that&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt; it&lt;loss_mask&gt;'t&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;.&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt; the&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;,&lt;loss_mask&gt; the&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt; rating as&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;.&lt;loss_mask&gt;\n&lt;loss_mask&gt; destroying the&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt; still&lt;loss_mask&gt;&lt;loss_mask&gt; the&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt; the&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt; have&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt; to&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt; we&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;hero&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;, there&lt;loss_mask&gt;&lt;loss_mask&gt; second&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;'s&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt; serious&lt;loss_mask&gt; Yes&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt; with&lt;loss_mask&gt;&lt;loss_mask&gt; And&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt; a&lt;loss_mask&gt;&lt;loss_mask&gt;sheet&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt; leaping&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt; with&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt; bronze&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt; a&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt; tie&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;AV&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt; Next&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt; If&lt;loss_mask&gt; knows&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt; George&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt; San&lt;loss_mask&gt; for the&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>&lt;s&gt;&lt;mask&gt; is another one of those 'humans vs insects/eco-horror' features; a theme that was popular in the late 70's.&lt;mask&gt; you can't really call it horror. There's zero suspense and no&lt;mask&gt; events.&lt;mask&gt; other words: this movie&lt;mask&gt; pretty lame. It's not that it&lt;mask&gt; really bad or&lt;mask&gt;; it's just very boring. A construction site near&lt;mask&gt; hotel uncovers a big nest of&lt;mask&gt;. Later on we learn that, probably due to&lt;mask&gt; sorts&lt;mask&gt; pesticides Lounge in the past, their&lt;mask&gt; became poisonous. Some people get bitten and rushed to&lt;mask&gt; hospital and it takes ages for&lt;mask&gt;&lt;mask&gt; Vanity the&lt;mask&gt; to figure out what's going on.&lt;mask&gt; Foxworth figures&lt;mask&gt; out first and then you can&lt;mask&gt; him go berserk with a digging machine for what seems like several hours.&lt;mask&gt; they&lt;mask&gt; in the house, waiting&lt;mask&gt; get rescued. And, man, you should see all the efforts they make for&lt;mask&gt; them.&lt;mask&gt; won't spoil too much, but at&lt;mask&gt; point they even use a big&lt;mask&gt;. All the</td>
+      <td>&lt;loss_mask&gt; This&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt; Only&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt; gruesome&lt;loss_mask&gt;&lt;loss_mask&gt; In&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt; is&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;'s&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt; something&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt; a&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt; ants&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt; different&lt;loss_mask&gt; of&lt;loss_mask&gt; used&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt; bite&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt; the&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt; the residents of&lt;loss_mask&gt; hospital&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt; Robert&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt; it&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt; see&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt; Then&lt;loss_mask&gt; flee&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt; to&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt; all&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt; rescuing&lt;loss_mask&gt;&lt;loss_mask&gt; I&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt; one&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt; helicopter&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt; this&lt;loss_mask&gt; I&lt;loss_mask&gt;&lt;loss_mask&gt; thinking&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt; you&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt; on&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt; building&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt; lots of&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt; of&lt;loss_mask&gt;&lt;loss_mask&gt; are shown&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt; movie&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt; Ant&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt; garbage&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt; the&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt; in&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt; straw&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt; ants&lt;loss_mask&gt; wider shots&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt; designers&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt; near&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt; do&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt; in&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt; It&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt; as&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt; IT&lt;loss_mask&gt;&lt;loss_mask&gt;EN&lt;loss_mask&gt; AT&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt; my&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt; title&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;K&lt;loss_mask&gt;&lt;loss_mask&gt; MAN&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt; have&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;for&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;'ll&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt; in&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt; Now&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;,&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>&lt;s&gt; The&lt;mask&gt;&lt;mask&gt; saw no fewer than 3 filmed productions&lt;mask&gt; H. G. Wells' great novel, "War of&lt;mask&gt; Worlds". This&lt;mask&gt; perhaps the least well-known and very probably the best of&lt;mask&gt;&lt;mask&gt; No other&lt;mask&gt;&lt;mask&gt; W&lt;mask&gt;W has ever attempted not only to present the story very much as Wells wrote&lt;mask&gt;, but also Burton create the atmosphere of the time&lt;mask&gt; which it was supposed to take place: the last year of&lt;mask&gt; 19th Century, 1900  using Wells' original setting, in and near Woking&lt;mask&gt;&lt;mask&gt;.\n\nIMDb&lt;mask&gt; unfFlyingly to what they regard as "spoilers". That might apply&lt;mask&gt; some&lt;mask&gt;, where the ending might actually be a&lt;mask&gt;, but with regard to one of the most famous novels in&lt;mask&gt;&lt;mask&gt;, it seems positively silly. I have&lt;mask&gt; sympathy&lt;mask&gt; people who have neglected to&lt;mask&gt; one&lt;mask&gt; the seminal works&lt;mask&gt; English literature,&lt;mask&gt; let's get right to the chase. The aliens are destroyed through catching an Earth disease,&lt;mask&gt; hits&lt;mask&gt; have no immunity. If that wo a spoiler, so be</td>
+      <td>&lt;loss_mask&gt;&lt;loss_mask&gt; year 2005&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt; of&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt; the&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt; is&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt; them.&lt;loss_mask&gt;&lt;loss_mask&gt; version of&lt;loss_mask&gt;ot&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt; it&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt; to&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt; in&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt; the&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;, England&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt; seems unfriend&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt; with&lt;loss_mask&gt; films&lt;loss_mask&gt; where&lt;loss_mask&gt;&lt;loss_mask&gt; might&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt; surprise&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt; the world&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt; have no&lt;loss_mask&gt; for&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt; read&lt;loss_mask&gt; of&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt; in&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt; so&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt; against which they&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;'s&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt; other&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt; 1953 classic&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt; to&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;\n&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;' plot&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;, is&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt; �&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt; way&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt; off due to&lt;loss_mask&gt;&lt;loss_mask&gt; of&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt; Century&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt; in&lt;loss_mask&gt;&lt;loss_mask&gt;ides&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt; film&lt;loss_mask&gt;&lt;loss_mask&gt; some&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt; an&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt; old&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt; than&lt;loss_mask&gt;).&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt; of&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;.&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt; are typical of&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;'t&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;,&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt; to&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;/white and&lt;loss_mask&gt; on&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;.&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt; as&lt;loss_mask&gt; described them&lt;loss_mask&gt; have a more&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;feel".&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt; destruction&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt; more&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt; period&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt; particularly&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt; or brilliant&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt; facial&lt;loss_mask&gt;</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>&lt;s&gt;&lt;mask&gt; watched Grend&lt;mask&gt; the&lt;mask&gt; night and am compelled&lt;mask&gt; evangelical&lt;mask&gt; a Public Service Announcement.\n\nGrendel is another version of&lt;mask&gt;owulf, the thousand- resulted-&lt;mask&gt; Anglo-Saxon epic poem.&lt;mask&gt; SciFi channeluture a growing catalog of inoffensive&lt;mask&gt; uninterestingxs,&lt;mask&gt; the previews promised an&lt;mask&gt;authentic low-budget mini-epic, but this one refused to&lt;mask&gt;&lt;mask&gt; switch channels.&lt;mask&gt; was staggeringly, overwhelmingly, bad&lt;mask&gt; I watched in fascination and horror at the train wreck you&lt;mask&gt;'t tear your eyes away from&lt;mask&gt; I reached for a notepad and managed to capture part of what I was seeing.&lt;mask&gt; following may contain spoilers or might just save your sanity&lt;mask&gt; You've been warned.\n\n- Just to&lt;mask&gt; it over with, Beow&lt;mask&gt;&lt;mask&gt; warriors wore horned&lt;mask&gt;.&lt;mask&gt;&lt;mask&gt;ial issue compared to what came after. It also appears that the helmets were in a bin and handed&lt;mask&gt; whichever actor wandered by next. Fit,&lt;mask&gt; and function&lt;mask&gt; apparently irrelevant.\n\n- Marina Sirtis&lt;mask&gt;&lt;mask&gt; been blackmailed into doing the&lt;mask&gt; by&lt;mask&gt; Ringling Brothers, Barnum and&lt;mask&gt;&lt;mask&gt;.&lt;mask&gt; managed to avoid a red rubber nose, but the</td>
+      <td>&lt;loss_mask&gt; I&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;el&lt;loss_mask&gt; other&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt; to put together&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt; Be&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;year&lt;loss_mask&gt;old&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt; The&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt; has&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt; and&lt;loss_mask&gt;&lt;loss_mask&gt; movies&lt;loss_mask&gt; and&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt; in&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt; let me&lt;loss_mask&gt;&lt;loss_mask&gt;. It&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;.&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt; couldn&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;.&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt; The&lt;loss_mask&gt;&lt;loss_mask&gt; contain&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt; save&lt;loss_mask&gt;&lt;loss_mask&gt;.&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;\n&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt; get&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;ulf's&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt; helmets&lt;loss_mask&gt; Triv&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt; to&lt;loss_mask&gt; actor&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt; appearance&lt;loss_mask&gt;&lt;loss_mask&gt; were&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt; had obviously&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt; movie&lt;loss_mask&gt; the&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt; Bailey circus&lt;loss_mask&gt; She&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt; Ben&lt;loss_mask&gt;&lt;loss_mask&gt; not&lt;loss_mask&gt; be&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt; H&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt; must have&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt; film&lt;loss_mask&gt;&lt;loss_mask&gt; hadn&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt; the&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt; to&lt;loss_mask&gt; him&lt;loss_mask&gt;&lt;loss_mask&gt;\n&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt; facilitate&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt; hairst&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;.&lt;loss_mask&gt;&lt;loss_mask&gt; of&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt; sideburn&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt; and&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt; the&lt;loss_mask&gt;.&lt;loss_mask&gt; prove&lt;loss_mask&gt;&lt;loss_mask&gt; a&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;-&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt; movie&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt; this&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;shaped&lt;loss_mask&gt;&lt;loss_mask&gt;-&lt;loss_mask&gt; and&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt; tradition&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt; with&lt;loss_mask&gt; volume&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;\n&lt;loss_mask&gt;&lt;loss_mask&gt; unintended focus&lt;loss_mask&gt;&lt;loss_mask&gt; movie&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt; with&lt;loss_mask&gt; bolts&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt; recoil&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt; the&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt; the&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;&lt;loss_mask&gt;</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Model">Model<a class="anchor-link" href="#Model"> </a></h2><p>Our model can be instantiated with either pretrained or random weights. We also need to be careful to pass the model the <code>attention_mask</code> so that the model ignores padding tokens when training.</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="k">class</span> <span class="nc">LMModel</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">lm_model_class</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">tokenizer</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">model_name</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">config_dict</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">pretrained</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tok</span><span class="o">=</span><span class="n">tokenizer</span>
+        <span class="k">if</span> <span class="n">pretrained</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span> <span class="o">=</span> <span class="n">lm_model_class</span><span class="o">.</span><span class="n">from_pretrained</span><span class="p">(</span><span class="n">model_name</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span> <span class="o">=</span> <span class="n">lm_model_class</span><span class="o">.</span><span class="n">from_config</span><span class="p">(</span><span class="n">config_dict</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">model</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">module</span> <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="p">,</span> <span class="s2">&quot;module&quot;</span><span class="p">)</span> <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">resize_token_embeddings</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">tokenizer</span><span class="p">))</span>
+            
+    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">input_ids</span><span class="p">):</span>
+        <span class="n">attention_mask</span> <span class="o">=</span>  <span class="p">(</span><span class="n">input_ids</span><span class="o">!=</span><span class="bp">self</span><span class="o">.</span><span class="n">tok</span><span class="o">.</span><span class="n">pad_token_id</span><span class="p">)</span><span class="o">.</span><span class="n">type</span><span class="p">(</span><span class="n">input_ids</span><span class="o">.</span><span class="n">type</span><span class="p">())</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="p">(</span><span class="n">input_ids</span><span class="p">,</span> <span class="n">attention_mask</span><span class="o">=</span><span class="n">attention_mask</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>    <span class="c1"># only return the prediction_scores (and not hidden states and attention)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="Pretrained-Language-Model">Pretrained Language Model<a class="anchor-link" href="#Pretrained-Language-Model"> </a></h3><p>Lets fine-tune our pretrained Language Model. We would typically do this before training the model on our specific text. Note that here we are not training the language model head before we train the full model, but we could do so if we created a splitter and passed it to our learner</p>
+<p>To load the pretrained HuggingFace model just use <code>pretrained=True</code> when calling your model:</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">model</span> <span class="o">=</span> <span class="n">LMModel</span><span class="p">(</span><span class="n">lm_model_class</span><span class="o">=</span><span class="n">lm_model_class</span><span class="p">,</span> <span class="n">tokenizer</span><span class="o">=</span><span class="n">tokenizer</span><span class="p">,</span> <span class="n">model_name</span><span class="o">=</span><span class="n">model_name</span><span class="p">,</span> 
+                  <span class="n">config_dict</span><span class="o">=</span><span class="n">config_dict</span><span class="p">,</span> <span class="n">pretrained</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Training">Training<a class="anchor-link" href="#Training"> </a></h2><p>From here we train our model as usual using fastai. Note that we use <code>Perplexity</code> as our metric as it is a good measure of how well a language model is training</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<details class="description">
+      <summary class="btn btn-sm" data-open="Hide Code" data-close="Show Code"></summary>
+        <p><div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1">#collapse</span>
+<span class="n">opt_func</span> <span class="o">=</span> <span class="n">partial</span><span class="p">(</span><span class="n">Adam</span><span class="p">,</span> <span class="n">decouple_wd</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="n">loss</span> <span class="o">=</span> <span class="n">CrossEntropyLossFlat</span><span class="p">()</span>
+
+<span class="n">learn</span> <span class="o">=</span> <span class="n">Learner</span><span class="p">(</span><span class="n">dls</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="n">opt_func</span><span class="o">=</span><span class="n">opt_func</span><span class="p">,</span> <span class="c1">#splitter=model_splitter, </span>
+                <span class="n">loss_func</span><span class="o">=</span><span class="n">loss</span><span class="p">,</span> <span class="n">metrics</span><span class="o">=</span><span class="p">[</span><span class="n">accuracy</span><span class="p">,</span> <span class="n">Perplexity</span><span class="p">()])</span><span class="o">.</span><span class="n">to_fp16</span><span class="p">()</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+</p>
+    </details>
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>We check our learning rate finder</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<details class="description">
+      <summary class="btn btn-sm" data-open="Hide Code" data-close="Show Code"></summary>
+        <p><div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1">#collapse-hide</span>
+<span class="n">learn</span><span class="o">.</span><span class="n">lr_find</span><span class="p">(</span><span class="n">suggestions</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">stop_div</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+</p>
+    </details>
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_html rendered_html output_subarea ">
+
+</div>
+
+</div>
+
+<div class="output_area">
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>SuggestedLRs(lr_min=0.025118863582611083, lr_steep=0.2089296132326126)</pre>
+</div>
+
+</div>
+
+<div class="output_area">
+
+
+
+<div class="output_png output_subarea ">
+<img src="data:image/png;base64,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
+" />
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>We do some training</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<details class="description">
+      <summary class="btn btn-sm" data-open="Hide Code" data-close="Show Code"></summary>
+        <p><div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1">#collapse-hide</span>
+<span class="n">learn</span><span class="o">.</span><span class="n">fit_one_cycle</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="n">lr_max</span><span class="o">=</span><span class="mf">1e-4</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+</p>
+    </details>
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_html rendered_html output_subarea ">
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: left;">
+      <th>epoch</th>
+      <th>train_loss</th>
+      <th>valid_loss</th>
+      <th>accuracy</th>
+      <th>perplexity</th>
+      <th>time</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>0</td>
+      <td>13.052832</td>
+      <td>11.317341</td>
+      <td>0.052725</td>
+      <td>82235.375000</td>
+      <td>00:32</td>
+    </tr>
+    <tr>
+      <td>1</td>
+      <td>8.539399</td>
+      <td>5.935386</td>
+      <td>0.049121</td>
+      <td>378.185822</td>
+      <td>00:32</td>
+    </tr>
+    <tr>
+      <td>2</td>
+      <td>1.660586</td>
+      <td>0.785814</td>
+      <td>0.493350</td>
+      <td>2.194192</td>
+      <td>00:32</td>
+    </tr>
+    <tr>
+      <td>3</td>
+      <td>0.731211</td>
+      <td>0.768679</td>
+      <td>0.493125</td>
+      <td>2.156916</td>
+      <td>00:32</td>
+    </tr>
+    <tr>
+      <td>4</td>
+      <td>0.732979</td>
+      <td>0.772890</td>
+      <td>0.492373</td>
+      <td>2.166016</td>
+      <td>00:32</td>
+    </tr>
+    <tr>
+      <td>5</td>
+      <td>0.681202</td>
+      <td>0.695503</td>
+      <td>0.493711</td>
+      <td>2.004716</td>
+      <td>00:33</td>
+    </tr>
+    <tr>
+      <td>6</td>
+      <td>0.660206</td>
+      <td>0.681334</td>
+      <td>0.494063</td>
+      <td>1.976512</td>
+      <td>00:33</td>
+    </tr>
+    <tr>
+      <td>7</td>
+      <td>0.469388</td>
+      <td>0.641964</td>
+      <td>0.495615</td>
+      <td>1.900209</td>
+      <td>00:33</td>
+    </tr>
+    <tr>
+      <td>8</td>
+      <td>0.512519</td>
+      <td>0.612524</td>
+      <td>0.494834</td>
+      <td>1.845082</td>
+      <td>00:33</td>
+    </tr>
+    <tr>
+      <td>9</td>
+      <td>0.545736</td>
+      <td>0.625833</td>
+      <td>0.495205</td>
+      <td>1.869804</td>
+      <td>00:33</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>And we see how our loss progressed</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Lets-Look-at-the-model's-predictions">Lets Look at the model's predictions<a class="anchor-link" href="#Lets-Look-at-the-model's-predictions"> </a></h2><p>Manually checking how well our model makes predictions for masked tokens is a simple way to see how it is training</p>
+<p>Here function <code>get_mask_pred</code> takes masked string given by the user and returns the <code>topk</code> predictions given by the model for that masked token. With it we can sanity check that our model has learned something useful!</p>
+<p>*Note that <code>get_mask_pred</code> is mostly code from <code>FillMaskPipeline</code> in HuggingFace's Transformers repo, full credit to them!</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<details class="description">
+      <summary class="btn btn-sm" data-open="Hide Code" data-close="Show Code"></summary>
+        <p><div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1">#collapse</span>
+<span class="k">def</span> <span class="nf">get_mask_pred</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">masked_text</span><span class="p">:</span><span class="nb">str</span><span class="p">,</span> <span class="n">topk</span><span class="p">:</span><span class="nb">int</span><span class="o">=</span><span class="mi">5</span><span class="p">):</span>
+    <span class="s2">&quot;Code lightly modified from `FillMaskPipeline` in the HuggingFace Transformers library&quot;</span>
+    
+    <span class="n">aa</span><span class="o">=</span><span class="n">fastai_tokenizer</span><span class="o">.</span><span class="n">encodes</span><span class="p">(</span><span class="n">masked_text</span><span class="p">)</span>
+    <span class="n">bb</span><span class="o">=</span><span class="n">Numericalize</span><span class="p">(</span><span class="n">vocab</span><span class="o">=</span><span class="n">tokenizer_vocab_ls</span><span class="p">)(</span><span class="n">aa</span><span class="p">)</span>
+    <span class="n">cc</span><span class="o">=</span><span class="n">AddSpecialTokens</span><span class="p">(</span><span class="n">tokenizer</span><span class="p">)(</span><span class="n">bb</span><span class="p">)</span>
+    
+    <span class="n">outs</span><span class="o">=</span><span class="n">model</span><span class="p">(</span><span class="n">cc</span><span class="o">.</span><span class="n">unsqueeze</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">cuda</span><span class="p">())</span>
+    <span class="n">masked_index</span> <span class="o">=</span> <span class="p">(</span><span class="n">cc</span> <span class="o">==</span> <span class="n">tokenizer</span><span class="o">.</span><span class="n">mask_token_id</span><span class="p">)</span><span class="o">.</span><span class="n">nonzero</span><span class="p">()</span><span class="o">.</span><span class="n">item</span><span class="p">()</span>
+    <span class="n">logits</span> <span class="o">=</span> <span class="n">outs</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="n">masked_index</span><span class="p">,</span> <span class="p">:]</span>
+    <span class="n">probs</span> <span class="o">=</span> <span class="n">logits</span><span class="o">.</span><span class="n">softmax</span><span class="p">(</span><span class="n">dim</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+    <span class="n">values</span><span class="p">,</span> <span class="n">predictions</span> <span class="o">=</span> <span class="n">probs</span><span class="o">.</span><span class="n">topk</span><span class="p">(</span><span class="n">topk</span><span class="p">)</span>
+    
+    <span class="n">result</span><span class="o">=</span><span class="p">[]</span>
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">vv</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">values</span><span class="o">.</span><span class="n">tolist</span><span class="p">(),</span> <span class="n">predictions</span><span class="o">.</span><span class="n">tolist</span><span class="p">())):</span>
+        <span class="n">v</span><span class="p">,</span> <span class="n">p</span> <span class="o">=</span><span class="n">vv</span>
+        <span class="n">tokens</span> <span class="o">=</span> <span class="n">cc</span><span class="o">.</span><span class="n">numpy</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">i</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span> <span class="n">result</span><span class="o">.</span><span class="n">append</span><span class="p">({</span><span class="s2">&quot;word&quot;</span><span class="p">:</span><span class="s2">&quot;Input text&quot;</span><span class="p">,</span> <span class="s2">&quot;score&quot;</span><span class="p">:</span> <span class="mf">0.</span><span class="p">,</span> <span class="s2">&quot;token&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;sequence&quot;</span><span class="p">:</span> <span class="n">tokenizer</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="n">tokens</span><span class="p">)})</span> 
+        <span class="n">tokens</span><span class="p">[</span><span class="n">masked_index</span><span class="p">]</span> <span class="o">=</span> <span class="n">p</span>
+        <span class="n">tokens</span> <span class="o">=</span> <span class="n">tokens</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">tokens</span> <span class="o">!=</span> <span class="n">tokenizer</span><span class="o">.</span><span class="n">pad_token_id</span><span class="p">)]</span>
+        <span class="n">w</span> <span class="o">=</span> <span class="n">tokenizer</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="n">p</span><span class="p">)</span>
+        <span class="n">result</span><span class="o">.</span><span class="n">append</span><span class="p">({</span><span class="s2">&quot;word&quot;</span><span class="p">:</span><span class="n">w</span><span class="p">,</span> <span class="s2">&quot;score&quot;</span><span class="p">:</span> <span class="n">v</span><span class="p">,</span> <span class="s2">&quot;token&quot;</span><span class="p">:</span> <span class="n">p</span><span class="p">,</span> <span class="s2">&quot;sequence&quot;</span><span class="p">:</span> <span class="n">tokenizer</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="n">tokens</span><span class="p">)})</span> 
+
+    <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+</p>
+    </details>
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Here we can input our own masked sentence and see how the model does. Note that even without fine-tuning the performance below will still be very strong as the pretrained RoBERTa model is very strong.</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">text2</span> <span class="o">=</span> <span class="s1">&#39;I was walking to &lt;mask&gt; when I came across a cat on the road&#39;</span>
+<span class="n">pred2</span> <span class="o">=</span> <span class="n">get_mask_pred</span><span class="p">(</span><span class="n">model1</span><span class="p">,</span> <span class="n">text2</span><span class="p">);</span><span class="n">pred2</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_html rendered_html output_subarea output_execute_result">
+<div>
+<style scoped="">
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>word</th>
+      <th>score</th>
+      <th>token</th>
+      <th>sequence</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>Input text</td>
+      <td>0.000000</td>
+      <td>0</td>
+      <td>&lt;s&gt; I was walking to&lt;mask&gt; when I came across a cat on the road&lt;/s&gt;</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>school</td>
+      <td>0.791473</td>
+      <td>334</td>
+      <td>&lt;s&gt; I was walking to school when I came across a cat on the road&lt;/s&gt;</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>church</td>
+      <td>0.068957</td>
+      <td>2352</td>
+      <td>&lt;s&gt; I was walking to church when I came across a cat on the road&lt;/s&gt;</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>work</td>
+      <td>0.068007</td>
+      <td>173</td>
+      <td>&lt;s&gt; I was walking to work when I came across a cat on the road&lt;/s&gt;</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>breakfast</td>
+      <td>0.007202</td>
+      <td>7080</td>
+      <td>&lt;s&gt; I was walking to breakfast when I came across a cat on the road&lt;/s&gt;</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p><strong>Not bad at all!</strong> Now lets see how it does on a movie review, lets look at an example from our validation set. We mask the word <code>might</code> from the first sentence of the reivew, <code>... shows what might happen...</code></p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">mask_indices</span><span class="o">=</span><span class="p">[</span><span class="mi">7</span><span class="p">]</span>
+<span class="n">txts</span><span class="o">=</span><span class="n">df</span><span class="o">.</span><span class="n">text</span><span class="o">.</span><span class="n">values</span>
+<span class="n">masked_text</span> <span class="o">=</span> <span class="n">txts</span><span class="p">[</span><span class="mi">800</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39; &#39;</span><span class="p">)</span>  <span class="c1"># our validation split starts at index 800</span>
+<span class="n">masked_text</span><span class="p">[</span><span class="n">mask_indices</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span> <span class="o">=</span> <span class="s1">&#39;&lt;mask&gt;&#39;</span>
+<span class="n">masked_text</span> <span class="o">=</span> <span class="s2">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">masked_text</span><span class="p">)</span>
+
+<span class="n">pred1</span> <span class="o">=</span> <span class="n">get_mask_pred</span><span class="p">(</span><span class="n">model1</span><span class="p">,</span> <span class="n">masked_text</span><span class="p">);</span><span class="n">pred1</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_html rendered_html output_subarea output_execute_result">
+<div>
+<style scoped="">
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>word</th>
+      <th>score</th>
+      <th>token</th>
+      <th>sequence</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>Input text</td>
+      <td>0.000000</td>
+      <td>0</td>
+      <td>&lt;s&gt; This very funny British comedy shows what&lt;mask&gt; happen if a section of London, in this case Pimlico, were to declare itself independent from the rest of the UK and its laws, taxes &amp; post-war restrictions. Merry mayhem is what would happen.&lt;br /&gt;&lt;br /&gt;The explosion of a wartime bomb leads to the discovery of ancient documents which show that Pimlico was ceded to the Duchy of Burgundy centuries ago, a small historical footnote long since forgotten. To the new Burgundians, however, this is an unexpected opportunity to live as they please, free from any interference from Whitehall.&lt;br /&gt;&lt;b...</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>would</td>
+      <td>0.809723</td>
+      <td>74</td>
+      <td>&lt;s&gt; This very funny British comedy shows what would happen if a section of London, in this case Pimlico, were to declare itself independent from the rest of the UK and its laws, taxes &amp; post-war restrictions. Merry mayhem is what would happen.&lt;br /&gt;&lt;br /&gt;The explosion of a wartime bomb leads to the discovery of ancient documents which show that Pimlico was ceded to the Duchy of Burgundy centuries ago, a small historical footnote long since forgotten. To the new Burgundians, however, this is an unexpected opportunity to live as they please, free from any interference from Whitehall.&lt;br /&gt;&lt;b...</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>might</td>
+      <td>0.131539</td>
+      <td>429</td>
+      <td>&lt;s&gt; This very funny British comedy shows what might happen if a section of London, in this case Pimlico, were to declare itself independent from the rest of the UK and its laws, taxes &amp; post-war restrictions. Merry mayhem is what would happen.&lt;br /&gt;&lt;br /&gt;The explosion of a wartime bomb leads to the discovery of ancient documents which show that Pimlico was ceded to the Duchy of Burgundy centuries ago, a small historical footnote long since forgotten. To the new Burgundians, however, this is an unexpected opportunity to live as they please, free from any interference from Whitehall.&lt;br /&gt;&lt;b...</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>could</td>
+      <td>0.042638</td>
+      <td>115</td>
+      <td>&lt;s&gt; This very funny British comedy shows what could happen if a section of London, in this case Pimlico, were to declare itself independent from the rest of the UK and its laws, taxes &amp; post-war restrictions. Merry mayhem is what would happen.&lt;br /&gt;&lt;br /&gt;The explosion of a wartime bomb leads to the discovery of ancient documents which show that Pimlico was ceded to the Duchy of Burgundy centuries ago, a small historical footnote long since forgotten. To the new Burgundians, however, this is an unexpected opportunity to live as they please, free from any interference from Whitehall.&lt;br /&gt;&lt;b...</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>will</td>
+      <td>0.009556</td>
+      <td>40</td>
+      <td>&lt;s&gt; This very funny British comedy shows what will happen if a section of London, in this case Pimlico, were to declare itself independent from the rest of the UK and its laws, taxes &amp; post-war restrictions. Merry mayhem is what would happen.&lt;br /&gt;&lt;br /&gt;The explosion of a wartime bomb leads to the discovery of ancient documents which show that Pimlico was ceded to the Duchy of Burgundy centuries ago, a small historical footnote long since forgotten. To the new Burgundians, however, this is an unexpected opportunity to live as they please, free from any interference from Whitehall.&lt;br /&gt;&lt;br...</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Boom, pretty darn good! Lets try the same example, replacing <code>ancient</code> in <code>discovery of ancient documents</code></p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">mask_indices</span><span class="o">=</span><span class="p">[</span><span class="mi">54</span><span class="p">]</span>
+<span class="n">txts</span><span class="o">=</span><span class="n">df</span><span class="o">.</span><span class="n">text</span><span class="o">.</span><span class="n">values</span>
+<span class="n">masked_text</span> <span class="o">=</span> <span class="n">txts</span><span class="p">[</span><span class="mi">800</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39; &#39;</span><span class="p">)</span>  <span class="c1"># our validation split starts at index 800</span>
+<span class="n">masked_text</span><span class="p">[</span><span class="n">mask_indices</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span> <span class="o">=</span> <span class="s1">&#39;&lt;mask&gt;&#39;</span>
+<span class="n">masked_text</span> <span class="o">=</span> <span class="s2">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">masked_text</span><span class="p">)</span>
+
+<span class="n">pred1</span> <span class="o">=</span> <span class="n">get_mask_pred</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">masked_text</span><span class="p">);</span><span class="n">pred1</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_html rendered_html output_subarea output_execute_result">
+<div>
+<style scoped="">
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>word</th>
+      <th>score</th>
+      <th>token</th>
+      <th>sequence</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>Input text</td>
+      <td>0.000000</td>
+      <td>0</td>
+      <td>&lt;s&gt; This very funny British comedy shows what might happen if a section of London, in this case Pimlico, were to declare itself independent from the rest of the UK and its laws, taxes &amp; post-war restrictions. Merry mayhem is what would happen.&lt;br /&gt;&lt;br /&gt;The explosion of a wartime bomb leads to the discovery of&lt;mask&gt; documents which show that Pimlico was ceded to the Duchy of Burgundy centuries ago, a small historical footnote long since forgotten. To the new Burgundians, however, this is an unexpected opportunity to live as they please, free from any interference from Whitehall.&lt;br /&gt;&lt;br ...</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>historical</td>
+      <td>0.585666</td>
+      <td>4566</td>
+      <td>&lt;s&gt; This very funny British comedy shows what might happen if a section of London, in this case Pimlico, were to declare itself independent from the rest of the UK and its laws, taxes &amp; post-war restrictions. Merry mayhem is what would happen.&lt;br /&gt;&lt;br /&gt;The explosion of a wartime bomb leads to the discovery of historical documents which show that Pimlico was ceded to the Duchy of Burgundy centuries ago, a small historical footnote long since forgotten. To the new Burgundians, however, this is an unexpected opportunity to live as they please, free from any interference from Whitehall.&lt;br /...</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>old</td>
+      <td>0.086817</td>
+      <td>793</td>
+      <td>&lt;s&gt; This very funny British comedy shows what might happen if a section of London, in this case Pimlico, were to declare itself independent from the rest of the UK and its laws, taxes &amp; post-war restrictions. Merry mayhem is what would happen.&lt;br /&gt;&lt;br /&gt;The explosion of a wartime bomb leads to the discovery of old documents which show that Pimlico was ceded to the Duchy of Burgundy centuries ago, a small historical footnote long since forgotten. To the new Burgundians, however, this is an unexpected opportunity to live as they please, free from any interference from Whitehall.&lt;br /&gt;&lt;br /&gt;...</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>obscure</td>
+      <td>0.040825</td>
+      <td>23732</td>
+      <td>&lt;s&gt; This very funny British comedy shows what might happen if a section of London, in this case Pimlico, were to declare itself independent from the rest of the UK and its laws, taxes &amp; post-war restrictions. Merry mayhem is what would happen.&lt;br /&gt;&lt;br /&gt;The explosion of a wartime bomb leads to the discovery of obscure documents which show that Pimlico was ceded to the Duchy of Burgundy centuries ago, a small historical footnote long since forgotten. To the new Burgundians, however, this is an unexpected opportunity to live as they please, free from any interference from Whitehall.&lt;br /&gt;&lt;b...</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>ancient</td>
+      <td>0.035504</td>
+      <td>8178</td>
+      <td>&lt;s&gt; This very funny British comedy shows what might happen if a section of London, in this case Pimlico, were to declare itself independent from the rest of the UK and its laws, taxes &amp; post-war restrictions. Merry mayhem is what would happen.&lt;br /&gt;&lt;br /&gt;The explosion of a wartime bomb leads to the discovery of ancient documents which show that Pimlico was ceded to the Duchy of Burgundy centuries ago, a small historical footnote long since forgotten. To the new Burgundians, however, this is an unexpected opportunity to live as they please, free from any interference from Whitehall.&lt;br /&gt;&lt;b...</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Again, pretty solid predictions!</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Train-a-Language-Model-from-Scratch!">Train a Language Model from Scratch!<a class="anchor-link" href="#Train-a-Language-Model-from-Scratch!"> </a></h2><p>We can follow the same procedure to train a language model from scratch by using <code>pretrained=False</code> when seeing up our model</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<details class="description">
+      <summary class="btn btn-sm" data-open="Hide Code" data-close="Show Code"></summary>
+        <p><div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1">#collapse</span>
+<span class="n">model</span> <span class="o">=</span> <span class="n">LMModel</span><span class="p">(</span><span class="n">lm_model_class</span><span class="o">=</span><span class="n">lm_model_class</span><span class="p">,</span> <span class="n">tokenizer</span><span class="o">=</span><span class="n">tokenizer</span><span class="p">,</span> <span class="n">model_name</span><span class="o">=</span><span class="n">model_name</span><span class="p">,</span> 
+                  <span class="n">config_dict</span><span class="o">=</span><span class="n">config_dict</span><span class="p">,</span> <span class="n">pretrained</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+<span class="n">opt_func</span> <span class="o">=</span> <span class="n">partial</span><span class="p">(</span><span class="n">Adam</span><span class="p">,</span> <span class="n">decouple_wd</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="n">loss</span> <span class="o">=</span> <span class="n">CrossEntropyLossFlat</span><span class="p">()</span>
+
+<span class="n">learn</span> <span class="o">=</span> <span class="n">Learner</span><span class="p">(</span><span class="n">dls</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="n">opt_func</span><span class="o">=</span><span class="n">opt_func</span><span class="p">,</span> <span class="n">loss_func</span><span class="o">=</span><span class="n">loss</span><span class="p">,</span> <span class="n">metrics</span><span class="o">=</span><span class="p">[</span><span class="n">accuracy</span><span class="p">,</span> <span class="n">Perplexity</span><span class="p">()])</span><span class="o">.</span><span class="n">to_fp16</span><span class="p">()</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+</p>
+    </details>
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Training">Training<a class="anchor-link" href="#Training"> </a></h2>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Untrained">Untrained<a class="anchor-link" href="#Untrained"> </a></h2><p>Again, lets look at the predictions:</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">model2</span><span class="o">=</span><span class="n">learn</span><span class="o">.</span><span class="n">model</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">text2</span> <span class="o">=</span> <span class="s1">&#39;I was walking to &lt;mask&gt; when I cam across a cat on the road&#39;</span>
+<span class="n">pred2</span> <span class="o">=</span> <span class="n">get_mask_pred</span><span class="p">(</span><span class="n">model2</span><span class="p">,</span> <span class="n">text2</span><span class="p">);</span><span class="n">pred2</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_html rendered_html output_subarea output_execute_result">
+<div>
+<style scoped="">
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>word</th>
+      <th>score</th>
+      <th>token</th>
+      <th>sequence</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>Input text</td>
+      <td>0.000000</td>
+      <td>0</td>
+      <td>&lt;s&gt; I was walking to&lt;mask&gt; when I cam across a cat on the road&lt;/s&gt;</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>the</td>
+      <td>0.037963</td>
+      <td>5</td>
+      <td>&lt;s&gt; I was walking to the when I cam across a cat on the road&lt;/s&gt;</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>.</td>
+      <td>0.036504</td>
+      <td>4</td>
+      <td>&lt;s&gt; I was walking to. when I cam across a cat on the road&lt;/s&gt;</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>,</td>
+      <td>0.033266</td>
+      <td>6</td>
+      <td>&lt;s&gt; I was walking to, when I cam across a cat on the road&lt;/s&gt;</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>of</td>
+      <td>0.024381</td>
+      <td>9</td>
+      <td>&lt;s&gt; I was walking to of when I cam across a cat on the road&lt;/s&gt;</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Pretty bad 👎, and see how the unconfident it is in its predictions! This doesn't perform well because we have only used 800 movie reviews to train our model, we'll need a lot more text to get decent results!</p>
+<p>Again, just for fun, lets see how it does on a movie review, lets look at an example from our validation set. We mask the word <code>might</code> from the first sentence of the reivew, <code>... shows what might happen...</code></p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">mask_indices</span><span class="o">=</span><span class="p">[</span><span class="mi">7</span><span class="p">]</span>
+<span class="n">txts</span><span class="o">=</span><span class="n">df</span><span class="o">.</span><span class="n">text</span><span class="o">.</span><span class="n">values</span>
+<span class="n">masked_text</span> <span class="o">=</span> <span class="n">txts</span><span class="p">[</span><span class="mi">800</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39; &#39;</span><span class="p">)</span>  <span class="c1"># our validation split starts at index 800</span>
+<span class="n">masked_text</span><span class="p">[</span><span class="n">mask_indices</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span> <span class="o">=</span> <span class="s1">&#39;&lt;mask&gt;&#39;</span>
+<span class="n">masked_text</span> <span class="o">=</span> <span class="s2">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">masked_text</span><span class="p">)</span>
+
+<span class="n">pred1</span> <span class="o">=</span> <span class="n">get_mask_pred</span><span class="p">(</span><span class="n">model2</span><span class="p">,</span> <span class="n">masked_text</span><span class="p">);</span><span class="n">pred1</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_html rendered_html output_subarea output_execute_result">
+<div>
+<style scoped="">
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>word</th>
+      <th>score</th>
+      <th>token</th>
+      <th>sequence</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>Input text</td>
+      <td>0.000000</td>
+      <td>0</td>
+      <td>&lt;s&gt; This very funny British comedy shows what&lt;mask&gt; happen if a section of London, in this case Pimlico, were to declare itself independent from the rest of the UK and its laws, taxes &amp; post-war restrictions. Merry mayhem is what would happen.&lt;br /&gt;&lt;br /&gt;The explosion of a wartime bomb leads to the discovery of ancient documents which show that Pimlico was ceded to the Duchy of Burgundy centuries ago, a small historical footnote long since forgotten. To the new Burgundians, however, this is an unexpected opportunity to live as they please, free from any interference from Whitehall.&lt;br /&gt;&lt;b...</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>,</td>
+      <td>0.044226</td>
+      <td>6</td>
+      <td>&lt;s&gt; This very funny British comedy shows what, happen if a section of London, in this case Pimlico, were to declare itself independent from the rest of the UK and its laws, taxes &amp; post-war restrictions. Merry mayhem is what would happen.&lt;br /&gt;&lt;br /&gt;The explosion of a wartime bomb leads to the discovery of ancient documents which show that Pimlico was ceded to the Duchy of Burgundy centuries ago, a small historical footnote long since forgotten. To the new Burgundians, however, this is an unexpected opportunity to live as they please, free from any interference from Whitehall.&lt;br /&gt;&lt;br /&gt;S...</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>the</td>
+      <td>0.035027</td>
+      <td>5</td>
+      <td>&lt;s&gt; This very funny British comedy shows what the happen if a section of London, in this case Pimlico, were to declare itself independent from the rest of the UK and its laws, taxes &amp; post-war restrictions. Merry mayhem is what would happen.&lt;br /&gt;&lt;br /&gt;The explosion of a wartime bomb leads to the discovery of ancient documents which show that Pimlico was ceded to the Duchy of Burgundy centuries ago, a small historical footnote long since forgotten. To the new Burgundians, however, this is an unexpected opportunity to live as they please, free from any interference from Whitehall.&lt;br /&gt;&lt;br ...</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>.</td>
+      <td>0.028172</td>
+      <td>4</td>
+      <td>&lt;s&gt; This very funny British comedy shows what. happen if a section of London, in this case Pimlico, were to declare itself independent from the rest of the UK and its laws, taxes &amp; post-war restrictions. Merry mayhem is what would happen.&lt;br /&gt;&lt;br /&gt;The explosion of a wartime bomb leads to the discovery of ancient documents which show that Pimlico was ceded to the Duchy of Burgundy centuries ago, a small historical footnote long since forgotten. To the new Burgundians, however, this is an unexpected opportunity to live as they please, free from any interference from Whitehall.&lt;br /&gt;&lt;br /&gt;S...</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>and</td>
+      <td>0.025764</td>
+      <td>8</td>
+      <td>&lt;s&gt; This very funny British comedy shows what and happen if a section of London, in this case Pimlico, were to declare itself independent from the rest of the UK and its laws, taxes &amp; post-war restrictions. Merry mayhem is what would happen.&lt;br /&gt;&lt;br /&gt;The explosion of a wartime bomb leads to the discovery of ancient documents which show that Pimlico was ceded to the Duchy of Burgundy centuries ago, a small historical footnote long since forgotten. To the new Burgundians, however, this is an unexpected opportunity to live as they please, free from any interference from Whitehall.&lt;br /&gt;&lt;br ...</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Ewww..</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">mask_indices</span><span class="o">=</span><span class="p">[</span><span class="mi">54</span><span class="p">]</span>
+<span class="n">txts</span><span class="o">=</span><span class="n">df</span><span class="o">.</span><span class="n">text</span><span class="o">.</span><span class="n">values</span>
+<span class="n">masked_text</span> <span class="o">=</span> <span class="n">txts</span><span class="p">[</span><span class="mi">800</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39; &#39;</span><span class="p">)</span>  <span class="c1"># our validation split starts at index 800</span>
+<span class="n">masked_text</span><span class="p">[</span><span class="n">mask_indices</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span> <span class="o">=</span> <span class="s1">&#39;&lt;mask&gt;&#39;</span>
+<span class="n">masked_text</span> <span class="o">=</span> <span class="s2">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">masked_text</span><span class="p">)</span>
+
+<span class="n">pred1</span> <span class="o">=</span> <span class="n">get_mask_pred</span><span class="p">(</span><span class="n">model2</span><span class="p">,</span> <span class="n">masked_text</span><span class="p">);</span><span class="n">pred1</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_html rendered_html output_subarea output_execute_result">
+<div>
+<style scoped="">
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>word</th>
+      <th>score</th>
+      <th>token</th>
+      <th>sequence</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>Input text</td>
+      <td>0.000000</td>
+      <td>0</td>
+      <td>&lt;s&gt; This very funny British comedy shows what might happen if a section of London, in this case Pimlico, were to declare itself independent from the rest of the UK and its laws, taxes &amp; post-war restrictions. Merry mayhem is what would happen.&lt;br /&gt;&lt;br /&gt;The explosion of a wartime bomb leads to the discovery of&lt;mask&gt; documents which show that Pimlico was ceded to the Duchy of Burgundy centuries ago, a small historical footnote long since forgotten. To the new Burgundians, however, this is an unexpected opportunity to live as they please, free from any interference from Whitehall.&lt;br /&gt;&lt;br ...</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>the</td>
+      <td>0.036510</td>
+      <td>5</td>
+      <td>&lt;s&gt; This very funny British comedy shows what might happen if a section of London, in this case Pimlico, were to declare itself independent from the rest of the UK and its laws, taxes &amp; post-war restrictions. Merry mayhem is what would happen.&lt;br /&gt;&lt;br /&gt;The explosion of a wartime bomb leads to the discovery of the documents which show that Pimlico was ceded to the Duchy of Burgundy centuries ago, a small historical footnote long since forgotten. To the new Burgundians, however, this is an unexpected opportunity to live as they please, free from any interference from Whitehall.&lt;br /&gt;&lt;br /&gt;...</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>,</td>
+      <td>0.035627</td>
+      <td>6</td>
+      <td>&lt;s&gt; This very funny British comedy shows what might happen if a section of London, in this case Pimlico, were to declare itself independent from the rest of the UK and its laws, taxes &amp; post-war restrictions. Merry mayhem is what would happen.&lt;br /&gt;&lt;br /&gt;The explosion of a wartime bomb leads to the discovery of, documents which show that Pimlico was ceded to the Duchy of Burgundy centuries ago, a small historical footnote long since forgotten. To the new Burgundians, however, this is an unexpected opportunity to live as they please, free from any interference from Whitehall.&lt;br /&gt;&lt;br /&gt;Sta...</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>and</td>
+      <td>0.029176</td>
+      <td>8</td>
+      <td>&lt;s&gt; This very funny British comedy shows what might happen if a section of London, in this case Pimlico, were to declare itself independent from the rest of the UK and its laws, taxes &amp; post-war restrictions. Merry mayhem is what would happen.&lt;br /&gt;&lt;br /&gt;The explosion of a wartime bomb leads to the discovery of and documents which show that Pimlico was ceded to the Duchy of Burgundy centuries ago, a small historical footnote long since forgotten. To the new Burgundians, however, this is an unexpected opportunity to live as they please, free from any interference from Whitehall.&lt;br /&gt;&lt;br /&gt;...</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>.</td>
+      <td>0.029063</td>
+      <td>4</td>
+      <td>&lt;s&gt; This very funny British comedy shows what might happen if a section of London, in this case Pimlico, were to declare itself independent from the rest of the UK and its laws, taxes &amp; post-war restrictions. Merry mayhem is what would happen.&lt;br /&gt;&lt;br /&gt;The explosion of a wartime bomb leads to the discovery of. documents which show that Pimlico was ceded to the Duchy of Burgundy centuries ago, a small historical footnote long since forgotten. To the new Burgundians, however, this is an unexpected opportunity to live as they please, free from any interference from Whitehall.&lt;br /&gt;&lt;br /&gt;Sta...</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Yuck!</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Notes-&amp;-Hacky-Bits">Notes &amp; Hacky Bits<a class="anchor-link" href="#Notes-&amp;-Hacky-Bits"> </a></h2><h4 id="Notes">Notes<a class="anchor-link" href="#Notes"> </a></h4><ul>
+<li><p>The validation set will change slightly due to random masking. While the data in the validaion set remains constant, different tokens will be masked each time the validation dataloader is called due to <code>MLMTokensLabels</code> calling a random probability each time.</p>
+<ul>
+<li>If a perfectly reproducable validation set is needed then you'll probably have to create a separate transform for it's masking and set it's <code>split_idx = 1</code>.  </li>
+</ul>
+</li>
+<li><p>I didn't have time to get <code>learn.predict</code> working. One issue that needs to be fixed is that <code>MLMTokensLabels</code> transform shouldn't be called on your masked input text as it will add more masks, which you don't want.</p>
+</li>
+<li><p><code>FastHugsTokenizer</code> will have to be modified to:</p>
+<ul>
+<li>enable sequence lengths larger than the tokenizer default</li>
+<li>to use a non-pretrained tokenizer (e.g. one you trained yourself)</li>
+</ul>
+</li>
+<li><p>The HuggingFace <code>encode_plus</code> or <code>batch_encode_plus</code> functions are great and I would have used them, but don't play nice with fastai multiprocessiing</p>
+</li>
+</ul>
+<h4 id="Hacks">Hacks<a class="anchor-link" href="#Hacks"> </a></h4><ul>
+<li><p>I had to overwrite <code>__getitem__</code> in the <code>Datasets</code> class so that it wouldn't return a tuple as what it thinks is our <code>x</code> is actually our <code>(x,y)</code>. Wrapping this tuple in anoother tuple causes headaches down the line. Creating a custom <code>Datasets</code> class and inheriting from it didn't work as <code>learn.predict</code> calls on <code>Datasets</code> and not the custom dataset class.</p>
+</li>
+<li><p>The function <code>get_mask_pred</code> (used to view predictions of masked text) is mostly code from <code>FillMaskPipeline</code> in HuggingFace's Transformers repo, full credit to them!</p>
+</li>
+</ul>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Give-me-a-shout-&#128227;">Give me a shout &#128227;<a class="anchor-link" href="#Give-me-a-shout-&#128227;"> </a></h2><p>Thats it for this, I hope you found it useful and learned a thing or two. If you have any questions or would like to get in touch you can find me on Twitter <a href="www.twitter.com/mcgenergy">@mcgenergy</a></p>
+
+</div>
+</div>
+</div>
+</div>
+
+
+
+  </div><!-- from https://github.com/utterance/utterances -->
+<script src="https://utteranc.es/client.js"
+        repo="morganmcg1/ntentional"
+        issue-term="title"
+        label="blogpost-comment"
+        theme="github-light"
+        crossorigin="anonymous"
+        async>
+</script><a class="u-url" href="/nlp/transformers/training%20technique/classification/2020/04/24/fasthugs_language_model.html" hidden></a>
+</article>
+      </div>
+    </main><footer class="site-footer h-card">
+  <data class="u-url" href="/"></data>
+
+  <div class="wrapper">
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col">
+        <p class="feed-subscribe">
+          <a href="/feed.xml">
+            <svg class="svg-icon orange">
+              <use xlink:href="/assets/minima-social-icons.svg#rss"></use>
+            </svg><span>Subscribe</span>
+          </a>
+        </p>
+      </div>
+      <div class="footer-col">
+        <p>Morgan McGuire&#39;s machine learning journey through blogs and code</p>
+      </div>
+    </div>
+
+    <div class="social-links"><ul class="social-media-list"><li><a rel="me" href="https://github.com/morganmcg1" title="morganmcg1"><svg class="svg-icon grey"><use xlink:href="/assets/minima-social-icons.svg#github"></use></svg></a></li><li><a rel="me" href="https://twitter.com/mcgenergy" title="mcgenergy"><svg class="svg-icon grey"><use xlink:href="/assets/minima-social-icons.svg#twitter"></use></svg></a></li></ul>
+</div>
+
+  </div>
+
+</footer>
+</body>
+
+</html>
