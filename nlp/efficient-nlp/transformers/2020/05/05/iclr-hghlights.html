@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1"><!-- Begin Jekyll SEO tag v2.6.1 -->
+<title>ICLR 2020: Efficient NLP - Transformers | ntentional</title>
+<meta name="generator" content="Jekyll v4.0.0" />
+<meta property="og:title" content="ICLR 2020: Efficient NLP - Transformers" />
+<meta name="author" content="Morgan McGuire" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Highlights from my favorite papers at ICLR 2020" />
+<meta property="og:description" content="Highlights from my favorite papers at ICLR 2020" />
+<link rel="canonical" href="https://www.ntentional.com/nlp/efficient-nlp/transformers/2020/05/05/iclr-hghlights.html" />
+<meta property="og:url" content="https://www.ntentional.com/nlp/efficient-nlp/transformers/2020/05/05/iclr-hghlights.html" />
+<meta property="og:site_name" content="ntentional" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2020-05-05T00:00:00-05:00" />
+<script type="application/ld+json">
+{"author":{"@type":"Person","name":"Morgan McGuire"},"description":"Highlights from my favorite papers at ICLR 2020","@type":"BlogPosting","headline":"ICLR 2020: Efficient NLP - Transformers","dateModified":"2020-05-05T00:00:00-05:00","datePublished":"2020-05-05T00:00:00-05:00","url":"https://www.ntentional.com/nlp/efficient-nlp/transformers/2020/05/05/iclr-hghlights.html","mainEntityOfPage":{"@type":"WebPage","@id":"https://www.ntentional.com/nlp/efficient-nlp/transformers/2020/05/05/iclr-hghlights.html"},"@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+<link rel="stylesheet" href="/assets/css/style.css"><link type="application/atom+xml" rel="alternate" href="https://www.ntentional.com/feed.xml" title="ntentional" /><link rel="shortcut icon" type="image/x-icon" href="/images/favicon.ico"><!-- Begin Jekyll SEO tag v2.6.1 -->
+<title>ICLR 2020: Efficient NLP - Transformers | ntentional</title>
+<meta name="generator" content="Jekyll v4.0.0" />
+<meta property="og:title" content="ICLR 2020: Efficient NLP - Transformers" />
+<meta name="author" content="Morgan McGuire" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Highlights from my favorite papers at ICLR 2020" />
+<meta property="og:description" content="Highlights from my favorite papers at ICLR 2020" />
+<link rel="canonical" href="https://www.ntentional.com/nlp/efficient-nlp/transformers/2020/05/05/iclr-hghlights.html" />
+<meta property="og:url" content="https://www.ntentional.com/nlp/efficient-nlp/transformers/2020/05/05/iclr-hghlights.html" />
+<meta property="og:site_name" content="ntentional" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2020-05-05T00:00:00-05:00" />
+<script type="application/ld+json">
+{"author":{"@type":"Person","name":"Morgan McGuire"},"description":"Highlights from my favorite papers at ICLR 2020","@type":"BlogPosting","headline":"ICLR 2020: Efficient NLP - Transformers","dateModified":"2020-05-05T00:00:00-05:00","datePublished":"2020-05-05T00:00:00-05:00","url":"https://www.ntentional.com/nlp/efficient-nlp/transformers/2020/05/05/iclr-hghlights.html","mainEntityOfPage":{"@type":"WebPage","@id":"https://www.ntentional.com/nlp/efficient-nlp/transformers/2020/05/05/iclr-hghlights.html"},"@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+
+<link href="https://unpkg.com/@primer/css/dist/primer.css" rel="stylesheet" />
+<link rel="stylesheet" href="//use.fontawesome.com/releases/v5.0.7/css/all.css"><link type="application/atom+xml" rel="alternate" href="https://www.ntentional.com/feed.xml" title="ntentional" />
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js"></script>
+<script type="text/javascript">
+require.config({
+  paths: {
+    jquery: 'https://code.jquery.com/jquery-3.5.0.min',
+    plotly: 'https://cdn.plot.ly/plotly-latest.min'
+  },
+
+  shim: {
+    plotly: {
+      deps: ['jquery'],
+      exports: 'plotly'
+    }
+  }
+});
+</script>
+
+<script>
+function wrap_img(fn) {
+    if (document.attachEvent ? document.readyState === "complete" : document.readyState !== "loading") {
+        var elements = document.querySelectorAll(".post img");
+        Array.prototype.forEach.call(elements, function(el, i) {
+            if (el.getAttribute("title") && (el.className != "emoji")) {
+                const caption = document.createElement('figcaption');
+                var node = document.createTextNode(el.getAttribute("title"));
+                caption.appendChild(node);
+                const wrapper = document.createElement('figure');
+                wrapper.className = 'image';
+                el.parentNode.insertBefore(wrapper, el);
+                el.parentNode.removeChild(el);
+                wrapper.appendChild(el);
+                wrapper.appendChild(caption);
+            }
+        });
+    } else { document.addEventListener('DOMContentLoaded', fn); }
+}
+window.onload = wrap_img;
+</script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function(){
+    // add link icon to anchor tags
+    var elem = document.querySelectorAll(".anchor-link")
+    elem.forEach(e => (e.innerHTML = '<i class="fas fa-link fa-xs"></i>'));
+    });
+</script>
+</head><body><header class="site-header">
+
+  <div class="wrapper"><a class="site-title" rel="author" href="/">ntentional</a><nav class="site-nav">
+        <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+        <label for="nav-trigger">
+          <span class="menu-icon">
+            <svg viewBox="0 0 18 15" width="18px" height="15px">
+              <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"/>
+            </svg>
+          </span>
+        </label>
+
+        <div class="trigger"><a class="page-link" href="/about/">About Me</a><a class="page-link" href="/search/">Search</a><a class="page-link" href="/categories/">Tags</a></div>
+      </nav></div>
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title p-name" itemprop="name headline">ICLR 2020: Efficient NLP - Transformers</h1><p class="page-description">Highlights from my favorite papers at ICLR 2020</p><p class="post-meta post-meta-title"><time class="dt-published" datetime="2020-05-05T00:00:00-05:00" itemprop="datePublished">
+        May 5, 2020
+      </time>• 
+          <span itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <span class="p-author h-card" itemprop="name">Morgan McGuire</span></span>
+       • <span class="read-time" title="Estimated read time">
+    
+    
+      5 min read
+    
+</span></p>
+
+    
+      <p class="category-tags"><i class="fas fa-tags category-tags-icon"></i></i> 
+      
+        <a class="category-tags-link" href="/categories/#NLP">NLP</a>
+        &nbsp;
+      
+        <a class="category-tags-link" href="/categories/#efficient-nlp">efficient-nlp</a>
+        &nbsp;
+      
+        <a class="category-tags-link" href="/categories/#transformers">transformers</a>
+        
+      
+      </p>
+    
+
+    
+      </header>
+
+  <div class="post-content e-content" itemprop="articleBody">
+    <!--
+#################################################
+### THIS FILE WAS AUTOGENERATED! DO NOT EDIT! ###
+#################################################
+# file to edit: _notebooks/2020-05-05-iclr-hghlights.ipynb
+-->
+
+<div class="container" id="notebook-container">
+        
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>I was lucky enough to volunteer and attend (virtual) ICLR 2020. It delivered a huge amount of learning for me and I was fortunate to join some really great discussions.</p>
+<p>Efficient NLP was big focus of many of the papers and here I will focus on a few of the more well known transformer architectures proposed over the past year or so; Reformer, ELECTRA, Lite Transformer and ALBERT. Towards the end of this article I also mention additional ICLR summaries that are worth reading 🙂</p>
+<h3 id="Note:-ICLR-Videos-Now-Online!">Note: ICLR Videos Now <a href="http://iclr.cc/virtual_2020/">Online</a>!<a class="anchor-link" href="#Note:-ICLR-Videos-Now-Online!"> </a></h3><p>All of the ICLR paper talks and slides are now online, I <strong>highly recommend</strong> watching the 5 to 15minutes videos accompanying each of the papers below for some excellent summaries and additional understanding
+
+<center>
+    <div class="jekyll-twitter-plugin"><blockquote class="twitter-tweet"><p lang="en" dir="ltr"><a href="https://twitter.com/hashtag/ICLR2020?src=hash&amp;ref_src=twsrc%5Etfw">#ICLR2020</a> Public Archive - <a href="https://t.co/EpXWIK0ujS">https://t.co/EpXWIK0ujS</a> <br />* ~700 short talks with synced slides, papers, and code<br />* 8 keynotes with moderated QA <br />* 15 workshops on topics ranging from climate change to AfricaNLP. <a href="https://t.co/FVX2JJUYVZ">pic.twitter.com/FVX2JJUYVZ</a></p>&mdash; Sasha Rush (@srush_nlp) <a href="https://twitter.com/srush_nlp/status/1257287875323969537?ref_src=twsrc%5Etfw">May 4, 2020</a></blockquote>
+<script async="" src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+</div>
+</center>
+</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Efficient-NLP---Transformers">Efficient NLP - Transformers<a class="anchor-link" href="#Efficient-NLP---Transformers"> </a></h2><p>New transformer architectures that promise less compute-intense NLP training, in order of my excitement to use them:</p>
+<h3 id="&#9889;-Reformer:-The-Efficient-Transformer-&#9889;">&#9889; <a href="https://iclr.cc/virtual/poster_rkgNKkHtvB.html">Reformer: The Efficient Transformer</a> &#9889;<a class="anchor-link" href="#&#9889;-Reformer:-The-Efficient-Transformer-&#9889;"> </a></h3><ul>
+<li>Reformer enables training on <strong>much longer</strong> sequences than BERT-like models (e.g. document-length sequences instead of 512 token length sequences) much more efficiently</li>
+<li><p>Reformer introduces a couple of techniques that improve both time and memory efficiency:</p>
+</li>
+<li><p><strong>Technique 1: Reversible residual connection layers</strong> (originally used in computer vision in <a href="https://ameroyer.github.io/reading-notes/architectures/2019/05/07/the_reversible_residual_network.html">RevNets</a>) instead of the standard residual layers improves <strong>memory efficiency:</strong></p>
+</li>
+</ul>
+<p><img src="/images/copied_from_nb/my_icons/reformer_rev.png" alt="" /></p>
+<ul>
+<li><strong>Technique 2: Locality-Sensitive Hashing (LSH)</strong> based attention replaces dot-product attention (and is much faster) which reduces the <strong>time complexity:</strong> 
+<img src="/images/copied_from_nb/my_icons/reformer_lsh.png" alt="" /> </li>
+</ul>
+<ul>
+<li>The 15 minute ICLR paper presentation video linked above really helps better understand these concepts</li>
+<li><a href="https://github.com/lucidrains/reformer-pytorch"><strong>A PyTorch Reformer implementation can be found here</strong></a></li>
+</ul>
+<h3 id="&#9889;-ELECTRA:-Pre-training-Text-Encoders-as-Discriminators-Rather-Than-Generators-&#9889;">&#9889; <a href="https://iclr.cc/virtual/poster_r1xMH1BtvB.html">ELECTRA: Pre-training Text Encoders as Discriminators Rather Than Generators</a> &#9889;<a class="anchor-link" href="#&#9889;-ELECTRA:-Pre-training-Text-Encoders-as-Discriminators-Rather-Than-Generators-&#9889;"> </a></h3><ul>
+<li>ELECTRA brings a couple of novelties, resulting in a much more computationally efficient transformer to train. It is trained with:<ul>
+<li>a Generator-Discriminator setup and </li>
+<li>a new pre-training task called Replaced Token Detection</li>
+</ul>
+</li>
+<li>The Generator is trained to replace masked tokens (as per the standard MLM task), the Discriminator then tries to identify the token that has been replaced</li>
+</ul>
+<p><img src="/images/copied_from_nb/my_icons/electra.png" alt="" /></p>
+<ul>
+<li>One subtle thing to note is that if the generator happens to generate the correct token then that token is considered "real" instead of "fake" </li>
+<li>ELECTRA-small can be trained on a single V100 GPU (4 days) </li>
+<li>It is slower per epoch than other transformers, but it converges faster resulting in an overall faster training:<blockquote><p>the model learns from all input tokens instead of just the small masked-out subset, making it more computationally efficient</p>
+</blockquote>
+</li>
+<li>Very strong results and it's performance scales up as the architecture is made larger</li>
+<li>Lots more interesting results and experiment discussion can be found in the paper</li>
+<li><a href="https://huggingface.co/transformers/model_doc/electra.html?highlight=electra"><strong>A HuggingFace ELECTRA Implementation is here</strong></a></li>
+</ul>
+<h3 id="&#9889;-Lite-Transformer-with-Long-Short-Range-Attention-&#9889;">&#9889; <a href="https://iclr.cc/virtual/poster_ByeMPlHKPH.html">Lite Transformer with Long-Short Range Attention</a> &#9889;<a class="anchor-link" href="#&#9889;-Lite-Transformer-with-Long-Short-Range-Attention-&#9889;"> </a></h3><ul>
+<li><p>Introduces Long-Short Range Attention (LRSA) which results in a reduction in model computation between 2.5x and 3x compared to original Transformer.
+<img src="/images/copied_from_nb/my_icons/lite_summary.png" alt="" /></p>
+</li>
+<li><p>The new architecture enables 2 different perspectives on the input sequence:</p>
+<blockquote><p>...one group of heads specializes in the local context modeling (by convolution) while another group specializes in the long-distance relationship modeling (by attention)...</p>
+</blockquote>
+</li>
+<li><p>The LSRA architecture and where the attention is focussed can be seen here:<img src="/images/copied_from_nb/my_icons/lite_2.png" alt="" /></p>
+</li>
+<li>Lite Transformer performs well against the original Transformer for translation, summarisation and language modelling</li>
+<li>One thing I liked is that Lite Transformer looks at performance under mobile-like constraints, defined by the authros as 10M parameters and 1G FLOPs </li>
+<li><a href="https://github.com/mit-han-lab/lite-transformer"><strong>Lite Transformer code (PyTorch) is available from the authors here</strong></a></li>
+</ul>
+<h3 id="&#9889;-ALBERT:-A-Lite-BERT-for-Self-supervised-Learning-of-Language-Representations-&#9889;">&#9889; <a href="https://iclr.cc/virtual/poster_H1eA7AEtvS.html">ALBERT: A Lite BERT for Self-supervised Learning of Language Representations</a> &#9889;<a class="anchor-link" href="#&#9889;-ALBERT:-A-Lite-BERT-for-Self-supervised-Learning-of-Language-Representations-&#9889;"> </a></h3><ul>
+<li>ALBERT is 18x smaller model than BERT-large and can be trained 1.7x faster while still outperforming it</li>
+<li>The two techniques used to reduce its size are:<ul>
+<li>Reduce the vocabulary embedding size; they reduce the matrix size by projecting it to a lower dimension. e.g. an input one-hot encoded matrix of size 30,000 is reduced to a much smaller sized matix which is then used</li>
+<li>Cross-layer parameter sharing; they use the same operations and repeat them multiple times. This helps the parameter size of the network growing as layers as added </li>
+</ul>
+</li>
+<li>ALBERT uses 3 training tricks to further improve its performance:<ol>
+<li>Uses MLM and Sentence Order Prediction (SOP), a self-supervised loss that focuses on modeling inter-sentence coherence</li>
+<li>Does not use dropout (due to the huge amount of data available)</li>
+<li>Uses 10x more data than BERT-Base</li>
+</ol>
+</li>
+<li><a href="https://huggingface.co/transformers/model_doc/albert.html"><strong>HuggingFace PyTorch ALBERT code can be found here</strong></a></li>
+</ul>
+<p><img src="/images/copied_from_nb/my_icons/albert.png" alt="" /></p>
+<h2 id="Other-Great-Summaries-to-Read">Other Great Summaries to Read<a class="anchor-link" href="#Other-Great-Summaries-to-Read"> </a></h2><p>Other great summaries from ICLR attendees are below, the Google Doc in Yacine's tweet below gives brief summaries to even more papers that I haven't covered here</p>
+<ul>
+<li><p><strong><a href="https://twitter.com/mstanojevic118/status/1255987903408287745">Marija Stanojevic on mentorship tips for aspiring ML Researchers</a></strong>, <a href="https://twitter.com/mstanojevic118">@mstanojevic118</a></p>
+</li>
+<li><p><strong><a href="https://twitter.com/YJernite/status/1256284687242330112">Yacine Jernite with additional paper summaries</a></strong>, <a href="https://twitter.com/YJernite">@YRnite</a></p>
+</li>
+<li><p><strong><a href="https://www.analyticsvidhya.com/blog/2020/05/key-takeaways-iclr-2020/">Analytics Vidhya with a summary of the event and what the most used opensource tools were</a></strong></p>
+</li>
+</ul>
+<h2 id="To-Close">To Close<a class="anchor-link" href="#To-Close"> </a></h2><p>Research work on efficient NLP is moving rapidly and it was fascinating to see so many different approaches on display at ICLR this year, myself and my single GPU are super excited to see how fast things will develop this year 😆</p>
+<p>This was also the first ML conference I attended and found the (covid-caused) virtual format to work exceptionally well, my huge congrates to all of the organisers involved in pulling off a massive amount of work in such a short amount of time!</p>
+<p>As always, I would love to hear if you have any comments, thoughts or criticisms at <strong><a href="www.twitter.com/mcgenergy">@mcgenergy</a></strong></p>
+
+</div>
+</div>
+</div>
+</div>
+
+
+
+  </div><!-- from https://github.com/utterance/utterances -->
+<script src="https://utteranc.es/client.js"
+        repo="morganmcg1/ntentional"
+        issue-term="title"
+        label="blogpost-comment"
+        theme="github-light"
+        crossorigin="anonymous"
+        async>
+</script><a class="u-url" href="/nlp/efficient-nlp/transformers/2020/05/05/iclr-hghlights.html" hidden></a>
+</article>
+      </div>
+    </main><footer class="site-footer h-card">
+  <data class="u-url" href="/"></data>
+
+  <div class="wrapper">
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col">
+        <p class="feed-subscribe">
+          <a href="/feed.xml">
+            <svg class="svg-icon orange">
+              <use xlink:href="/assets/minima-social-icons.svg#rss"></use>
+            </svg><span>Subscribe</span>
+          </a>
+        </p>
+      </div>
+      <div class="footer-col">
+        <p>Morgan McGuire&#39;s machine learning journey through blogs and code</p>
+      </div>
+    </div>
+
+    <div class="social-links"><ul class="social-media-list"><li><a rel="me" href="https://github.com/morganmcg1" title="morganmcg1"><svg class="svg-icon grey"><use xlink:href="/assets/minima-social-icons.svg#github"></use></svg></a></li><li><a rel="me" href="https://twitter.com/mcgenergy" title="mcgenergy"><svg class="svg-icon grey"><use xlink:href="/assets/minima-social-icons.svg#twitter"></use></svg></a></li></ul>
+</div>
+
+  </div>
+
+</footer>
+</body>
+
+</html>
