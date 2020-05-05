@@ -1,13 +1,12 @@
 ---
 layout: page
-title: About Me
+title: Morgan (Me)
 permalink: /about/
 ---
+Current on a self-directed learning journey, diving deep into ML and loving it
 
-This is where you put the contents of your *About* page. Like all your pages, it's in [Markdown](https://guides.github.com/features/mastering-markdown/) format.
+Previously at **Facebook** and before then working in electricity trading at **Gaelectric** and **Danske Commodities**
 
-This website is powered by **[fastpages](https://github.com/fastai/fastpages)** [^1].
+I really enjoy ML talk, give me a shout on [@mcgenergy](www.twitter.com/mcgenergy) on Twitter or on [LinkedIn](https://www.linkedin.com/in/morganmcg1/) or have a look at my latest work (such as [HuggingFace, a bridge between between fastai and the HuggingFace library](https://github.com/morganmcg1/fasthugs)) on my [Github](https://github.com/morganmcg1)
 
-
-
-[^1]:a blogging platform that natively supports Jupyter notebooks in addition to other formats.
+![]({{site.baseurl}}/images/mountain.jpg "Lets go up!")
