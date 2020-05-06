@@ -485,10 +485,6 @@ table td { text-overflow: ellipsis; overflow: hidden; max-width: 15em; }
 
 .post-content p, .post-content li { font-size: 16px; }
 
-.post-title h1 { font-size: 1.75rem; }
-
-@media screen and (min-width: 800px) { .post-title h1 { font-size: 2rem; } }
-
 .post-title h1 { font-size: 2rem; }
 
 @media screen and (min-width: 800px) { .post-title h1 { font-size: 2.25rem; } }
