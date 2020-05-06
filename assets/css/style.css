@@ -483,6 +483,6 @@ table td { text-overflow: ellipsis; overflow: hidden; max-width: 15em; }
 
 .highlight .gd { color: #ff5555; }
 
-.page-content { font-size: 6pt; }
+.post-content p, .post-content li { font-size: 12px; }
 
 /*# sourceMappingURL=style.css.map */
