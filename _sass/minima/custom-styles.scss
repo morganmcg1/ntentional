@@ -11,10 +11,9 @@
 @import "minima/fastpages-dracula-highlight"; 
 
 
-// make non-headings slightly lighter
+// make body text (paragraphy) smaller (was 20px)
 .post-content p, .post-content li {
    font-size: 16px;
-   //color: #515151;
 }
 
 // Make title smaller
