@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1"><!-- Begin Jekyll SEO tag v2.6.1 -->
+<title>FixRes: ‘Fixing the train-test resolution discrepancy’ | ntentional</title>
+<meta name="generator" content="Jekyll v4.0.0" />
+<meta property="og:title" content="FixRes: ‘Fixing the train-test resolution discrepancy’" />
+<meta name="author" content="Morgan McGuire" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="‘Fixing the train-test resolution discrepancy’ from Facebook AI Research, NeurIPS 2019" />
+<meta property="og:description" content="‘Fixing the train-test resolution discrepancy’ from Facebook AI Research, NeurIPS 2019" />
+<link rel="canonical" href="https://www.ntentional.com/papers/training%20technique/classification/2020/04/15/fixres.html" />
+<meta property="og:url" content="https://www.ntentional.com/papers/training%20technique/classification/2020/04/15/fixres.html" />
+<meta property="og:site_name" content="ntentional" />
+<meta property="og:image" content="https://www.ntentional.com/images/20202_04_15_horse_train_224.png" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2020-04-15T00:00:00-05:00" />
+<script type="application/ld+json">
+{"author":{"@type":"Person","name":"Morgan McGuire"},"description":"‘Fixing the train-test resolution discrepancy’ from Facebook AI Research, NeurIPS 2019","mainEntityOfPage":{"@type":"WebPage","@id":"https://www.ntentional.com/papers/training%20technique/classification/2020/04/15/fixres.html"},"@type":"BlogPosting","url":"https://www.ntentional.com/papers/training%20technique/classification/2020/04/15/fixres.html","headline":"FixRes: ‘Fixing the train-test resolution discrepancy’","dateModified":"2020-04-15T00:00:00-05:00","datePublished":"2020-04-15T00:00:00-05:00","image":"https://www.ntentional.com/images/20202_04_15_horse_train_224.png","@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+<link rel="stylesheet" href="/assets/css/style.css"><link type="application/atom+xml" rel="alternate" href="https://www.ntentional.com/feed.xml" title="ntentional" /><!-- the google_analytics_id gets auto inserted from the config file -->
+
+
+
+<script>(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)})(window,document,'script','//www.google-analytics.com/analytics.js','ga');ga('create','G-QM13ZPPXRV','auto');ga('require','displayfeatures');ga('send','pageview');</script>
+
+<link rel="shortcut icon" type="image/x-icon" href="/images/nt.ico">
+<!-- Begin Jekyll SEO tag v2.6.1 -->
+<title>FixRes: ‘Fixing the train-test resolution discrepancy’ | ntentional</title>
+<meta name="generator" content="Jekyll v4.0.0" />
+<meta property="og:title" content="FixRes: ‘Fixing the train-test resolution discrepancy’" />
+<meta name="author" content="Morgan McGuire" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="‘Fixing the train-test resolution discrepancy’ from Facebook AI Research, NeurIPS 2019" />
+<meta property="og:description" content="‘Fixing the train-test resolution discrepancy’ from Facebook AI Research, NeurIPS 2019" />
+<link rel="canonical" href="https://www.ntentional.com/papers/training%20technique/classification/2020/04/15/fixres.html" />
+<meta property="og:url" content="https://www.ntentional.com/papers/training%20technique/classification/2020/04/15/fixres.html" />
+<meta property="og:site_name" content="ntentional" />
+<meta property="og:image" content="https://www.ntentional.com/images/20202_04_15_horse_train_224.png" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2020-04-15T00:00:00-05:00" />
+<script type="application/ld+json">
+{"author":{"@type":"Person","name":"Morgan McGuire"},"description":"‘Fixing the train-test resolution discrepancy’ from Facebook AI Research, NeurIPS 2019","mainEntityOfPage":{"@type":"WebPage","@id":"https://www.ntentional.com/papers/training%20technique/classification/2020/04/15/fixres.html"},"@type":"BlogPosting","url":"https://www.ntentional.com/papers/training%20technique/classification/2020/04/15/fixres.html","headline":"FixRes: ‘Fixing the train-test resolution discrepancy’","dateModified":"2020-04-15T00:00:00-05:00","datePublished":"2020-04-15T00:00:00-05:00","image":"https://www.ntentional.com/images/20202_04_15_horse_train_224.png","@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+
+<link href="https://unpkg.com/@primer/css/dist/primer.css" rel="stylesheet" />
+<link rel="stylesheet" href="//use.fontawesome.com/releases/v5.0.7/css/all.css"><link type="application/atom+xml" rel="alternate" href="https://www.ntentional.com/feed.xml" title="ntentional" /><!-- the google_analytics_id gets auto inserted from the config file -->
+
+
+
+<script>(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)})(window,document,'script','//www.google-analytics.com/analytics.js','ga');ga('create','G-QM13ZPPXRV','auto');ga('require','displayfeatures');ga('send','pageview');</script>
+
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js"></script>
+<script type="text/javascript">
+require.config({
+  paths: {
+    jquery: 'https://code.jquery.com/jquery-3.5.0.min',
+    plotly: 'https://cdn.plot.ly/plotly-latest.min'
+  },
+
+  shim: {
+    plotly: {
+      deps: ['jquery'],
+      exports: 'plotly'
+    }
+  }
+});
+</script>
+
+<script>
+function wrap_img(fn) {
+    if (document.attachEvent ? document.readyState === "complete" : document.readyState !== "loading") {
+        var elements = document.querySelectorAll(".post img");
+        Array.prototype.forEach.call(elements, function(el, i) {
+            if (el.getAttribute("title") && (el.className != "emoji")) {
+                const caption = document.createElement('figcaption');
+                var node = document.createTextNode(el.getAttribute("title"));
+                caption.appendChild(node);
+                const wrapper = document.createElement('figure');
+                wrapper.className = 'image';
+                el.parentNode.insertBefore(wrapper, el);
+                el.parentNode.removeChild(el);
+                wrapper.appendChild(el);
+                wrapper.appendChild(caption);
+            }
+        });
+    } else { document.addEventListener('DOMContentLoaded', fn); }
+}
+window.onload = wrap_img;
+</script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function(){
+    // add link icon to anchor tags
+    var elem = document.querySelectorAll(".anchor-link")
+    elem.forEach(e => (e.innerHTML = '<i class="fas fa-link fa-xs"></i>'));
+    });
+</script>
+</head><body><header class="site-header">
+
+  <div class="wrapper"><a class="site-title" rel="author" href="/">ntentional</a><nav class="site-nav">
+        <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+        <label for="nav-trigger">
+          <span class="menu-icon">
+            <svg viewBox="0 0 18 15" width="18px" height="15px">
+              <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"/>
+            </svg>
+          </span>
+        </label>
+
+        <div class="trigger"><a class="page-link" href="/about/">Morgan (Me)</a><a class="page-link" href="/search/">Search</a><a class="page-link" href="/categories/">Tags</a></div>
+      </nav></div>
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title p-name" itemprop="name headline">FixRes: &#39;Fixing the train-test resolution discrepancy&#39;</h1><p class="page-description">'Fixing the train-test resolution discrepancy' from Facebook AI Research, NeurIPS 2019</p><p class="post-meta post-meta-title"><time class="dt-published" datetime="2020-04-15T00:00:00-05:00" itemprop="datePublished">
+        Apr 15, 2020
+      </time>• 
+          <span itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <span class="p-author h-card" itemprop="name">Morgan McGuire</span></span>
+       • <span class="read-time" title="Estimated read time">
+    
+    
+      3 min read
+    
+</span></p>
+
+    
+      <p class="category-tags"><i class="fas fa-tags category-tags-icon"></i></i> 
+      
+        <a class="category-tags-link" href="/categories/#papers">papers</a>
+        &nbsp;
+      
+        <a class="category-tags-link" href="/categories/#training technique">training technique</a>
+        &nbsp;
+      
+        <a class="category-tags-link" href="/categories/#classification">classification</a>
+        
+      
+      </p>
+    
+
+    
+      </header>
+
+  <div class="post-content e-content" itemprop="articleBody">
+    <!--
+#################################################
+### THIS FILE WAS AUTOGENERATED! DO NOT EDIT! ###
+#################################################
+# file to edit: _notebooks/2020-04-15-fixres.ipynb
+-->
+
+<div class="container" id="notebook-container">
+        
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="TL;DR">TL;DR<a class="anchor-link" href="#TL;DR"> </a></h2><p>The paper outlines two easy-to-implement tips to improve your image classification test results:</p>
+<ol>
+<li>Do your inference on the test set at a <strong>higher resolution</strong> than your train set</li>
+<li>Fine-tune the <strong>last layers</strong> of your CNN classifier (i.e. the linear layer(s) after your pooling layer) at the higher test resolution</li>
+</ol>
+<h2 id="Overview">Overview<a class="anchor-link" href="#Overview"> </a></h2><p>This article is a quick summary of <a href="https://arxiv.org/abs/1906.06423">'Fixing the train-test resolution discrepancy'</a> from Hugo Touvron, Andrea Vedaldi, Matthijs Douze, Hervé Jégou from Facebook AI Research, presented at NeurIPS 2019, with additional data from the note <a href="https://arxiv.org/pdf/2003.08237.pdf">'Fixing the train-test resolution discrepancy: FixEfficientNet'</a> from the same authors</p>
+<h2 id="Results">Results<a class="anchor-link" href="#Results"> </a></h2><ul>
+<li>Facebook AI Research (FAIR) used this technique to <strong>achieve a new SOTA result on Imagenet</strong> (<strong><code>88.5%</code></strong> top-1 accuracy) using EfficientNet (using extra data)</li>
+</ul>
+<p><img src="/images/copied_from_nb/my_icons/20200415_fixres_blog/fixeff.png" alt="" title="FixEfficientNet performance" /></p>
+<ul>
+<li>The authors also claim that it can <strong>enable faster training</strong> by training at a lower resolution while still attaining similr/better results</li>
+</ul>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>
+<center>
+    <div class="jekyll-twitter-plugin"><blockquote class="twitter-tweet"><p lang="en" dir="ltr">Our FixEfficientNet-L2 obtains a new state-of-the-art performance on ImageNet!<br />You can find all our new results on the FixRes additional note (<a href="https://t.co/mvY3EkGucR">https://t.co/mvY3EkGucR</a>) and also on <a href="https://twitter.com/paperswithcode?ref_src=twsrc%5Etfw">@paperswithcode</a> and <a href="https://twitter.com/sotabench?ref_src=twsrc%5Etfw">@sotabench</a><br />(In case you missed the FixRes paper : <a href="https://t.co/2NgQcrGDk5">https://t.co/2NgQcrGDk5</a>) <a href="https://t.co/WiQtJQxdgT">pic.twitter.com/WiQtJQxdgT</a></p>&mdash; Hugo Touvron (@HugoTouvron) <a href="https://twitter.com/HugoTouvron/status/1242071277415870470?ref_src=twsrc%5Etfw">March 23, 2020</a></blockquote>
+<script async="" src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+</div>
+</center>
+</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="But-Why?">But Why?<a class="anchor-link" href="#But-Why?"> </a></h2><p>Using typical training transforms such as <code>RandomResizedCrop</code> result in objects in training images appearing <strong>larger</strong> than they do in the test set. Have a look at the example from the paper below.</p>
+<p>Our original image is resized to <code>224 x 224</code> before it is shown to the model. <code>RandomResizedCrop</code> is used to resize our training image (and add a little regularisation) while for the test image a simple center crop is taken. As a result of these different resizing methods, the size of the white horse in the top left training image is much larger than what would be shown to the model in the test set. It is this <strong>difference in object (e.g. horse) size</strong> that the authors say that their FixRes technique addresses</p>
+<p><img src="/images/copied_from_nb/my_icons/20200415_fixres_blog/horse_train_224.png" alt="" /></p>
+<p>In other words:</p>
+<blockquote><p>...resizing the input images in pre-processing changes the distribution of objects sizes. Since different pre-processing protocols are used at training and testing time, the size distribution differs in the two cases.</p>
+</blockquote>
+<h2 id="How?---Two-Tricks">How? - Two Tricks<a class="anchor-link" href="#How?---Two-Tricks"> </a></h2><ol>
+<li>Test at a Higher Resolution</li>
+</ol>
+<p>Simply testing at a higher resolution should yield a performance improvement. Here, the authors show ImageNet top-1 test set accuracy trained at <code>224 x 224</code>, you can see that the optimal test resolution was <code>288 x 288</code>:<img src="/images/copied_from_nb/my_icons/20200415_fixres_blog/k_test_acc.png" alt="" />
+(This behaviour was previously been shown in 2016 in <a href="https://arxiv.org/pdf/1603.05027.pdf">"Identity Mappings in Deep Residual Networks"</a>). Alternatively if you don't want to/cannot test at higher resolution, then training at a lower resolution is said to deliver the same accuracy, while <strong>enabling you to train faster</strong> (as you will be able to use a larger batch size with your smaller image resolutions)</p>
+<ol>
+<li>Fine-tuning of later (classifier) layers of your CNN model</li>
+</ol>
+<blockquote><p>For the convolutional part of the CNN, comprising linear convolution, subsampling, ReLU, and similar layers, changing the input crop size is approximately transparent because the receptive field is unaffected by the input size. However, for classification the network must be terminated by a pooling operator (usually average pooling) in order to produce a fixed-size vector. <strong>Changing the size of the input crop strongly affects the activation statistics of this layer</strong>.</p>
+</blockquote>
+<p>When fine-tuning, the authors recommend using <strong>test-time augmentation, not the previous training augmentation</strong> as it is simplest and performs well. Using training augmentations gave only slightly better results.</p>
+<h2 id="Similarity-to-Fast.ai's-Progressive-Resizing">Similarity to Fast.ai's Progressive Resizing<a class="anchor-link" href="#Similarity-to-Fast.ai's-Progressive-Resizing"> </a></h2><p>Interestingly this technique is a little similar to <code>Progressive Resizing</code>, first espoused in the <a href="www.fast.ai">fast.ai</a> deep learning course. The idea behind Progressive Resizing is that you first train at a lower resolution before increasing resolution and training again, albeit you're always training the entire network as opposed fine-tuning the classifier layers as described above. Nevertheless, it makes me wonder if both the FixRes and Progressive Resizing training techniques work via correcting for the same Train/Test object size mis-match?</p>
+<p>Any thoughts, comments, suggestions I'd love to hear from you <a href="www.twitter.com/mcgenergy">@mcgenergy</a> on Twitter 😃</p>
+
+</div>
+</div>
+</div>
+</div>
+
+
+
+  </div><!-- from https://github.com/utterance/utterances -->
+<script src="https://utteranc.es/client.js"
+        repo="morganmcg1/ntentional"
+        issue-term="title"
+        label="blogpost-comment"
+        theme="github-light"
+        crossorigin="anonymous"
+        async>
+</script><a class="u-url" href="/papers/training%20technique/classification/2020/04/15/fixres.html" hidden></a>
+</article>
+      </div>
+    </main><footer class="site-footer h-card">
+  <data class="u-url" href="/"></data>
+
+  <div class="wrapper">
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col">
+        <p class="feed-subscribe">
+          <a href="/feed.xml">
+            <svg class="svg-icon orange">
+              <use xlink:href="/assets/minima-social-icons.svg#rss"></use>
+            </svg><span>Subscribe</span>
+          </a>
+        </p>
+      </div>
+      <div class="footer-col">
+        <p>Morgan McGuire&#39;s machine learning journey through blogs and code</p>
+      </div>
+    </div>
+
+    <div class="social-links"><ul class="social-media-list"><li><a rel="me" href="https://github.com/morganmcg1" title="morganmcg1"><svg class="svg-icon grey"><use xlink:href="/assets/minima-social-icons.svg#github"></use></svg></a></li><li><a rel="me" href="https://twitter.com/mcgenergy" title="mcgenergy"><svg class="svg-icon grey"><use xlink:href="/assets/minima-social-icons.svg#twitter"></use></svg></a></li></ul>
+</div>
+
+  </div>
+
+</footer>
+</body>
+
+</html>
