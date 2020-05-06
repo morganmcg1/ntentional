@@ -483,7 +483,4 @@ table td { text-overflow: ellipsis; overflow: hidden; max-width: 15em; }
 
 .highlight .gd { color: #ff5555; }
 
-@media screen and (min-width: 600px) { .site-nav .page-link { color: #fff; font-size: 14pt; border-top: 5pt solid #54008c; border-bottom: 5pt solid #54008c; font-family: "Source Code Pro", "Menlo", "DejaVu Sans Mono", "Lucida Console", monospace; }
-  .site-nav .page-link:hover { color: #000000; background-color: #fff; border-color: #fff; text-decoration: none; } }
-
 /*# sourceMappingURL=style.css.map */
