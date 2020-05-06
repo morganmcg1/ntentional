@@ -27,6 +27,17 @@
   }
 }   
 
+// Change Post-Title size
+// Defaults from minima/_sass/minima/_layout.scss were relative-font-size(2.625) and relative-font-size(2.625)
+.post-title h1 {
+  @include relative-font-size(2.0);
+
+  @media screen and (min-width: $on-large) {
+    @include relative-font-size(2.25);
+  }
+}
+
+
 // Make heading sizes smaller in body
 .post-content {
   h1 {
