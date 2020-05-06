@@ -365,14 +365,11 @@ window.onload = wrap_img;
     
     
 <div class="cell border-box-sizing code_cell rendered">
-<details class="description">
-      <summary class="btn btn-sm" data-open="Hide Code" data-close="Show Code"></summary>
-        <p><div class="input">
+<div class="input">
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># collapse</span>
-<span class="k">class</span> <span class="nc">FastHugsTokenizer</span><span class="p">():</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="k">class</span> <span class="nc">FastHugsTokenizer</span><span class="p">():</span>
     <span class="sd">&quot;&quot;&quot; </span>
 <span class="sd">        transformer_tokenizer : takes the tokenizer that has been loaded from the tokenizer class</span>
 <span class="sd">        model_name : model type set by the user</span>
@@ -415,8 +412,7 @@ window.onload = wrap_img;
     </div>
 </div>
 </div>
-</p>
-    </details>
+
 </div>
     
 
@@ -638,6 +634,13 @@ window.onload = wrap_img;
 </div>
     
 
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>We change <code>decodes</code> in our <code>Numericalize</code> class to deal with the <code>&lt;loss_mask&gt;</code> tokens</p>
+
+</div>
+</div>
+</div>
     
     
 <div class="cell border-box-sizing code_cell rendered">
@@ -666,6 +669,13 @@ window.onload = wrap_img;
 </div>
     
 
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>And we modify <code>Datasets</code> so as to not wrap out tuple in another tuple</p>
+
+</div>
+</div>
+</div>
     
     
 <div class="cell border-box-sizing code_cell rendered">
