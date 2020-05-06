@@ -17,7 +17,17 @@
    //color: #515151;
 }
 
-// Make heading sizes smaller
+// Make title smaller
+.post-title {
+  h1 {
+    @include relative-font-size(1.75);
+
+    @media screen and (min-width: $on-large) {
+      @include relative-font-size(2);
+    }
+  }
+
+// Make heading sizes smaller in body
 .post-content {
   h1 {
     @include relative-font-size(1.75);
