@@ -11,7 +11,13 @@
 @import "minima/fastpages-dracula-highlight"; 
 
 
-$base-font-size:   6px !default;
+// $base-font-size:   6px !default;
+
+// mediumnok custom site-header
+.page-content {
+  font-size: 6pt;
+}
+
 
 // $content-width: 100%;
 
