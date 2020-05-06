@@ -11,12 +11,18 @@
 @import "minima/fastpages-dracula-highlight"; 
 
 
+// make non-headings slightly lighter
+.post-content p, .post-content li {
+   font-size: 12px;
+   //color: #515151;
+}
+
 // $base-font-size:   6px !default;
 
 // mediumnok custom site-header
-.page-content {
-  font-size: 6pt;
-}
+// .page-content {
+//   font-size: 6pt;
+// }
 
 
 // $content-width: 100%;
