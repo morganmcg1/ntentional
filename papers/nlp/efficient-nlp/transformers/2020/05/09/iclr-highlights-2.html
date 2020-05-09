@@ -181,9 +181,9 @@ window.onload = wrap_img;
 </div>
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h1 id="Efficient-Deep-Learning">Efficient Deep Learning<a class="anchor-link" href="#Efficient-Deep-Learning"> </a></h1><p>Training methods and architecture changes that can make NLP models smaller/more efficient</p>
+<h1 id="Efficient-Deep-Learning">Efficient Deep Learning<a class="anchor-link" href="#Efficient-Deep-Learning"> </a></h1><p>Training methods and architecture changes that can make Deep Learning models smaller/more efficient</p>
 <h2 id="&#9889;-Reducing-Transformer-Depth-on-Demand-with-Structured-Dropout-&#9889;">&#9889; <a href="https://iclr.cc/virtual/poster_SylO2yStDr.html">Reducing Transformer Depth on Demand with Structured Dropout</a> &#9889;<a class="anchor-link" href="#&#9889;-Reducing-Transformer-Depth-on-Demand-with-Structured-Dropout-&#9889;"> </a></h2><ul>
-<li>The introduction of <strong>LayerDrop</strong> in this paper was super exciting to read as it makes a (transformer) model robust to pruning while only having to train it once, unlike finding lottery tickets for example</li>
+<li>The introduction of <strong>LayerDrop</strong> in this paper was super exciting to read as it makes a (transformer) model much more robust to pruning while only having to train it once, unlike finding lottery tickets for example</li>
 </ul>
 <ul>
 <li>Essentially the idea is simple, just randomly remove/skip different layers during the forward pass in training like so:</li>
@@ -205,6 +205,7 @@ for layer in transformer.layers:
 <li>NLP models trained with layerDrop seem to perform better than baseline models trained without it (e.g. EN-DE Transformer performance improvement)</li>
 <li>Increased robustness of deeper models which enables you to increase the number of layers in your model. The authors doubled the encoder depth in their WMT14 EN-DE transformer translation model for a new SOTA BLEU score.</li>
 <li>Increases model stability</li>
+<li>Note the authors also reduced DropOut slightly when training to compensate for the additional regularisation of LayerDrop</li>
 </ul>
 </li>
 <li><strong>Reduction in model size</strong><ul>
@@ -216,10 +217,13 @@ for layer in transformer.layers:
 </li>
 </ul>
 <ul>
-<li>Unfortunatley when I asked during the Q&amp;A whether this could be applied to when fine-tuning existing pre-trained transformer models, such as those in HuggingFace's library, one of the authors replied that they had tried it but it didn't have great results. Their theory was that these transformers had learned so much during pre-training that a little bit of fine-tuning during LayerDrop wasn't able to have enough of an influence on the model weights to confer this robustness.</li>
+<li>Unfortunatley when I asked during the Q&amp;A whether this could be applied to when fine-tuning existing pre-trained transformer models, such as those in HuggingFace's library, one of the authors replied that they had tried it but it didn't have great results. Their theory was that these transformers had learned so much during pre-training that a little bit of fine-tuning using LayerDrop wasn't able to have enough of an influence on the model weights to confer this robustness.</li>
 </ul>
 <ul>
-<li>Code for LayerDrop and <strong>models pre-trained with LayerDrop</strong> can be <a href="https://github.com/pytorch/fairseq/tree/master/examples/layerdrop">found here</a>. If you want to use RoBERTa but find it too large/slow for inference then you should give the models here a go!</li>
+<li>Code for LayerDrop and <strong>models pre-trained with LayerDrop</strong> can be <a href="https://github.com/pytorch/fairseq/tree/master/examples/layerdrop">found here</a>. <ul>
+<li>If you want to use RoBERTa but find it too large/slow for inference then you should give the models here a go!</li>
+</ul>
+</li>
 </ul>
 <h2 id="&#9889;-Playing-the-lottery-with-rewards-and-multiple-languages:-lottery-tickets-in-RL-and-NLP-&#9889;">&#9889; <a href="https://iclr.cc/virtual/poster_S1xnXRVFwH.html">Playing the lottery with rewards and multiple languages: lottery tickets in RL and NLP</a> &#9889;<a class="anchor-link" href="#&#9889;-Playing-the-lottery-with-rewards-and-multiple-languages:-lottery-tickets-in-RL-and-NLP-&#9889;"> </a></h2><ul>
 <li>This work is a follow on from <a href="https://arxiv.org/abs/1803.03635v5">The Lottery Ticket Hypothesis: Finding Sparse, Trainable Neural Networks</a> from Jonathan Frankle, Michael Carbin at FAIR, who's research codebase has just been released by the way: 
@@ -251,9 +255,6 @@ for layer in transformer.layers:
 <li>I'd also recommend watching the authors second ICLR 2020 paper, <a href="https://iclr.cc/virtual/poster_Hkl1iRNFwS.html">"The Early Phase of Neural Network Training"</a>, which explored how the "Early Phase" of the network training, i.e. the point at which lottery ticket sub-networks emerge (and the point at which Late Resetting would reset to) was impacted by variations to the input data and weight distributions.</li>
 </ul>
 <h2 id="&#9889;-Dynamic-Model-Pruning-with-Feedback-&#9889;">&#9889; <a href="https://iclr.cc/virtual/poster_SJem8lSFwB.html">Dynamic Model Pruning with Feedback</a> &#9889;<a class="anchor-link" href="#&#9889;-Dynamic-Model-Pruning-with-Feedback-&#9889;"> </a></h2><ul>
-<li>This was actually only tested for vision models, but I'm adding this under NLP too as it looks to be a promising pruning method that could help the push towards efficient NLP!</li>
-</ul>
-<ul>
 <li>The paper introduces a dynamic way to prune weights (Dynamic Model Pruning with Feedback, or DPF) that allows previously pruned model weights to be re-activated when needed, resulting in lottery-ticket peformance of the pruned models while only needing to be trained once (unlike lottery tickets which need multiple rounds of training)</li>
 </ul>
 <p><img src="/images/copied_from_nb/my_icons/20200508_iclr_2/dynamic_pruning.png" alt="" /></p>
@@ -296,7 +297,7 @@ for layer in transformer.layers:
 </div>
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="Other-Great-Papers-You-Should-Absolutely-Checkout-&#128175;">Other Great Papers You Should Absolutely Checkout &#128175;<a class="anchor-link" href="#Other-Great-Papers-You-Should-Absolutely-Checkout-&#128175;"> </a></h2><p>There were many other super interesting papers I couldn't cover there, some of my favorites were:</p>
+<h2 id="Other-Great-Papers-You-Should-Absolutely-Checkout-&#128175;">Other Great Papers You Should Absolutely Checkout &#128175;<a class="anchor-link" href="#Other-Great-Papers-You-Should-Absolutely-Checkout-&#128175;"> </a></h2><p>There were many other super interesting papers I couldn't cover there, some of my favorites are below</p>
 <h3 id="Optimisation">Optimisation<a class="anchor-link" href="#Optimisation"> </a></h3><p><strong><a href="https://iclr.cc/virtual/poster_SkgGjRVKDS.html">Towards Stabilizing Batch Statistics in Backward Propagation of Batch Normalization</a></strong></p>
 <ul>
 <li>Introduces Moving Average Batch Normalization (MABN) for training with small batches</li>
