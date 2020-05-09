@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1"><!-- Begin Jekyll SEO tag v2.6.1 -->
+<title>ICLR 2020: Efficient Deep Learning and More | ntentional</title>
+<meta name="generator" content="Jekyll v4.0.0" />
+<meta property="og:title" content="ICLR 2020: Efficient Deep Learning and More" />
+<meta name="author" content="Morgan McGuire" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Highlights from my favorite Deep Learning efficiency-related papers at ICLR 2020" />
+<meta property="og:description" content="Highlights from my favorite Deep Learning efficiency-related papers at ICLR 2020" />
+<link rel="canonical" href="https://www.ntentional.com/papers/nlp/efficient-nlp/transformers/2020/05/09/iclr-highlights-2.html" />
+<meta property="og:url" content="https://www.ntentional.com/papers/nlp/efficient-nlp/transformers/2020/05/09/iclr-highlights-2.html" />
+<meta property="og:site_name" content="ntentional" />
+<meta property="og:image" content="https://www.ntentional.com/images/iclr_logo.png" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2020-05-09T00:00:00-05:00" />
+<script type="application/ld+json">
+{"author":{"@type":"Person","name":"Morgan McGuire"},"description":"Highlights from my favorite Deep Learning efficiency-related papers at ICLR 2020","mainEntityOfPage":{"@type":"WebPage","@id":"https://www.ntentional.com/papers/nlp/efficient-nlp/transformers/2020/05/09/iclr-highlights-2.html"},"@type":"BlogPosting","url":"https://www.ntentional.com/papers/nlp/efficient-nlp/transformers/2020/05/09/iclr-highlights-2.html","headline":"ICLR 2020: Efficient Deep Learning and More","dateModified":"2020-05-09T00:00:00-05:00","datePublished":"2020-05-09T00:00:00-05:00","image":"https://www.ntentional.com/images/iclr_logo.png","@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+<link rel="stylesheet" href="/assets/css/style.css"><link type="application/atom+xml" rel="alternate" href="https://www.ntentional.com/feed.xml" title="ntentional" /><!-- the google_analytics_id gets auto inserted from the config file -->
+
+
+
+<script>(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)})(window,document,'script','//www.google-analytics.com/analytics.js','ga');ga('create','G-QM13ZPPXRV','auto');ga('require','displayfeatures');ga('send','pageview');</script>
+
+<link rel="shortcut icon" type="image/x-icon" href="/images/nt.ico">
+<!-- Begin Jekyll SEO tag v2.6.1 -->
+<title>ICLR 2020: Efficient Deep Learning and More | ntentional</title>
+<meta name="generator" content="Jekyll v4.0.0" />
+<meta property="og:title" content="ICLR 2020: Efficient Deep Learning and More" />
+<meta name="author" content="Morgan McGuire" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Highlights from my favorite Deep Learning efficiency-related papers at ICLR 2020" />
+<meta property="og:description" content="Highlights from my favorite Deep Learning efficiency-related papers at ICLR 2020" />
+<link rel="canonical" href="https://www.ntentional.com/papers/nlp/efficient-nlp/transformers/2020/05/09/iclr-highlights-2.html" />
+<meta property="og:url" content="https://www.ntentional.com/papers/nlp/efficient-nlp/transformers/2020/05/09/iclr-highlights-2.html" />
+<meta property="og:site_name" content="ntentional" />
+<meta property="og:image" content="https://www.ntentional.com/images/iclr_logo.png" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2020-05-09T00:00:00-05:00" />
+<script type="application/ld+json">
+{"author":{"@type":"Person","name":"Morgan McGuire"},"description":"Highlights from my favorite Deep Learning efficiency-related papers at ICLR 2020","mainEntityOfPage":{"@type":"WebPage","@id":"https://www.ntentional.com/papers/nlp/efficient-nlp/transformers/2020/05/09/iclr-highlights-2.html"},"@type":"BlogPosting","url":"https://www.ntentional.com/papers/nlp/efficient-nlp/transformers/2020/05/09/iclr-highlights-2.html","headline":"ICLR 2020: Efficient Deep Learning and More","dateModified":"2020-05-09T00:00:00-05:00","datePublished":"2020-05-09T00:00:00-05:00","image":"https://www.ntentional.com/images/iclr_logo.png","@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+
+<link href="https://unpkg.com/@primer/css/dist/primer.css" rel="stylesheet" />
+<link rel="stylesheet" href="//use.fontawesome.com/releases/v5.0.7/css/all.css"><link type="application/atom+xml" rel="alternate" href="https://www.ntentional.com/feed.xml" title="ntentional" /><!-- the google_analytics_id gets auto inserted from the config file -->
+
+
+
+<script>(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)})(window,document,'script','//www.google-analytics.com/analytics.js','ga');ga('create','G-QM13ZPPXRV','auto');ga('require','displayfeatures');ga('send','pageview');</script>
+
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js"></script>
+<script type="text/javascript">
+require.config({
+  paths: {
+    jquery: 'https://code.jquery.com/jquery-3.5.0.min',
+    plotly: 'https://cdn.plot.ly/plotly-latest.min'
+  },
+
+  shim: {
+    plotly: {
+      deps: ['jquery'],
+      exports: 'plotly'
+    }
+  }
+});
+</script>
+
+<script>
+function wrap_img(fn) {
+    if (document.attachEvent ? document.readyState === "complete" : document.readyState !== "loading") {
+        var elements = document.querySelectorAll(".post img");
+        Array.prototype.forEach.call(elements, function(el, i) {
+            if (el.getAttribute("title") && (el.className != "emoji")) {
+                const caption = document.createElement('figcaption');
+                var node = document.createTextNode(el.getAttribute("title"));
+                caption.appendChild(node);
+                const wrapper = document.createElement('figure');
+                wrapper.className = 'image';
+                el.parentNode.insertBefore(wrapper, el);
+                el.parentNode.removeChild(el);
+                wrapper.appendChild(el);
+                wrapper.appendChild(caption);
+            }
+        });
+    } else { document.addEventListener('DOMContentLoaded', fn); }
+}
+window.onload = wrap_img;
+</script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function(){
+    // add link icon to anchor tags
+    var elem = document.querySelectorAll(".anchor-link")
+    elem.forEach(e => (e.innerHTML = '<i class="fas fa-link fa-xs"></i>'));
+    });
+</script>
+</head><body><header class="site-header">
+
+  <div class="wrapper"><a class="site-title" rel="author" href="/">ntentional</a><nav class="site-nav">
+        <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+        <label for="nav-trigger">
+          <span class="menu-icon">
+            <svg viewBox="0 0 18 15" width="18px" height="15px">
+              <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"/>
+            </svg>
+          </span>
+        </label>
+
+        <div class="trigger"><a class="page-link" href="/about/">Morgan (Me)</a><a class="page-link" href="/search/">Search</a><a class="page-link" href="/categories/">Tags</a></div>
+      </nav></div>
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title p-name" itemprop="name headline">ICLR 2020: Efficient Deep Learning and More</h1><p class="page-description">Highlights from my favorite Deep Learning efficiency-related papers at ICLR 2020</p><p class="post-meta post-meta-title"><time class="dt-published" datetime="2020-05-09T00:00:00-05:00" itemprop="datePublished">
+        May 9, 2020
+      </time>• 
+          <span itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <span class="p-author h-card" itemprop="name">Morgan McGuire</span></span>
+       • <span class="read-time" title="Estimated read time">
+    
+    
+      8 min read
+    
+</span></p>
+
+    
+      <p class="category-tags"><i class="fas fa-tags category-tags-icon"></i></i> 
+      
+        <a class="category-tags-link" href="/categories/#papers">papers</a>
+        &nbsp;
+      
+        <a class="category-tags-link" href="/categories/#NLP">NLP</a>
+        &nbsp;
+      
+        <a class="category-tags-link" href="/categories/#efficient-nlp">efficient-nlp</a>
+        &nbsp;
+      
+        <a class="category-tags-link" href="/categories/#transformers">transformers</a>
+        
+      
+      </p>
+    
+
+    
+      </header>
+
+  <div class="post-content e-content" itemprop="articleBody">
+    <!--
+#################################################
+### THIS FILE WAS AUTOGENERATED! DO NOT EDIT! ###
+#################################################
+# file to edit: _notebooks/2020-05-09-iclr-highlights-2.ipynb
+-->
+
+<div class="container" id="notebook-container">
+        
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>I was lucky enough to volunteer and attend (virtual) ICLR 2020. It delivered a huge amount of learning for me and I was fortunate to join some really great discussions.</p>
+<p>Efficient Deep Learning was big focus of many of the papers and in this second ICLR2020 article* I will focus on techniques presented that either enable more efficient training and/or inference from the papers I managed to see. There are also a couple of bonus papers I really liked at the end of this article.</p>
+<p>*<a href="https://www.ntentional.com/papers/nlp/efficient-nlp/transformers/2020/05/05/iclr-hghlights.html">In my first ICLR2020 article</a> I highlight some of the new, more efficient transformer achitectures presented such as ELECTRA, Reformer and more.</p>
+<h3 id="Note:-ICLR-Videos-Now-Online!">Note: ICLR Videos Now <a href="http://iclr.cc/virtual_2020/">Online</a>!<a class="anchor-link" href="#Note:-ICLR-Videos-Now-Online!"> </a></h3><p>All of the ICLR paper talks and slides are now online, I <strong>highly recommend</strong> watching the 5 to 15minutes videos accompanying each of the papers below for some excellent summaries and additional understanding</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h1 id="Efficient-Deep-Learning">Efficient Deep Learning<a class="anchor-link" href="#Efficient-Deep-Learning"> </a></h1><p>Training methods and architecture changes that can make NLP models smaller/more efficient</p>
+<h2 id="&#9889;-Reducing-Transformer-Depth-on-Demand-with-Structured-Dropout-&#9889;">&#9889; <a href="https://iclr.cc/virtual/poster_SylO2yStDr.html">Reducing Transformer Depth on Demand with Structured Dropout</a> &#9889;<a class="anchor-link" href="#&#9889;-Reducing-Transformer-Depth-on-Demand-with-Structured-Dropout-&#9889;"> </a></h2><ul>
+<li>The introduction of <strong>LayerDrop</strong> in this paper was super exciting to read as it makes a (transformer) model robust to pruning while only having to train it once, unlike finding lottery tickets for example</li>
+</ul>
+<ul>
+<li>Essentially the idea is simple, just randomly remove/skip different layers during the forward pass in training like so:</li>
+</ul>
+<p><img src="/images/copied_from_nb/my_icons/20200508_iclr_2/layerdrop.png" alt="" /></p>
+<ul>
+<li>LayerDrop can be implemented like so (see the link below for the author's full codebase)
+<pre><code>layer_drop = 0.2    # The authors dropped the layers with a 20% probability in all of their experiments
+for layer in transformer.layers:
+  if random(0,1) &gt; layer_drop and self.training:
+      x = layer(x)</code></pre>
+</li>
+<li>This training setup confers 3 benefits:<ol>
+<li><strong>Increased Training Speed (training less layers)</strong> <ul>
+<li>in training the percentage increase in words per second increased almost linearly with the percentage of layers dropped</li>
+</ul>
+</li>
+<li><strong>Strong regulariser</strong><ul>
+<li>NLP models trained with layerDrop seem to perform better than baseline models trained without it (e.g. EN-DE Transformer performance improvement)</li>
+<li>Increased robustness of deeper models which enables you to increase the number of layers in your model. The authors doubled the encoder depth in their WMT14 EN-DE transformer translation model for a new SOTA BLEU score.</li>
+<li>Increases model stability</li>
+</ul>
+</li>
+<li><strong>Reduction in model size</strong><ul>
+<li>A model trained with LayerDrop can be pruned to any desired depth for inference and still maintain robust performance <strong>without additional fine-tuning</strong></li>
+<li>The specific type of pruning used for inference also did not seem to matter although <strong>dropping every other layer</strong> seemd to offer strong performance while being straightforward to implement</li>
+</ul>
+</li>
+</ol>
+</li>
+</ul>
+<ul>
+<li>Unfortunatley when I asked during the Q&amp;A whether this could be applied to when fine-tuning existing pre-trained transformer models, such as those in HuggingFace's library, one of the authors replied that they had tried it but it didn't have great results. Their theory was that these transformers had learned so much during pre-training that a little bit of fine-tuning during LayerDrop wasn't able to have enough of an influence on the model weights to confer this robustness.</li>
+</ul>
+<ul>
+<li>Code for LayerDrop and <strong>models pre-trained with LayerDrop</strong> can be <a href="https://github.com/pytorch/fairseq/tree/master/examples/layerdrop">found here</a>. If you want to use RoBERTa but find it too large/slow for inference then you should give the models here a go!</li>
+</ul>
+<h2 id="&#9889;-Playing-the-lottery-with-rewards-and-multiple-languages:-lottery-tickets-in-RL-and-NLP-&#9889;">&#9889; <a href="https://iclr.cc/virtual/poster_S1xnXRVFwH.html">Playing the lottery with rewards and multiple languages: lottery tickets in RL and NLP</a> &#9889;<a class="anchor-link" href="#&#9889;-Playing-the-lottery-with-rewards-and-multiple-languages:-lottery-tickets-in-RL-and-NLP-&#9889;"> </a></h2><ul>
+<li>This work is a follow on from <a href="https://arxiv.org/abs/1803.03635v5">The Lottery Ticket Hypothesis: Finding Sparse, Trainable Neural Networks</a> from Jonathan Frankle, Michael Carbin at FAIR, who's research codebase has just been released by the way: 
+
+<center>
+    <div class="jekyll-twitter-plugin"><blockquote class="twitter-tweet"><p lang="en" dir="ltr">I just open-sourced my codebase for research on neural network pruning, the Lottery Ticket Hypothesis, and other topics in deep learning.  It&#39;s written in PyTorch and designed to make it easy to add new models, datasets, and experiments. Check it out: <a href="https://t.co/JyTGT8RRZW">https://t.co/JyTGT8RRZW</a></p>&mdash; Jonathan Frankle (@jefrankle) <a href="https://twitter.com/jefrankle/status/1258440816982458368?ref_src=twsrc%5Etfw">May 7, 2020</a></blockquote>
+<script async="" src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+</div>
+</center>
+</li>
+<li>At ICLR 2020 they present how the <a href="https://towardsdatascience.com/breaking-down-the-lottery-ticket-hypothesis-ca1c053b3e58">lottery ticket phenomenon</a>, which previously was only explored for vision models, applies more generally to deep neural networks across NLP and reinforcement learning.</li>
+</ul>
+<ul>
+<li>They test it with NLP models, LSTMs and Transformer, as well as reinforcement learning models and found that the lottery ticket sub-networks performed better than randomly pruned networks, as was found in their previous work on vision models. </li>
+</ul>
+<p><img src="/images/copied_from_nb/my_icons/20200508_iclr_2/lottery.png" alt="" /></p>
+<ul>
+<li>The authors used Iterative Pruning with Late Resetting (aka Late Rewinding):
+
+<center>
+    <div class="jekyll-twitter-plugin"><blockquote class="twitter-tweet"><p lang="en" dir="ltr">The trick is that the subnetworks don&#39;t always emerge at initialization. Instead, we found that training these subnetworks from an iteration slightly after initialization (between a few iterations and a few epochs) often works much better. We term this technique &quot;late resetting.&quot;</p>&mdash; Jonathan Frankle (@jefrankle) <a href="https://twitter.com/jefrankle/status/1103293740465221632?ref_src=twsrc%5Etfw">March 6, 2019</a></blockquote>
+<script async="" src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+</div>
+</center>
+</li>
+<li>Currently the downside to discovering lottery tickets is that they are very computationally expensive to discover. Here the authors trained the models to convergence, before pruning ~20%, reinitializing  and training again. Several cycles of this requires significant computational resources for large models such as transformers and reinforcement learning frameworks. However once a lottery ticket is found it can be trained quickly due to its reduced size whilst still maintaining almost the same performance of the original full network.</li>
+</ul>
+<ul>
+<li>I'd also recommend watching the authors second ICLR 2020 paper, <a href="https://iclr.cc/virtual/poster_Hkl1iRNFwS.html">"The Early Phase of Neural Network Training"</a>, which explored how the "Early Phase" of the network training, i.e. the point at which lottery ticket sub-networks emerge (and the point at which Late Resetting would reset to) was impacted by variations to the input data and weight distributions.</li>
+</ul>
+<h2 id="&#9889;-Dynamic-Model-Pruning-with-Feedback-&#9889;">&#9889; <a href="https://iclr.cc/virtual/poster_SJem8lSFwB.html">Dynamic Model Pruning with Feedback</a> &#9889;<a class="anchor-link" href="#&#9889;-Dynamic-Model-Pruning-with-Feedback-&#9889;"> </a></h2><ul>
+<li>This was actually only tested for vision models, but I'm adding this under NLP too as it looks to be a promising pruning method that could help the push towards efficient NLP!</li>
+</ul>
+<ul>
+<li>The paper introduces a dynamic way to prune weights (Dynamic Model Pruning with Feedback, or DPF) that allows previously pruned model weights to be re-activated when needed, resulting in lottery-ticket peformance of the pruned models while only needing to be trained once (unlike lottery tickets which need multiple rounds of training)</li>
+</ul>
+<p><img src="/images/copied_from_nb/my_icons/20200508_iclr_2/dynamic_pruning.png" alt="" /></p>
+<ul>
+<li>They achieve state-of-the-art top-1 accuracy for pruning on CIFAR-10 and Imagenet for unstructured weight pruning</li>
+</ul>
+<ul>
+<li>The gradient is <strong>evaluated for the pruned model</strong> and then <strong>applied to the dense model</strong>. The binary mask is periodically updated to reallocate the weights. The intuition is that the gradient is used to measure the "error" and then the dense model is used to correct this error
+<img src="/images/copied_from_nb/my_icons/20200508_iclr_2/dynamic_pruning2.png" alt="" /></li>
+</ul>
+<ul>
+<li>Unstructured magnitude pruning was used</li>
+</ul>
+<ul>
+<li>The authors say that the code will be released in June</li>
+</ul>
+<h2 id="&#9889;-Once-for-All:-Train-One-Network-and-Specialize-it-for-Efficient-Deployment-&#9889;">&#9889; <a href="https://iclr.cc/virtual/poster_HylxE1HKwS.html">Once for All: Train One Network and Specialize it for Efficient Deployment</a> &#9889;<a class="anchor-link" href="#&#9889;-Once-for-All:-Train-One-Network-and-Specialize-it-for-Efficient-Deployment-&#9889;"> </a></h2><ul>
+<li>The idea here is that a single large model can be trained the contains a multitude of high performant sub-networks. These sub-networks can be pruned for use in a wide variety of edge device types and sizes <strong>without additional training</strong>. The author's focussed on training efficient vision models for this paper.</li>
+</ul>
+<p><img src="/images/copied_from_nb/my_icons/20200508_iclr_2/once_for_all2.png" alt="" /></p>
+<ul>
+<li>This enables strong performance on a wide variety of devices, without incurring the computational expence (and CO2 footprint) of searching for specialised architectures for each device</li>
+</ul>
+<p><img src="/images/copied_from_nb/my_icons/20200508_iclr_2/once_for_all3.png" alt="" /></p>
+<ul>
+<li>The key to training this model is a technique called <strong>Progresive Shrinking</strong> which is a:<blockquote><p>a generalized pruning method that reduces the model size across many more dimensions than pruning (depth, width, kernel size, and resolution)</p>
+</blockquote>
+</li>
+</ul>
+<p><img src="/images/copied_from_nb/my_icons/20200508_iclr_2/once_for_all_prog_shrink.png" alt="" /></p>
+<ul>
+<li>They achieved 1.5x lower latency for MobileNet-V3 and 2.6x for EfficientNet in ImageNet mobile setting while maintaining the same accuracy</li>
+</ul>
+<ul>
+<li>Their Code and <strong>50 pre-trained models</strong> (for many devices &amp; many latency constraints) can be <a href="https://github.com/mit-han-lab/once-for-all">found in their gihub</a></li>
+</ul>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Other-Great-Papers-You-Should-Absolutely-Checkout-&#128175;">Other Great Papers You Should Absolutely Checkout &#128175;<a class="anchor-link" href="#Other-Great-Papers-You-Should-Absolutely-Checkout-&#128175;"> </a></h2><p>There were many other super interesting papers I couldn't cover there, some of my favorites were:</p>
+<h3 id="Optimisation">Optimisation<a class="anchor-link" href="#Optimisation"> </a></h3><p><strong><a href="https://iclr.cc/virtual/poster_SkgGjRVKDS.html">Towards Stabilizing Batch Statistics in Backward Propagation of Batch Normalization</a></strong></p>
+<ul>
+<li>Introduces Moving Average Batch Normalization (MABN) for training with small batches</li>
+<li>Restores BatchNorm-like performance when training with small batches, down to bs=1 (BatchNorm tends to suffer when training with small batches) </li>
+<li><a href="https://github.com/megvii-model/MABN">Code here</a></li>
+</ul>
+<p><strong><a href="https://iclr.cc/virtual/poster_HkgaETNtDB.html">Mixout: Effective Regularization to Finetune Large-scale Pretrained Language Models</a></strong></p>
+<ul>
+<li>Useful for stabilising training on fine-tuning (BERT for downstream task for example)</li>
+<li>Motivated by DropOut (which is a special case of DropConnect)</li>
+<li>Replaces a randomly selected parameter with a "target" parameter, instead of zero as in DropOut, from a previously memorised state</li>
+<li><a href="https://github.com/bloodwass/mixout">Code here</a>
+<img src="/images/copied_from_nb/my_icons/20200508_iclr_2/mixout.png" alt="" /></li>
+</ul>
+<h3 id="Vision">Vision<a class="anchor-link" href="#Vision"> </a></h3><p><strong><a href="https://iclr.cc/virtual/poster_rkeu30EtvS.html">Network Deconvolution</a></strong></p>
+<ul>
+<li>Correlations between pixels and between channels can make image recognition more difficult, the authors propose network deconvolution to solve this</li>
+<li>Achieves impressive performance gains across ResNet, ResNeXt, EfficientNet, VGG (and more) in both image classification and semantic segmentation tasks, <strong>even when BatchNorm is removed</strong></li>
+<li>Network Deconvolution seems to hold promise beyond vision models too:<blockquote><p>Also, the same deconvolution procedure for 1 × 1 convolutions can be used for non-convolutional layers, which makes it useful for the broader machine learning community.</p>
+</blockquote>
+</li>
+<li><a href="https://github.com/yechengxi/deconvolution">Code here</a>- Network Deconvolution has also been discussed and implemented in the <a href="https://forums.fast.ai/t/network-deconvolution-cnns-that-are-more-robust-and-easier-to-train/70412">fastai forums</a></li>
+</ul>
+<p><img src="/images/copied_from_nb/my_icons/20200508_iclr_2/network_deconv.png" alt="" /></p>
+<p><strong><a href="https://iclr.cc/virtual/poster_rJeB36NKvB.html">How much Position Information Do Convolutional Neural Networks Encode?</a></strong></p>
+<ul>
+<li>Adding zero-padding (widely used already) implicitly delivers positional information and imrproves vision performance</li>
+<li>Deeper models can better encode positional information</li>
+</ul>
+<h2 id="Thanks-for-Reading-&#128515;">Thanks for Reading &#128515;<a class="anchor-link" href="#Thanks-for-Reading-&#128515;"> </a></h2><p>As always, I would love to hear if you have any comments, thoughts or criticisms at <strong><a href="www.twitter.com/mcgenergy">@mcgenergy</a></strong></p>
+
+</div>
+</div>
+</div>
+</div>
+
+
+
+  </div><!-- from https://github.com/utterance/utterances -->
+<script src="https://utteranc.es/client.js"
+        repo="morganmcg1/ntentional"
+        issue-term="title"
+        label="blogpost-comment"
+        theme="github-light"
+        crossorigin="anonymous"
+        async>
+</script><a class="u-url" href="/papers/nlp/efficient-nlp/transformers/2020/05/09/iclr-highlights-2.html" hidden></a>
+</article>
+      </div>
+    </main><footer class="site-footer h-card">
+  <data class="u-url" href="/"></data>
+
+  <div class="wrapper">
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col">
+        <p class="feed-subscribe">
+          <a href="/feed.xml">
+            <svg class="svg-icon orange">
+              <use xlink:href="/assets/minima-social-icons.svg#rss"></use>
+            </svg><span>Subscribe</span>
+          </a>
+        </p>
+      </div>
+      <div class="footer-col">
+        <p>Morgan McGuire&#39;s machine learning journey through blogs and code</p>
+      </div>
+    </div>
+
+    <div class="social-links"><ul class="social-media-list"><li><a rel="me" href="https://github.com/morganmcg1" title="morganmcg1"><svg class="svg-icon grey"><use xlink:href="/assets/minima-social-icons.svg#github"></use></svg></a></li><li><a rel="me" href="https://twitter.com/mcgenergy" title="mcgenergy"><svg class="svg-icon grey"><use xlink:href="/assets/minima-social-icons.svg#twitter"></use></svg></a></li></ul>
+</div>
+
+  </div>
+
+</footer>
+</body>
+
+</html>
