@@ -188,7 +188,7 @@ window.onload = wrap_img;
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <h2 id="Efficient-NLP---Transformers">Efficient NLP - Transformers<a class="anchor-link" href="#Efficient-NLP---Transformers"> </a></h2><p>New transformer architectures that promise less compute-intense NLP training, in order of my excitement to use them:</p>
-<h3 id="&#9889;-Reformer:-The-Efficient-Transformer-&#9889;">&#9889; <a href="https://iclr.cc/virtual/poster_rkgNKkHtvB.html">Reformer: The Efficient Transformer</a> &#9889;<a class="anchor-link" href="#&#9889;-Reformer:-The-Efficient-Transformer-&#9889;"> </a></h3><ul>
+<h3 id="&#9889;-Reformer:-The-Efficient-Transformer-&#9889;">&#9889; <a href="https://iclr.cc/virtual_2020/poster_rkgNKkHtvB.html">Reformer: The Efficient Transformer</a> &#9889;<a class="anchor-link" href="#&#9889;-Reformer:-The-Efficient-Transformer-&#9889;"> </a></h3><ul>
 <li>Reformer enables training on <strong>much longer</strong> sequences than BERT-like models (e.g. document-length sequences instead of 512 token length sequences) much more efficiently</li>
 <li><p>Reformer introduces a couple of techniques that improve both time and memory efficiency:</p>
 </li>
@@ -204,7 +204,7 @@ window.onload = wrap_img;
 <li>The 15 minute ICLR paper presentation video linked above really helps better understand these concepts</li>
 <li><a href="https://github.com/lucidrains/reformer-pytorch"><strong>A PyTorch Reformer implementation can be found here</strong></a></li>
 </ul>
-<h3 id="&#9889;-ELECTRA:-Pre-training-Text-Encoders-as-Discriminators-Rather-Than-Generators-&#9889;">&#9889; <a href="https://iclr.cc/virtual/poster_r1xMH1BtvB.html">ELECTRA: Pre-training Text Encoders as Discriminators Rather Than Generators</a> &#9889;<a class="anchor-link" href="#&#9889;-ELECTRA:-Pre-training-Text-Encoders-as-Discriminators-Rather-Than-Generators-&#9889;"> </a></h3><ul>
+<h3 id="&#9889;-ELECTRA:-Pre-training-Text-Encoders-as-Discriminators-Rather-Than-Generators-&#9889;">&#9889; <a href="https://iclr.cc/virtual_2020/poster_r1xMH1BtvB.html">ELECTRA: Pre-training Text Encoders as Discriminators Rather Than Generators</a> &#9889;<a class="anchor-link" href="#&#9889;-ELECTRA:-Pre-training-Text-Encoders-as-Discriminators-Rather-Than-Generators-&#9889;"> </a></h3><ul>
 <li>ELECTRA brings a couple of novelties, resulting in a much more computationally efficient transformer to train. It is trained with:<ul>
 <li>a Generator-Discriminator setup and </li>
 <li>a new pre-training task called Replaced Token Detection</li>
@@ -223,7 +223,7 @@ window.onload = wrap_img;
 <li>Lots more interesting results and experiment discussion can be found in the paper</li>
 <li><a href="https://huggingface.co/transformers/model_doc/electra.html?highlight=electra"><strong>A HuggingFace ELECTRA Implementation is here</strong></a></li>
 </ul>
-<h3 id="&#9889;-Lite-Transformer-with-Long-Short-Range-Attention-&#9889;">&#9889; <a href="https://iclr.cc/virtual/poster_ByeMPlHKPH.html">Lite Transformer with Long-Short Range Attention</a> &#9889;<a class="anchor-link" href="#&#9889;-Lite-Transformer-with-Long-Short-Range-Attention-&#9889;"> </a></h3><ul>
+<h3 id="&#9889;-Lite-Transformer-with-Long-Short-Range-Attention-&#9889;">&#9889; <a href="https://iclr.cc/virtual_2020/poster_ByeMPlHKPH.html">Lite Transformer with Long-Short Range Attention</a> &#9889;<a class="anchor-link" href="#&#9889;-Lite-Transformer-with-Long-Short-Range-Attention-&#9889;"> </a></h3><ul>
 <li><p>Introduces Long-Short Range Attention (LRSA) which results in a reduction in model computation between 2.5x and 3x compared to original Transformer.
 <img src="/images/copied_from_nb/my_icons/20200505_iclr_efficient/lite_summary.png" alt="" /></p>
 </li>
@@ -237,7 +237,7 @@ window.onload = wrap_img;
 <li>One thing I liked is that Lite Transformer looks at performance under mobile-like constraints, defined by the authros as 10M parameters and 1G FLOPs </li>
 <li><a href="https://github.com/mit-han-lab/lite-transformer"><strong>Lite Transformer code (PyTorch) is available from the authors here</strong></a></li>
 </ul>
-<h3 id="&#9889;-ALBERT:-A-Lite-BERT-for-Self-supervised-Learning-of-Language-Representations-&#9889;">&#9889; <a href="https://iclr.cc/virtual/poster_H1eA7AEtvS.html">ALBERT: A Lite BERT for Self-supervised Learning of Language Representations</a> &#9889;<a class="anchor-link" href="#&#9889;-ALBERT:-A-Lite-BERT-for-Self-supervised-Learning-of-Language-Representations-&#9889;"> </a></h3><ul>
+<h3 id="&#9889;-ALBERT:-A-Lite-BERT-for-Self-supervised-Learning-of-Language-Representations-&#9889;">&#9889; <a href="https://iclr.cc/virtual_2020/poster_H1eA7AEtvS.html">ALBERT: A Lite BERT for Self-supervised Learning of Language Representations</a> &#9889;<a class="anchor-link" href="#&#9889;-ALBERT:-A-Lite-BERT-for-Self-supervised-Learning-of-Language-Representations-&#9889;"> </a></h3><ul>
 <li>ALBERT is 18x smaller model than BERT-large and can be trained 1.7x faster while still outperforming it</li>
 <li>The two techniques used to reduce its size are:<ul>
 <li>Reduce the vocabulary embedding size; they reduce the matrix size by projecting it to a lower dimension. e.g. an input one-hot encoded matrix of size 30,000 is reduced to a much smaller sized matix which is then used</li>

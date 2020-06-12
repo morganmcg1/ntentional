@@ -182,7 +182,7 @@ window.onload = wrap_img;
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <h1 id="Efficient-Deep-Learning">Efficient Deep Learning<a class="anchor-link" href="#Efficient-Deep-Learning"> </a></h1><p>Training methods and architecture changes that can make Deep Learning models smaller/more efficient</p>
-<h2 id="&#9889;-Reducing-Transformer-Depth-on-Demand-with-Structured-Dropout-&#9889;">&#9889; <a href="https://iclr.cc/virtual/poster_SylO2yStDr.html">Reducing Transformer Depth on Demand with Structured Dropout</a> &#9889;<a class="anchor-link" href="#&#9889;-Reducing-Transformer-Depth-on-Demand-with-Structured-Dropout-&#9889;"> </a></h2><ul>
+<h2 id="&#9889;-Reducing-Transformer-Depth-on-Demand-with-Structured-Dropout-&#9889;">&#9889; <a href="https://iclr.cc/virtual_2020/poster_SylO2yStDr.html">Reducing Transformer Depth on Demand with Structured Dropout</a> &#9889;<a class="anchor-link" href="#&#9889;-Reducing-Transformer-Depth-on-Demand-with-Structured-Dropout-&#9889;"> </a></h2><ul>
 <li>The introduction of <strong>LayerDrop</strong> in this paper was super exciting to read as it makes a (transformer) model much more robust to pruning while only having to train it once, unlike finding lottery tickets for example</li>
 </ul>
 <ul>
@@ -225,7 +225,7 @@ for layer in transformer.layers:
 </ul>
 </li>
 </ul>
-<h2 id="&#9889;-Playing-the-lottery-with-rewards-and-multiple-languages:-lottery-tickets-in-RL-and-NLP-&#9889;">&#9889; <a href="https://iclr.cc/virtual/poster_S1xnXRVFwH.html">Playing the lottery with rewards and multiple languages: lottery tickets in RL and NLP</a> &#9889;<a class="anchor-link" href="#&#9889;-Playing-the-lottery-with-rewards-and-multiple-languages:-lottery-tickets-in-RL-and-NLP-&#9889;"> </a></h2><ul>
+<h2 id="&#9889;-Playing-the-lottery-with-rewards-and-multiple-languages:-lottery-tickets-in-RL-and-NLP-&#9889;">&#9889; <a href="https://iclr.cc/virtual_2020/poster_S1xnXRVFwH.html">Playing the lottery with rewards and multiple languages: lottery tickets in RL and NLP</a> &#9889;<a class="anchor-link" href="#&#9889;-Playing-the-lottery-with-rewards-and-multiple-languages:-lottery-tickets-in-RL-and-NLP-&#9889;"> </a></h2><ul>
 <li>This work is a follow on from <a href="https://arxiv.org/abs/1803.03635v5">The Lottery Ticket Hypothesis: Finding Sparse, Trainable Neural Networks</a> from Jonathan Frankle, Michael Carbin at FAIR, who's research codebase has just been released by the way: 
 
 <center>
@@ -254,7 +254,7 @@ for layer in transformer.layers:
 <ul>
 <li>I'd also recommend watching the authors second ICLR 2020 paper, <a href="https://iclr.cc/virtual/poster_Hkl1iRNFwS.html">"The Early Phase of Neural Network Training"</a>, which explored how the "Early Phase" of the network training, i.e. the point at which lottery ticket sub-networks emerge (and the point at which Late Resetting would reset to) was impacted by variations to the input data and weight distributions.</li>
 </ul>
-<h2 id="&#9889;-Dynamic-Model-Pruning-with-Feedback-&#9889;">&#9889; <a href="https://iclr.cc/virtual/poster_SJem8lSFwB.html">Dynamic Model Pruning with Feedback</a> &#9889;<a class="anchor-link" href="#&#9889;-Dynamic-Model-Pruning-with-Feedback-&#9889;"> </a></h2><ul>
+<h2 id="&#9889;-Dynamic-Model-Pruning-with-Feedback-&#9889;">&#9889; <a href="https://iclr.cc/virtual_2020/poster_SJem8lSFwB.html">Dynamic Model Pruning with Feedback</a> &#9889;<a class="anchor-link" href="#&#9889;-Dynamic-Model-Pruning-with-Feedback-&#9889;"> </a></h2><ul>
 <li>The paper introduces a dynamic way to prune weights (Dynamic Model Pruning with Feedback, or DPF) that allows previously pruned model weights to be re-activated when needed, resulting in lottery-ticket peformance of the pruned models while only needing to be trained once (unlike lottery tickets which need multiple rounds of training)</li>
 </ul>
 <p><img src="/images/copied_from_nb/my_icons/20200508_iclr_2/dynamic_pruning.png" alt="" /></p>
@@ -271,7 +271,7 @@ for layer in transformer.layers:
 <ul>
 <li>The authors say that the code will be released in June</li>
 </ul>
-<h2 id="&#9889;-Once-for-All:-Train-One-Network-and-Specialize-it-for-Efficient-Deployment-&#9889;">&#9889; <a href="https://iclr.cc/virtual/poster_HylxE1HKwS.html">Once for All: Train One Network and Specialize it for Efficient Deployment</a> &#9889;<a class="anchor-link" href="#&#9889;-Once-for-All:-Train-One-Network-and-Specialize-it-for-Efficient-Deployment-&#9889;"> </a></h2><ul>
+<h2 id="&#9889;-Once-for-All:-Train-One-Network-and-Specialize-it-for-Efficient-Deployment-&#9889;">&#9889; <a href="https://iclr.cc/virtual_2020/poster_HylxE1HKwS.html">Once for All: Train One Network and Specialize it for Efficient Deployment</a> &#9889;<a class="anchor-link" href="#&#9889;-Once-for-All:-Train-One-Network-and-Specialize-it-for-Efficient-Deployment-&#9889;"> </a></h2><ul>
 <li>The idea here is that a single large model can be trained the contains a multitude of high performant sub-networks. These sub-networks can be pruned for use in a wide variety of edge device types and sizes <strong>without additional training</strong>. The author's focussed on training efficient vision models for this paper.</li>
 </ul>
 <p><img src="/images/copied_from_nb/my_icons/20200508_iclr_2/once_for_all2.png" alt="" /></p>
@@ -298,13 +298,13 @@ for layer in transformer.layers:
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <h2 id="Other-Great-Papers-You-Should-Absolutely-Checkout-&#128175;">Other Great Papers You Should Absolutely Checkout &#128175;<a class="anchor-link" href="#Other-Great-Papers-You-Should-Absolutely-Checkout-&#128175;"> </a></h2><p>There were many other super interesting papers I couldn't cover there, some of my favorites are below</p>
-<h3 id="Optimisation">Optimisation<a class="anchor-link" href="#Optimisation"> </a></h3><p><strong><a href="https://iclr.cc/virtual/poster_SkgGjRVKDS.html">Towards Stabilizing Batch Statistics in Backward Propagation of Batch Normalization</a></strong></p>
+<h3 id="Optimisation">Optimisation<a class="anchor-link" href="#Optimisation"> </a></h3><p><strong><a href="https://iclr.cc/virtual_2020/poster_SkgGjRVKDS.html">Towards Stabilizing Batch Statistics in Backward Propagation of Batch Normalization</a></strong></p>
 <ul>
 <li>Introduces Moving Average Batch Normalization (MABN) for training with small batches</li>
 <li>Restores BatchNorm-like performance when training with small batches, down to bs=1 (BatchNorm tends to suffer when training with small batches) </li>
 <li><a href="https://github.com/megvii-model/MABN">Code here</a></li>
 </ul>
-<p><strong><a href="https://iclr.cc/virtual/poster_HkgaETNtDB.html">Mixout: Effective Regularization to Finetune Large-scale Pretrained Language Models</a></strong></p>
+<p><strong><a href="https://iclr.cc/virtual_2020/poster_HkgaETNtDB.html">Mixout: Effective Regularization to Finetune Large-scale Pretrained Language Models</a></strong></p>
 <ul>
 <li>Useful for stabilising training on fine-tuning (BERT for downstream task for example)</li>
 <li>Motivated by DropOut (which is a special case of DropConnect)</li>
@@ -312,7 +312,7 @@ for layer in transformer.layers:
 <li><a href="https://github.com/bloodwass/mixout">Code here</a>
 <img src="/images/copied_from_nb/my_icons/20200508_iclr_2/mixout.png" alt="" /></li>
 </ul>
-<h3 id="Vision">Vision<a class="anchor-link" href="#Vision"> </a></h3><p><strong><a href="https://iclr.cc/virtual/poster_rkeu30EtvS.html">Network Deconvolution</a></strong></p>
+<h3 id="Vision">Vision<a class="anchor-link" href="#Vision"> </a></h3><p><strong><a href="https://iclr.cc/virtual_2020/poster_rkeu30EtvS.html">Network Deconvolution</a></strong></p>
 <ul>
 <li>Correlations between pixels and between channels can make image recognition more difficult, the authors propose network deconvolution to solve this</li>
 <li>Achieves impressive performance gains across ResNet, ResNeXt, EfficientNet, VGG (and more) in both image classification and semantic segmentation tasks, <strong>even when BatchNorm is removed</strong></li>
@@ -322,7 +322,7 @@ for layer in transformer.layers:
 <li><a href="https://github.com/yechengxi/deconvolution">Code here</a>- Network Deconvolution has also been discussed and implemented in the <a href="https://forums.fast.ai/t/network-deconvolution-cnns-that-are-more-robust-and-easier-to-train/70412">fastai forums</a></li>
 </ul>
 <p><img src="/images/copied_from_nb/my_icons/20200508_iclr_2/network_deconv.png" alt="" /></p>
-<p><strong><a href="https://iclr.cc/virtual/poster_rJeB36NKvB.html">How much Position Information Do Convolutional Neural Networks Encode?</a></strong></p>
+<p><strong><a href="https://iclr.cc/virtual_2020/poster_rJeB36NKvB.html">How much Position Information Do Convolutional Neural Networks Encode?</a></strong></p>
 <ul>
 <li>Adding zero-padding (widely used already) implicitly delivers positional information and imrproves vision performance</li>
 <li>Deeper models can better encode positional information</li>
