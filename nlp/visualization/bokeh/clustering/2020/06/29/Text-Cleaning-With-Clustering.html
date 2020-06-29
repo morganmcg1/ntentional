@@ -123,7 +123,7 @@ window.onload = wrap_img;
        • <span class="read-time" title="Estimated read time">
     
     
-      15 min read
+      14 min read
     
 </span></p>
 
@@ -203,43 +203,24 @@ window.onload = wrap_img;
 </div>
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="Text-Embeddings-for-Fun-and-Profit">Text Embeddings for Fun and Profit<a class="anchor-link" href="#Text-Embeddings-for-Fun-and-Profit"> </a></h2><p>Text embeddings are incredibly valuable and can also be used for things like spell checking; have a look at <a href="https://blog.usejournal.com/a-simple-spell-checker-built-from-word-vectors-9f28452b6f26">@er214's post</a> and <a href="https://github.com/er214/spellchecker">notebook</a> to see how they <strong>used GloVe word embeddings to create a spell-checker</strong> for their dataset. The <a href="https://forums.fast.ai/t/nlp-any-libraries-dictionaries-out-there-for-fixing-common-spelling-errors/16411">fastai forums post</a> is also worth a read if you have time, they also created a "pretentiousness" embedding to score news outlets 🤣. While we are using embeddings for chunks of text, as opposed to individual words, the concept is the same.</p>
-<h4 id="Pre-Trained-XLM-RoBERTa-Model">Pre-Trained XLM-RoBERTa Model<a class="anchor-link" href="#Pre-Trained-XLM-RoBERTa-Model"> </a></h4><p>We derive our text embedding by passing the text sample though <a href="https://arxiv.org/abs/1911.02116">XLM-RoBERTa Large</a> (XLM-R), which is a multilingual model and should work reasonably well for both Irish and English.</p>
-<p>We will extracte the values in <strong>final</strong> hidden layer. Note that research has been done on BERT to show that by concatenating the final 4 layers of the model one gets even richer contextual embeddings. In the interest of simplicity we will stick to the final layer only for the moment, although using additional layers would be an interesting area of exploration!</p>
+<h2 id="Text-Embeddings-for-Fun-and-Profit">Text Embeddings for Fun and Profit<a class="anchor-link" href="#Text-Embeddings-for-Fun-and-Profit"> </a></h2><p>Text embeddings can be incredibly useful for a variety of tasks; have a look at <a href="https://blog.usejournal.com/a-simple-spell-checker-built-from-word-vectors-9f28452b6f26">@er214's post</a> and <a href="https://github.com/er214/spellchecker">notebook</a> to see how they <strong>used GloVe word embeddings to create a spell-checker</strong> for their dataset. And this <a href="https://forums.fast.ai/t/nlp-any-libraries-dictionaries-out-there-for-fixing-common-spelling-errors/16411">fastai forums post</a> outlines how they created a "pretentiousness" embedding to score news outlets 🤣. While we are using embeddings for chunks of text, as opposed to individual words, the concept is the same.</p>
+<h4 id="Pre-Trained-XLM-RoBERTa-Model">Pre-Trained XLM-RoBERTa Model<a class="anchor-link" href="#Pre-Trained-XLM-RoBERTa-Model"> </a></h4><p>We derive our text embedding by passing a text sample though <a href="https://arxiv.org/abs/1911.02116">XLM-RoBERTa Large</a> (XLM-R), a multilingual model which should work reasonably well for both Irish and English.</p>
+<p>For out embeddings we will extract the values in <strong>final</strong> hidden layer. Note that some research done on BERT shows that by concatenating the <strong>final 4 layers</strong> of the model one gets even richer contextual embeddings. In the interest of simplicity we will stick to the final layer only for the moment, although using additional layers would be an interesting area of exploration!</p>
 
 </div>
 </div>
 </div>
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="Dimension-Reduction---UMAP">Dimension Reduction - UMAP<a class="anchor-link" href="#Dimension-Reduction---UMAP"> </a></h2><p>Dimensionality reduction techniques attempt to find the latent features in your data <a href="https://umap-learn.readthedocs.io/en/latest/index.html">Uniform Manifold Approximation and Projection (UMAP)</a> is a dimension reduction technique published in <a href="https://arxiv.org/abs/1802.03426">2018 by McInnes and Healy</a> that can be used for visualisation of high dimensional data, similarly to [[t-SNE]]. Its main advantage is that it is fast (faster than t-SNE when dealing with large datasets) and also better maintains the global structure of the data.</p>
-<p>UMAP also has <a href="https://umap-learn.readthedocs.io/en/latest/index.html">beautifully well-written</a> documentation. McInnes gives a <a href="https://www.youtube.com/watch?v=nq6iPZVUxZU">helpful overview</a> of UMAP here at the SciPy 2018 conference too. Finally, Pair Code has an <a href="https://pair-code.github.io/understanding-umap/#:~:text=In%20the%20simplest%20sense%2C%20UMAP,behind%20them%20is%20remarkably%20simple">excellent explanation</a> complete with visualisations of UMAP if you'd like to learn more.</p>
+<h2 id="Dimension-Reduction---UMAP">Dimension Reduction - UMAP<a class="anchor-link" href="#Dimension-Reduction---UMAP"> </a></h2><p>Dimensionality reduction techniques attempt to find the latent features in your data. Uniform Manifold Approximation and Projection or <a href="https://umap-learn.readthedocs.io/en/latest/index.html">"UMAP"</a> is a dimension reduction technique published in <a href="https://arxiv.org/abs/1802.03426">2018 by McInnes and Healy</a> that can be used for visualisation of high dimensional data, in a similar manner to t-SNE. Its main advantage is that <strong>it is fast</strong> (faster than t-SNE when dealing with large datasets) and also better maintains the global structure of the data.</p>
+<p>UMAP also has <a href="https://umap-learn.readthedocs.io/en/latest/index.html">beautifully well-written</a> documentation. To learn more, McInnes gives a <a href="https://www.youtube.com/watch?v=nq6iPZVUxZU">helpful overview</a> of UMAP at the SciPy 2018 conference and Pair Code has an <a href="https://pair-code.github.io/understanding-umap/#:~:text=In%20the%20simplest%20sense%2C%20UMAP,behind%20them%20is%20remarkably%20simple">excellent explanation</a> complete with many different visualisations that aid in understanding.</p>
 
 </div>
 </div>
 </div>
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="Similarity-Search">Similarity Search<a class="anchor-link" href="#Similarity-Search"> </a></h2><p>In order to calculate the similarity between our embeddings there are a multitude of tools and techniques we can try. In this article we will demonstrate both Sci-kit Learn's <code>cosine_similarity</code> as well as <code>nmslib</code>'s functionality.</p>
-<h4 id="Similarity-Search-Resources">Similarity Search Resources<a class="anchor-link" href="#Similarity-Search-Resources"> </a></h4><p>Below are the resources I found that helped give me an overview of the similarity search tools and methods that are out there</p>
-<ul>
-<li><strong><a href="https://github.com/nmslib/nmslib/blob/master/python_bindings/notebooks/search_sparse_cosine.ipynb">nmslib</a></strong> is an "<strong>efficient similarity search library and a toolkit for evaluation of k-NN methods for generic non-metric spaces</strong>". In testing <a href="http://www.benfrederickson.com/approximate-nearest-neighbours-for-recommender-systems/">Ben Frederickson found</a> that between nmslib, <a href="https://engineering.fb.com/ml-applications/faiss-a-library-for-efficient-similarity-search/">FAISS</a> (Facebook) and <a href="https://github.com/spotify/annoy">annoy</a> (Spotify) nmslib was the fastest nearest neighbours library for CPU. Note FAISS on GPU is blazes past nmslib and annoy, but can also difficult to set up.</li>
-</ul>
-<ul>
-<li><strong><a href="https://github.com/milvus-io/milvus">Milvus</a></strong> is an interesting library that was open sourced in late 2019 which offers similarity search using FAISS, nmslib or annoy as well as GPU capability. If I had had more time I would have explored this further</li>
-</ul>
-<ul>
-<li>**<a href="https://www.elastic.co/blog/text-similarity-search-with-vectors-in-elasticsearch">ElasticSearch</a> and <a href="https://medium.com/analytics-vidhya/elasticbert-information-retrieval-using-bert-and-elasticsearch-51fef465b9ae">article</a> is yet another tool we could use to carry out the similarity search between our text embeddings.</li>
-</ul>
-<ul>
-<li><strong><a href="www.dair.ai">DAIR.ai</a></strong> recently posted a video called <a href="https://www.youtube.com/watch?v=VHm6_uC4vxM">"101 Ways to Solve Search"</a> by <a href="www.pratik.ai">Pratik Bhavsar</a> which is a great introduction to how search (including semantic search) works in general. </li>
-</ul>
-<ul>
-<li><strong><a href="models.pratik.ai">models.pratik.ai</a></strong> is a really great flow chart visualisation which he tries to keep up to date of the models and techniques available for semantic search and NLP in general</li>
-</ul>
-<ul>
-<li><strong>Spotify's annoy</strong>: <a href="https://www.kaggle.com/hmendonca/proper-clustering-with-facenet-embeddings-eda">@hmendonca's EDA notebook on kaggle</a> is an excellent example showing how to use annoy to group and display similar images (faces in this case).</li>
-</ul>
+<h2 id="Similarity-Search">Similarity Search<a class="anchor-link" href="#Similarity-Search"> </a></h2><p>In order to calculate the similarity between our embeddings there are a multitude of tools and techniques we can try. In this article we will demonstrate both Sci-kit Learn's <code>cosine_similarity</code> as well as <code>nmslib</code>'s functionality. See the end of this article for the similarity search resources I found useful</p>
 
 </div>
 </div>
@@ -288,27 +269,13 @@ window.onload = wrap_img;
 
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h4 id="Create-our-Dataloader">Create our Dataloader<a class="anchor-link" href="#Create-our-Dataloader"> </a></h4><p>As part of setting up our dataloader we'll need to define our:</p>
-<ul>
-<li>Tokenizer Transform, which is a wrapper around the HuggingFace tokenizer </li>
-<li>Function to add padding to each sample so that we can batch our samples</li>
-<li>Function to create a padding mask so that our model doesn't attend over the padding tokens</li>
-</ul>
-
+<h2 id="Grab-the-Embeddings">Grab the Embeddings<a class="anchor-link" href="#Grab-the-Embeddings"> </a></h2>
 </div>
 </div>
 </div>
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>Now we are ready to create our dataloader so that we can quickly iterate through our samples. I'm using fastai here, however you could also use either a PyTorch or Tensorflow dataloader here, the rest of this notebook doesn't have a fastai dependency.</p>
-<p>To start, we'll look at a random sample of 40,000 samples, about 5% of our data. Remember we are only retrieving embeddings for our English samples for now.</p>
-
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<p>You can see the English sample below, including the special tokens <code>&lt; s &gt;</code> and <code>&lt; /s &gt;</code> used by XLM-R to denote the start and end of the sequence. You can also see all the padding needed for this sample.</p>
+<p>After creating our dataloaders you can see the English sample below, including the special tokens <code>&lt; s &gt;</code> and <code>&lt; /s &gt;</code> used by XLM-R to denote the start and end of the sequence. You can also see all the padding needed for this sample.</p>
 
 </div>
 </div>
@@ -346,8 +313,8 @@ window.onload = wrap_img;
 
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="Grab-the-Embeddings">Grab the Embeddings<a class="anchor-link" href="#Grab-the-Embeddings"> </a></h2><p>Now we're ready to retrieve our embeddings from the pretrained multi-lingual model. We do this by simply passing our samples to the model and saving the output activations from the last layer of the model. From this we can generate an embedding of size (40000, 1024) which we can then pass to our dimensionality reduction algorithm.</p>
-<p>Processing 40k samples with UMAP takes about 5 minutes. After a little testing with <code>n_neighbors</code> and <code>min_dist</code> I found the defaults work quite well although its always worth playing around with the parameters and distance metric used.</p>
+<p>Now we're ready to retrieve our embeddings from the pretrained multi-lingual model. We do this by simply passing our samples to the model and saving the output activations from the last layer of the model. From this we can generate an embedding of size (40000, 1024) which we can then pass to our dimensionality reduction algorithm.</p>
+<p>Processing 40k samples with UMAP takes about 5 minutes. After a little testing with the <code>n_neighbors</code> and <code>min_dist</code> parameters I actually found the defaults work quite well, although its always worth playing around with them and distance metric used for your particular dataset.</p>
 
 </div>
 </div>
@@ -370,7 +337,7 @@ window.onload = wrap_img;
 </li>
 <li><p>Calculating a <strong>distance</strong> between this average embedding and all of the embeddings in our entire dataset</p>
 </li>
-<li><p>Removing embeddings that are within a certain distance to the average embeddings</p>
+<li><p>Removing embeddings that are within a certain <strong>distance</strong> to the average embeddings</p>
 </li>
 </ol>
 
@@ -1159,6 +1126,31 @@ xhr.send();
 <div class="text_cell_render border-box-sizing rendered_html">
 <h2 id="Summary">Summary<a class="anchor-link" href="#Summary"> </a></h2><p>Hopefully this gives you a sense of how you can explore and clean up large, noisy text datasets. You can open this notebook on github and test it for your own text dataset.</p>
 <p>As always, I would love to hear your feedback, what could have been written better or clearer, you can find me on twitter: <a href="www.twitter.com/mcgenergy">@mcgenergy</a></p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Appendix">Appendix<a class="anchor-link" href="#Appendix"> </a></h2><h4 id="Similarity-Search-Resources">Similarity Search Resources<a class="anchor-link" href="#Similarity-Search-Resources"> </a></h4><p>Below are the resources I found that helped give me an overview of the similarity search tools and methods that are out there</p>
+<ul>
+<li><strong><a href="https://github.com/nmslib/nmslib/blob/master/python_bindings/notebooks/search_sparse_cosine.ipynb">nmslib</a></strong> is an "<strong>efficient similarity search library and a toolkit for evaluation of k-NN methods for generic non-metric spaces</strong>". In testing <a href="http://www.benfrederickson.com/approximate-nearest-neighbours-for-recommender-systems/">Ben Frederickson found</a> that between nmslib, <a href="https://engineering.fb.com/ml-applications/faiss-a-library-for-efficient-similarity-search/">FAISS</a> (Facebook) and <a href="https://github.com/spotify/annoy">annoy</a> (Spotify) nmslib was the fastest nearest neighbours library for CPU. Note FAISS on GPU is blazes past nmslib and annoy, but can also difficult to set up.</li>
+</ul>
+<ul>
+<li><strong><a href="https://github.com/milvus-io/milvus">Milvus</a></strong> is an interesting library that was open sourced in late 2019 which offers similarity search using FAISS, nmslib or annoy as well as GPU capability. If I had had more time I would have explored this further</li>
+</ul>
+<ul>
+<li>**<a href="https://www.elastic.co/blog/text-similarity-search-with-vectors-in-elasticsearch">ElasticSearch</a> and <a href="https://medium.com/analytics-vidhya/elasticbert-information-retrieval-using-bert-and-elasticsearch-51fef465b9ae">article</a> is yet another tool we could use to carry out the similarity search between our text embeddings.</li>
+</ul>
+<ul>
+<li><strong><a href="www.dair.ai">DAIR.ai</a></strong> recently posted a video called <a href="https://www.youtube.com/watch?v=VHm6_uC4vxM">"101 Ways to Solve Search"</a> by <a href="www.pratik.ai">Pratik Bhavsar</a> which is a great introduction to how search (including semantic search) works in general. </li>
+</ul>
+<ul>
+<li><strong><a href="models.pratik.ai">models.pratik.ai</a></strong> is a really great flow chart visualisation which he tries to keep up to date of the models and techniques available for semantic search and NLP in general</li>
+</ul>
+<ul>
+<li><strong>Spotify's annoy</strong>: <a href="https://www.kaggle.com/hmendonca/proper-clustering-with-facenet-embeddings-eda">@hmendonca's EDA notebook on kaggle</a> is an excellent example showing how to use annoy to group and display similar images (faces in this case).</li>
+</ul>
 
 </div>
 </div>
