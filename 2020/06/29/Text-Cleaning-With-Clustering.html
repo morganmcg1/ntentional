@@ -3,9 +3,9 @@
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1"><!-- Begin Jekyll SEO tag v2.6.1 -->
-<title>Text Data Cleanup with XLM-R Embeddings and UMAP Visualisation | ntentional</title>
+<title>Text Data Cleanup - Embedding Visualisation | ntentional</title>
 <meta name="generator" content="Jekyll v4.0.0" />
-<meta property="og:title" content="Text Data Cleanup with XLM-R Embeddings and UMAP Visualisation" />
+<meta property="og:title" content="Text Data Cleanup - Embedding Visualisation" />
 <meta property="og:locale" content="en_US" />
 <meta name="description" content="Identify noisy text to remove from a Machine Translation dataset by visualising text embeddings with UMAP" />
 <meta property="og:description" content="Identify noisy text to remove from a Machine Translation dataset by visualising text embeddings with UMAP" />
@@ -15,7 +15,7 @@
 <meta property="og:type" content="article" />
 <meta property="article:published_time" content="2020-06-29T00:00:00-05:00" />
 <script type="application/ld+json">
-{"description":"Identify noisy text to remove from a Machine Translation dataset by visualising text embeddings with UMAP","mainEntityOfPage":{"@type":"WebPage","@id":"https://www.ntentional.com/2020/06/29/Text-Cleaning-With-Clustering.html"},"@type":"BlogPosting","url":"https://www.ntentional.com/2020/06/29/Text-Cleaning-With-Clustering.html","headline":"Text Data Cleanup with XLM-R Embeddings and UMAP Visualisation","dateModified":"2020-06-29T00:00:00-05:00","datePublished":"2020-06-29T00:00:00-05:00","@context":"https://schema.org"}</script>
+{"description":"Identify noisy text to remove from a Machine Translation dataset by visualising text embeddings with UMAP","mainEntityOfPage":{"@type":"WebPage","@id":"https://www.ntentional.com/2020/06/29/Text-Cleaning-With-Clustering.html"},"@type":"BlogPosting","url":"https://www.ntentional.com/2020/06/29/Text-Cleaning-With-Clustering.html","headline":"Text Data Cleanup - Embedding Visualisation","dateModified":"2020-06-29T00:00:00-05:00","datePublished":"2020-06-29T00:00:00-05:00","@context":"https://schema.org"}</script>
 <!-- End Jekyll SEO tag -->
 <link rel="stylesheet" href="/assets/css/style.css"><link type="application/atom+xml" rel="alternate" href="https://www.ntentional.com/feed.xml" title="ntentional" /><!-- the google_analytics_id gets auto inserted from the config file -->
 
@@ -25,9 +25,9 @@
 
 <link rel="shortcut icon" type="image/x-icon" href="/images/nt.ico">
 <!-- Begin Jekyll SEO tag v2.6.1 -->
-<title>Text Data Cleanup with XLM-R Embeddings and UMAP Visualisation | ntentional</title>
+<title>Text Data Cleanup - Embedding Visualisation | ntentional</title>
 <meta name="generator" content="Jekyll v4.0.0" />
-<meta property="og:title" content="Text Data Cleanup with XLM-R Embeddings and UMAP Visualisation" />
+<meta property="og:title" content="Text Data Cleanup - Embedding Visualisation" />
 <meta property="og:locale" content="en_US" />
 <meta name="description" content="Identify noisy text to remove from a Machine Translation dataset by visualising text embeddings with UMAP" />
 <meta property="og:description" content="Identify noisy text to remove from a Machine Translation dataset by visualising text embeddings with UMAP" />
@@ -37,7 +37,7 @@
 <meta property="og:type" content="article" />
 <meta property="article:published_time" content="2020-06-29T00:00:00-05:00" />
 <script type="application/ld+json">
-{"description":"Identify noisy text to remove from a Machine Translation dataset by visualising text embeddings with UMAP","mainEntityOfPage":{"@type":"WebPage","@id":"https://www.ntentional.com/2020/06/29/Text-Cleaning-With-Clustering.html"},"@type":"BlogPosting","url":"https://www.ntentional.com/2020/06/29/Text-Cleaning-With-Clustering.html","headline":"Text Data Cleanup with XLM-R Embeddings and UMAP Visualisation","dateModified":"2020-06-29T00:00:00-05:00","datePublished":"2020-06-29T00:00:00-05:00","@context":"https://schema.org"}</script>
+{"description":"Identify noisy text to remove from a Machine Translation dataset by visualising text embeddings with UMAP","mainEntityOfPage":{"@type":"WebPage","@id":"https://www.ntentional.com/2020/06/29/Text-Cleaning-With-Clustering.html"},"@type":"BlogPosting","url":"https://www.ntentional.com/2020/06/29/Text-Cleaning-With-Clustering.html","headline":"Text Data Cleanup - Embedding Visualisation","dateModified":"2020-06-29T00:00:00-05:00","datePublished":"2020-06-29T00:00:00-05:00","@context":"https://schema.org"}</script>
 <!-- End Jekyll SEO tag -->
 
 <link href="https://unpkg.com/@primer/css/dist/primer.css" rel="stylesheet" />
@@ -115,7 +115,7 @@ window.onload = wrap_img;
         <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
 
   <header class="post-header">
-    <h1 class="post-title p-name" itemprop="name headline">Text Data Cleanup with XLM-R Embeddings and UMAP Visualisation</h1><p class="page-description">Identify noisy text to remove from a Machine Translation dataset by visualising text embeddings with UMAP</p><p class="post-meta post-meta-title"><time class="dt-published" datetime="2020-06-29T00:00:00-05:00" itemprop="datePublished">
+    <h1 class="post-title p-name" itemprop="name headline">Text Data Cleanup - Embedding Visualisation</h1><p class="page-description">Identify noisy text to remove from a Machine Translation dataset by visualising text embeddings with UMAP</p><p class="post-meta post-meta-title"><time class="dt-published" datetime="2020-06-29T00:00:00-05:00" itemprop="datePublished">
         Jun 29, 2020
       </time>
        • <span class="read-time" title="Estimated read time">
@@ -214,27 +214,9 @@ window.onload = wrap_img;
 </div>
 </div>
 </div>
-    
-    
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">today</span> <span class="o">=</span> <span class="n">date</span><span class="o">.</span><span class="n">today</span><span class="p">()</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-</div>
-    
-
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="Text-Embeddings-for-Fun-and-Profit">Text Embeddings for Fun and Profit<a class="anchor-link" href="#Text-Embeddings-for-Fun-and-Profit"> </a></h2><p>Text embeddings are incredibly valuable and can also be used for things like spell checking; have a look at <a href="https://blog.usejournal.com/a-simple-spell-checker-built-from-word-vectors-9f28452b6f26">@er214's post</a> and <a href="https://github.com/er214/spellchecker">notebook</a> to see how they <strong>used GloVe word embeddings to create a spell-checker</strong> for their dataset. The <a href="https://forums.fast.ai/t/nlp-any-libraries-dictionaries-out-there-for-fixing-common-spelling-errors/16411">fastai forums post</a> is also worth a read if you have time, they also created a "pretentiousness" embedding to score news outlets 🤣.</p>
-<p>While we are using embeddings for chunks of text, as opposed to individual words, the concept is the same.</p>
+<h2 id="Text-Embeddings-for-Fun-and-Profit">Text Embeddings for Fun and Profit<a class="anchor-link" href="#Text-Embeddings-for-Fun-and-Profit"> </a></h2><p>Text embeddings are incredibly valuable and can also be used for things like spell checking; have a look at <a href="https://blog.usejournal.com/a-simple-spell-checker-built-from-word-vectors-9f28452b6f26">@er214's post</a> and <a href="https://github.com/er214/spellchecker">notebook</a> to see how they <strong>used GloVe word embeddings to create a spell-checker</strong> for their dataset. The <a href="https://forums.fast.ai/t/nlp-any-libraries-dictionaries-out-there-for-fixing-common-spelling-errors/16411">fastai forums post</a> is also worth a read if you have time, they also created a "pretentiousness" embedding to score news outlets 🤣. While we are using embeddings for chunks of text, as opposed to individual words, the concept is the same.</p>
 <h2 id="Generate-our-Embeddings">Generate our Embeddings<a class="anchor-link" href="#Generate-our-Embeddings"> </a></h2><h4 id="Load-Raw-ParaCrawl-Data">Load Raw ParaCrawl Data<a class="anchor-link" href="#Load-Raw-ParaCrawl-Data"> </a></h4><p>First lets load our raw data. This is data that has been crawled from the internet and contains a few different types of artifacts including:</p>
 <ul>
 <li>Non-latin scripts </li>
@@ -254,6 +236,20 @@ window.onload = wrap_img;
     
     
 <div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Dataset has : </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">df</span><span class="p">)</span><span class="si">}</span><span class="s1"> rows&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;[en] : </span><span class="si">{</span><span class="n">df</span><span class="o">.</span><span class="n">en</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="mi">50</span><span class="p">]</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;[ga] : </span><span class="si">{</span><span class="n">df</span><span class="o">.</span><span class="n">ga</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="mi">50</span><span class="p">]</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
 
 <div class="output_wrapper">
 <div class="output">
@@ -262,61 +258,12 @@ window.onload = wrap_img;
 
 <div class="output_subarea output_stream output_stdout output_text">
 <pre>Dataset has : 784606 rows
+
+[en] : green dog walkers is a regional programme involving most of the councils&#39; in the leinster area.
+
+[ga] : is clár réigiúnach é siúlóirí glasa madraí a bhaineann le formhór na gcomhairlí i gcúige laighin.
 </pre>
 </div>
-</div>
-
-<div class="output_area">
-
-
-<div class="output_html rendered_html output_subarea output_execute_result">
-<div>
-<style scoped="">
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
-
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-
-    .dataframe thead th {
-        text-align: right;
-    }
-</style>
-<table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th>ga</th>
-      <th>en</th>
-      <th>noise_type</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th>0</th>
-      <td>d'fhonn go raibh maith agat litreacha grianghraif teagmhã¡il naisc</td>
-      <td>order thanks letters photos contact links</td>
-      <td>na</td>
-    </tr>
-    <tr>
-      <th>1</th>
-      <td>ingus &amp; oleg ngo "ordãº" go raibh maith ingus agus oleg do na fionnachtana agus aistreoidh sã© chuig an reburial na taisã de dhã¡ saighdiãºirã an airm dearg.</td>
-      <td>ingus &amp; oleg ngo "order" thank ingus and oleg for the discovery and transfer to the reburial of the remains of two soldiers of the red army.</td>
-      <td>na</td>
-    </tr>
-    <tr>
-      <th>2</th>
-      <td>renarsp poiblã eagraã ocht "ordãº" mbuã ochas lenã¡r gcomhghleacaã - ã sã¡ideoirã renarsp, a bhrath agus chun cãºnaimh i dhã saighdiãºir gearmã¡nach. saighdiãºirã a tharchur chuig an reburial an reilig na gearmã¡ine.</td>
-      <td>renarsp public organization "order" thanks to our colleague - users renarsp, for the detection of and assistance in the exhumation of a german soldier. soldiers referred to the reburial of the german cemetery.</td>
-      <td>na</td>
-    </tr>
-  </tbody>
-</table>
-</div>
-</div>
-
 </div>
 
 </div>
@@ -328,33 +275,15 @@ window.onload = wrap_img;
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <h4 id="Get-Pre-Trained-XLM-RoBERTa-Model">Get Pre-Trained XLM-RoBERTa Model<a class="anchor-link" href="#Get-Pre-Trained-XLM-RoBERTa-Model"> </a></h4><p>Next we will initialise our XLM-RoBERTa model (commonly known as "XLM-R"). I chose this model as it is a multilingual model trained on 100 languages, including both English and Irish, if we choose to look at the Irish embeddings too.</p>
-<p>Here we will embed the <strong>English</strong> samples as this is where a lot of the noise in the dataset seems to stem from.</p>
-<p>We use XLM-R Large in this example, but XLM-R Base will also work well</p>
+<p>Here we will embed the <strong>English</strong> samples as this is where a lot of the noise in the dataset seems to stem from.
+<div class="flash">
+    <svg class="octicon octicon-info" viewBox="0 0 14 16" version="1.1" width="14" height="16" aria-hidden="true"><path fill-rule="evenodd" d="M6.3 5.69a.942.942 0 01-.28-.7c0-.28.09-.52.28-.7.19-.18.42-.28.7-.28.28 0 .52.09.7.28.18.19.28.42.28.7 0 .28-.09.52-.28.7a1 1 0 01-.7.3c-.28 0-.52-.11-.7-.3zM8 7.99c-.02-.25-.11-.48-.31-.69-.2-.19-.42-.3-.69-.31H6c-.27.02-.48.13-.69.31-.2.2-.3.44-.31.69h1v3c.02.27.11.5.31.69.2.2.42.31.69.31h1c.27 0 .48-.11.69-.31.2-.19.3-.42.31-.69H8V7.98v.01zM7 2.3c-3.14 0-5.7 2.54-5.7 5.68 0 3.14 2.56 5.7 5.7 5.7s5.7-2.55 5.7-5.7c0-3.15-2.56-5.69-5.7-5.69v.01zM7 .98c3.86 0 7 3.14 7 7s-3.14 7-7 7-7-3.12-7-7 3.14-7 7-7z"></path></svg>
+    <strong>Note: </strong>We use XLM-R Large in this example, but XLM-R Base will also work well
+</div></p>
 
 </div>
 </div>
 </div>
-    
-    
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">model</span> <span class="o">=</span> <span class="n">XLMRobertaModel</span><span class="o">.</span><span class="n">from_pretrained</span><span class="p">(</span><span class="s1">&#39;xlm-roberta-large&#39;</span><span class="p">)</span>
-<span class="n">model</span><span class="o">.</span><span class="n">cuda</span><span class="p">()</span>
-
-<span class="n">tokenizer</span> <span class="o">=</span> <span class="n">XLMRobertaTokenizer</span><span class="o">.</span><span class="n">from_pretrained</span><span class="p">(</span><span class="s1">&#39;xlm-roberta-base&#39;</span><span class="p">)</span>
-<span class="n">pad_idx</span><span class="o">=</span><span class="n">tokenizer</span><span class="o">.</span><span class="n">pad_token_id</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-</div>
-    
-
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <h4 id="Set-up-Tokenizer-and-Padding">Set up Tokenizer and Padding<a class="anchor-link" href="#Set-up-Tokenizer-and-Padding"> </a></h4><p>As part of setting up our dataloader we'll need to define our:</p>
@@ -415,7 +344,7 @@ window.onload = wrap_img;
 
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="Get-Embeddings">Get Embeddings<a class="anchor-link" href="#Get-Embeddings"> </a></h2>
+<h3 id="Grab-the-Embeddings">Grab the Embeddings<a class="anchor-link" href="#Grab-the-Embeddings"> </a></h3>
 </div>
 </div>
 </div>
@@ -427,23 +356,6 @@ window.onload = wrap_img;
 </div>
 </div>
 </div>
-    
-    
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">samp_embs</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s1">&#39;models/xlm-r_large_embs_en_samp_2020-06-29&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="s1">&#39;cpu&#39;</span><span class="p">)</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-</div>
-    
-
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <p><strong>Scaling your Embeddings</strong></p>
@@ -475,6 +387,13 @@ window.onload = wrap_img;
 </div>
 </div>
 </div>
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>First we use umap to reduce the embedding space to 2 dimensions, then we plot the embedding using Bokeh, which enables us to dynamically select different regions of interest, enabling us to interactively explore our dataset</p>
+
+</div>
+</div>
+</div>
     
     
 <div class="cell border-box-sizing code_cell rendered">
@@ -495,30 +414,27 @@ window.onload = wrap_img;
     
     
 <div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="o">![](</span>my_icons/20200612_nlp-irish/nlp-irish-grab.png<span class="o">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
 
 <div class="output_wrapper">
 <div class="output">
 
 <div class="output_area">
 
-
-<div class="output_html rendered_html output_subarea ">
-
-<script id="1002">
-  var xhr = new XMLHttpRequest()
-  xhr.responseType = 'blob';
-  xhr.open('GET', "http://0.0.0.0:41347/autoload.js?bokeh-autoload-element=1002&bokeh-absolute-url=http://0.0.0.0:41347&resources=none", true);
-  
-  xhr.onload = function (event) {
-    var script = document.createElement('script'),
-    src = URL.createObjectURL(event.target.response);
-    script.src = src;
-    document.body.appendChild(script);
-  };
-xhr.send();
-</script>
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>/bin/sh: -c: line 0: syntax error near unexpected token `my_icons/20200612_nlp-irish/nlp-irish-grab.png&#39;
+/bin/sh: -c: line 0: `[](my_icons/20200612_nlp-irish/nlp-irish-grab.png)&#39;
+</pre>
 </div>
-
 </div>
 
 </div>
@@ -649,46 +565,6 @@ xhr.send();
 </div>
 </div>
 </div>
-    
-    
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># #hide</span>
-<span class="c1"># full_dls = get_dls(all_texts, bs, show=False)</span>
-<span class="c1"># full_emb_nm = f&#39;models/xlm-r_large_embs_en_full_{today}&#39;</span>
-<span class="c1"># full_emb = get_text_embeddings(model, full_dls, emb_nm=full_emb_nm, n_files=6).to(&#39;cpu&#39;)</span>
-<span class="c1"># full_emb.size()</span>
-
-<span class="n">full_emb</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s1">&#39;models/xlm-r_large_embs_en_full_2020-06-19_full&#39;</span><span class="p">,</span> <span class="s1">&#39;cpu&#39;</span><span class="p">)</span>
-<span class="n">full_emb</span><span class="o">.</span><span class="n">size</span><span class="p">()</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-<div class="output_wrapper">
-<div class="output">
-
-<div class="output_area">
-
-
-
-<div class="output_text output_subarea output_execute_result">
-<pre>torch.Size([784606, 1024])</pre>
-</div>
-
-</div>
-
-</div>
-</div>
-
-</div>
-    
-
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <h3 id="Sci-kit-Learn's-cosine_similarity">Sci-kit Learn's cosine_similarity<a class="anchor-link" href="#Sci-kit-Learn's-cosine_similarity"> </a></h3><p>By calculating the average embedding of our selected datapoints we can calculate the cosine similarity between it and all of the other embeddings in our full dataset, providing decent results!</p>
@@ -699,17 +575,92 @@ xhr.send();
     
     
 <div class="cell border-box-sizing code_cell rendered">
-<div class="input">
 
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">sns</span><span class="o">.</span><span class="n">distplot</span><span class="p">(</span><span class="n">cs_df</span><span class="o">.</span><span class="n">score</span><span class="p">,</span> <span class="n">kde</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Cosine similarity between the average selection embedding and the full datset&#39;</span><span class="p">);</span>
-</pre></div>
+<div class="output_wrapper">
+<div class="output">
 
-    </div>
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>2724 rows with a similarity score greater than : 0.9995
+</pre>
 </div>
 </div>
+
+<div class="output_area">
+
+
+<div class="output_html rendered_html output_subarea output_execute_result">
+<div>
+<style scoped="">
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>ga</th>
+      <th>en</th>
+      <th>noise_type</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>570624</th>
+      <td>البحث عن المشاركات التي كتبها ɢнσғяαи</td>
+      <td>قلعة برامج الفيكتور illustrator و coreldraw</td>
+      <td>na</td>
+    </tr>
+    <tr>
+      <th>571940</th>
+      <td>safari مشاهدة ملفه الشخصي</td>
+      <td>مشكور على الاسرار ياعم</td>
+      <td>na</td>
+    </tr>
+    <tr>
+      <th>567896</th>
+      <td>رسالة إدارية رسالة إدارية</td>
+      <td>دورة الفوتوشوب cs5 للمبتدئين</td>
+      <td>na</td>
+    </tr>
+    <tr>
+      <th>573774</th>
+      <td>الله يعافيك أخي الفاضل</td>
+      <td>ممكن تعلميني ctrl+f اختصار لـ إيش بالظبط</td>
+      <td>na</td>
+    </tr>
+    <tr>
+      <th>568595</th>
+      <td>إرسال رسالة خاصة إلى fahooody</td>
+      <td>إرسال رسالة خاصة إلى رجل أعمال</td>
+      <td>na</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
 
 <div class="output_wrapper">
 <div class="output">
@@ -741,13 +692,19 @@ xhr.send();
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <h3 id="Creating-a-nmslib-Index">Creating a nmslib Index<a class="anchor-link" href="#Creating-a-nmslib-Index"> </a></h3><p><div class="flash">
-    <svg class="octicon octicon-info" viewBox="0 0 14 16" version="1.1" width="14" height="16" aria-hidden="true"><path fill-rule="evenodd" d="M6.3 5.69a.942.942 0 01-.28-.7c0-.28.09-.52.28-.7.19-.18.42-.28.7-.28.28 0 .52.09.7.28.18.19.28.42.28.7 0 .28-.09.52-.28.7a1 1 0 01-.7.3c-.28 0-.52-.11-.7-.3zM8 7.99c-.02-.25-.11-.48-.31-.69-.2-.19-.42-.3-.69-.31H6c-.27.02-.48.13-.69.31-.2.2-.3.44-.31.69h1v3c.02.27.11.5.31.69.2.2.42.31.69.31h1c.27 0 .48-.11.69-.31.2-.19.3-.42.31-.69H8V7.98v.01zM7 2.3c-3.14 0-5.7 2.54-5.7 5.68 0 3.14 2.56 5.7 5.7 5.7s5.7-2.55 5.7-5.7c0-3.15-2.56-5.69-5.7-5.69v.01zM7 .98c3.86 0 7 3.14 7 7s-3.14 7-7 7-7-3.12-7-7 3.14-7 7-7z"></path></svg>
+    <svg class="octicon octicon-info octicon octicon-info" viewBox="0 0 14 16" version="1.1" width="14" height="16" aria-hidden="true"><path fill-rule="evenodd" d="M6.3 5.69a.942.942 0 01-.28-.7c0-.28.09-.52.28-.7.19-.18.42-.28.7-.28.28 0 .52.09.7.28.18.19.28.42.28.7 0 .28-.09.52-.28.7a1 1 0 01-.7.3c-.28 0-.52-.11-.7-.3zM8 7.99c-.02-.25-.11-.48-.31-.69-.2-.19-.42-.3-.69-.31H6c-.27.02-.48.13-.69.31-.2.2-.3.44-.31.69h1v3c.02.27.11.5.31.69.2.2.42.31.69.31h1c.27 0 .48-.11.69-.31.2-.19.3-.42.31-.69H8V7.98v.01zM7 2.3c-3.14 0-5.7 2.54-5.7 5.68 0 3.14 2.56 5.7 5.7 5.7s5.7-2.55 5.7-5.7c0-3.15-2.56-5.69-5.7-5.69v.01zM7 .98c3.86 0 7 3.14 7 7s-3.14 7-7 7-7-3.12-7-7 3.14-7 7-7z"></path></svg>
     <strong>Note: </strong><em>As an alternative to Sci-kit Learn&#8217;s cosine similarity function we can also use nmslib to calculate our similarity. Note this method is slower given our needs in this example, but its always fun to work with a new technology</em> 😀
+</div></p>
+
 </div>
-Once we have all of our embeddings we can create our index with nmslib. This is the most time-consuming part of this process, it took 47minutes for the index to be created in this example, although there are other nmslib settings thatn can reduce this to ~15minutes.</p>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Once we have all of our embeddings we can create our index with nmslib. This is the most time-consuming part of this process, it took 47minutes for the index to be created in this example, although there are other nmslib settings thatn can reduce this to ~15minutes.</p>
 <p>We create an index for our entire dataset <strong>only once</strong>.  We create an index for the entire dataset because we will likely have multiple queries we do not want to re-create a new index each time as it will really slow down how fast we can identify and remove low quality data.
 <div class="flash">
-    <svg class="octicon octicon-info octicon octicon-info" viewBox="0 0 14 16" version="1.1" width="14" height="16" aria-hidden="true"><path fill-rule="evenodd" d="M6.3 5.69a.942.942 0 01-.28-.7c0-.28.09-.52.28-.7.19-.18.42-.28.7-.28.28 0 .52.09.7.28.18.19.28.42.28.7 0 .28-.09.52-.28.7a1 1 0 01-.7.3c-.28 0-.52-.11-.7-.3zM8 7.99c-.02-.25-.11-.48-.31-.69-.2-.19-.42-.3-.69-.31H6c-.27.02-.48.13-.69.31-.2.2-.3.44-.31.69h1v3c.02.27.11.5.31.69.2.2.42.31.69.31h1c.27 0 .48-.11.69-.31.2-.19.3-.42.31-.69H8V7.98v.01zM7 2.3c-3.14 0-5.7 2.54-5.7 5.68 0 3.14 2.56 5.7 5.7 5.7s5.7-2.55 5.7-5.7c0-3.15-2.56-5.69-5.7-5.69v.01zM7 .98c3.86 0 7 3.14 7 7s-3.14 7-7 7-7-3.12-7-7 3.14-7 7-7z"></path></svg>
+    <svg class="octicon octicon-info octicon octicon-info octicon octicon-info" viewBox="0 0 14 16" version="1.1" width="14" height="16" aria-hidden="true"><path fill-rule="evenodd" d="M6.3 5.69a.942.942 0 01-.28-.7c0-.28.09-.52.28-.7.19-.18.42-.28.7-.28.28 0 .52.09.7.28.18.19.28.42.28.7 0 .28-.09.52-.28.7a1 1 0 01-.7.3c-.28 0-.52-.11-.7-.3zM8 7.99c-.02-.25-.11-.48-.31-.69-.2-.19-.42-.3-.69-.31H6c-.27.02-.48.13-.69.31-.2.2-.3.44-.31.69h1v3c.02.27.11.5.31.69.2.2.42.31.69.31h1c.27 0 .48-.11.69-.31.2-.19.3-.42.31-.69H8V7.98v.01zM7 2.3c-3.14 0-5.7 2.54-5.7 5.68 0 3.14 2.56 5.7 5.7 5.7s5.7-2.55 5.7-5.7c0-3.15-2.56-5.69-5.7-5.69v.01zM7 .98c3.86 0 7 3.14 7 7s-3.14 7-7 7-7-3.12-7-7 3.14-7 7-7z"></path></svg>
     <strong>Note: </strong>(This index will now include our sample datapoints, which are the same datapoints that we use in our query to the index. Therefore we will have to exclude these sample datapoints from our query result)
 </div></p>
 
