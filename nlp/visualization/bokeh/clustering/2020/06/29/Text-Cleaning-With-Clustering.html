@@ -9,13 +9,14 @@
 <meta property="og:locale" content="en_US" />
 <meta name="description" content="Identify noisy text to remove from a Machine Translation dataset by visualising text embeddings with UMAP" />
 <meta property="og:description" content="Identify noisy text to remove from a Machine Translation dataset by visualising text embeddings with UMAP" />
-<link rel="canonical" href="https://www.ntentional.com/2020/06/29/Text-Cleaning-With-Clustering.html" />
-<meta property="og:url" content="https://www.ntentional.com/2020/06/29/Text-Cleaning-With-Clustering.html" />
+<link rel="canonical" href="https://www.ntentional.com/nlp/visualization/bokeh/clustering/2020/06/29/Text-Cleaning-With-Clustering.html" />
+<meta property="og:url" content="https://www.ntentional.com/nlp/visualization/bokeh/clustering/2020/06/29/Text-Cleaning-With-Clustering.html" />
 <meta property="og:site_name" content="ntentional" />
+<meta property="og:image" content="https://www.ntentional.com/images/bokeh_mini.png" />
 <meta property="og:type" content="article" />
 <meta property="article:published_time" content="2020-06-29T00:00:00-05:00" />
 <script type="application/ld+json">
-{"description":"Identify noisy text to remove from a Machine Translation dataset by visualising text embeddings with UMAP","mainEntityOfPage":{"@type":"WebPage","@id":"https://www.ntentional.com/2020/06/29/Text-Cleaning-With-Clustering.html"},"@type":"BlogPosting","url":"https://www.ntentional.com/2020/06/29/Text-Cleaning-With-Clustering.html","headline":"Text Data Cleanup - Dynamic Embedding Visualisation","dateModified":"2020-06-29T00:00:00-05:00","datePublished":"2020-06-29T00:00:00-05:00","@context":"https://schema.org"}</script>
+{"description":"Identify noisy text to remove from a Machine Translation dataset by visualising text embeddings with UMAP","mainEntityOfPage":{"@type":"WebPage","@id":"https://www.ntentional.com/nlp/visualization/bokeh/clustering/2020/06/29/Text-Cleaning-With-Clustering.html"},"@type":"BlogPosting","url":"https://www.ntentional.com/nlp/visualization/bokeh/clustering/2020/06/29/Text-Cleaning-With-Clustering.html","headline":"Text Data Cleanup - Dynamic Embedding Visualisation","dateModified":"2020-06-29T00:00:00-05:00","datePublished":"2020-06-29T00:00:00-05:00","image":"https://www.ntentional.com/images/bokeh_mini.png","@context":"https://schema.org"}</script>
 <!-- End Jekyll SEO tag -->
 <link rel="stylesheet" href="/assets/css/style.css"><link type="application/atom+xml" rel="alternate" href="https://www.ntentional.com/feed.xml" title="ntentional" /><!-- the google_analytics_id gets auto inserted from the config file -->
 
@@ -31,13 +32,14 @@
 <meta property="og:locale" content="en_US" />
 <meta name="description" content="Identify noisy text to remove from a Machine Translation dataset by visualising text embeddings with UMAP" />
 <meta property="og:description" content="Identify noisy text to remove from a Machine Translation dataset by visualising text embeddings with UMAP" />
-<link rel="canonical" href="https://www.ntentional.com/2020/06/29/Text-Cleaning-With-Clustering.html" />
-<meta property="og:url" content="https://www.ntentional.com/2020/06/29/Text-Cleaning-With-Clustering.html" />
+<link rel="canonical" href="https://www.ntentional.com/nlp/visualization/bokeh/clustering/2020/06/29/Text-Cleaning-With-Clustering.html" />
+<meta property="og:url" content="https://www.ntentional.com/nlp/visualization/bokeh/clustering/2020/06/29/Text-Cleaning-With-Clustering.html" />
 <meta property="og:site_name" content="ntentional" />
+<meta property="og:image" content="https://www.ntentional.com/images/bokeh_mini.png" />
 <meta property="og:type" content="article" />
 <meta property="article:published_time" content="2020-06-29T00:00:00-05:00" />
 <script type="application/ld+json">
-{"description":"Identify noisy text to remove from a Machine Translation dataset by visualising text embeddings with UMAP","mainEntityOfPage":{"@type":"WebPage","@id":"https://www.ntentional.com/2020/06/29/Text-Cleaning-With-Clustering.html"},"@type":"BlogPosting","url":"https://www.ntentional.com/2020/06/29/Text-Cleaning-With-Clustering.html","headline":"Text Data Cleanup - Dynamic Embedding Visualisation","dateModified":"2020-06-29T00:00:00-05:00","datePublished":"2020-06-29T00:00:00-05:00","@context":"https://schema.org"}</script>
+{"description":"Identify noisy text to remove from a Machine Translation dataset by visualising text embeddings with UMAP","mainEntityOfPage":{"@type":"WebPage","@id":"https://www.ntentional.com/nlp/visualization/bokeh/clustering/2020/06/29/Text-Cleaning-With-Clustering.html"},"@type":"BlogPosting","url":"https://www.ntentional.com/nlp/visualization/bokeh/clustering/2020/06/29/Text-Cleaning-With-Clustering.html","headline":"Text Data Cleanup - Dynamic Embedding Visualisation","dateModified":"2020-06-29T00:00:00-05:00","datePublished":"2020-06-29T00:00:00-05:00","image":"https://www.ntentional.com/images/bokeh_mini.png","@context":"https://schema.org"}</script>
 <!-- End Jekyll SEO tag -->
 
 <link href="https://unpkg.com/@primer/css/dist/primer.css" rel="stylesheet" />
@@ -126,6 +128,22 @@ window.onload = wrap_img;
 </span></p>
 
     
+      <p class="category-tags"><i class="fas fa-tags category-tags-icon"></i></i> 
+      
+        <a class="category-tags-link" href="/categories/#nlp">nlp</a>
+        &nbsp;
+      
+        <a class="category-tags-link" href="/categories/#visualization">visualization</a>
+        &nbsp;
+      
+        <a class="category-tags-link" href="/categories/#bokeh">bokeh</a>
+        &nbsp;
+      
+        <a class="category-tags-link" href="/categories/#clustering">clustering</a>
+        
+      
+      </p>
+    
 
     
       
@@ -179,8 +197,8 @@ window.onload = wrap_img;
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <h2 id="Text-Embeddings-for-Fun-and-Profit">Text Embeddings for Fun and Profit<a class="anchor-link" href="#Text-Embeddings-for-Fun-and-Profit"> </a></h2><p>Text embeddings are incredibly valuable and can also be used for things like spell checking; have a look at <a href="https://blog.usejournal.com/a-simple-spell-checker-built-from-word-vectors-9f28452b6f26">@er214's post</a> and <a href="https://github.com/er214/spellchecker">notebook</a> to see how they <strong>used GloVe word embeddings to create a spell-checker</strong> for their dataset. The <a href="https://forums.fast.ai/t/nlp-any-libraries-dictionaries-out-there-for-fixing-common-spelling-errors/16411">fastai forums post</a> is also worth a read if you have time, they also created a "pretentiousness" embedding to score news outlets 🤣. While we are using embeddings for chunks of text, as opposed to individual words, the concept is the same.</p>
-<p>We derive our text embedding by passing the text sample though <a href="https://arxiv.org/abs/1911.02116">XLM-RoBERTa Large</a> and extracting the values in final hidden layer. XLM-R  is a multilingual model and should work reasonably well for both Irish and English</p>
-<p>Research has been done on BERT to show that by concatenating the final 4 layers of the model one gets even richer contextual embeddings. In the interest of simplicity we will stick to the final layer only for the moment, although using additional layers would be an interesting area of exploration!</p>
+<h4 id="Pre-Trained-XLM-RoBERTa-Model">Pre-Trained XLM-RoBERTa Model<a class="anchor-link" href="#Pre-Trained-XLM-RoBERTa-Model"> </a></h4><p>We derive our text embedding by passing the text sample though <a href="https://arxiv.org/abs/1911.02116">XLM-RoBERTa Large</a> (XLM-R), which is a multilingual model and should work reasonably well for both Irish and English.</p>
+<p>We will extracte the values in <strong>final</strong> hidden layer. Note that research has been done on BERT to show that by concatenating the final 4 layers of the model one gets even richer contextual embeddings. In the interest of simplicity we will stick to the final layer only for the moment, although using additional layers would be an interesting area of exploration!</p>
 
 </div>
 </div>
@@ -195,23 +213,33 @@ window.onload = wrap_img;
 </div>
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="Similarity-Search---nmslib-and-more">Similarity Search - nmslib and more<a class="anchor-link" href="#Similarity-Search---nmslib-and-more"> </a></h2><p>Below are the resources I found that helped give me an overview of the similarity search tools and methods that are out there</p>
-<p><strong><a href="https://github.com/nmslib/nmslib/blob/master/python_bindings/notebooks/search_sparse_cosine.ipynb">nmslib</a></strong> is an "<strong>efficient similarity search library and a toolkit for evaluation of k-NN methods for generic non-metric spaces</strong>" and is easily installed with <code>pip install nmslib</code></p>
+<h2 id="Similarity-Search">Similarity Search<a class="anchor-link" href="#Similarity-Search"> </a></h2><p>In order to calculate the similarity between our embeddings there are a multitude of tools and techniques we can try. In this article we will demonstrate both Sci-kit Learn's <code>cosine_similarity</code> as well as <code>nmslib</code>'s functionality.</p>
+<h4 id="Similarity-Search-Resources">Similarity Search Resources<a class="anchor-link" href="#Similarity-Search-Resources"> </a></h4><p>Below are the resources I found that helped give me an overview of the similarity search tools and methods that are out there</p>
 <ul>
-<li>In testing <a href="http://www.benfrederickson.com/approximate-nearest-neighbours-for-recommender-systems/">Ben Frederickson found</a> that between nmslib, <a href="https://engineering.fb.com/ml-applications/faiss-a-library-for-efficient-similarity-search/">FAISS</a> (Facebook) and <a href="https://github.com/spotify/annoy">annoy</a> (Spotify) nmslib was the fastest nearest neighbours library for CPU. Note FAISS on GPU is blazes past nmslib and annoy, but can also difficult to set up.</li>
+<li><strong><a href="https://github.com/nmslib/nmslib/blob/master/python_bindings/notebooks/search_sparse_cosine.ipynb">nmslib</a></strong> is an "<strong>efficient similarity search library and a toolkit for evaluation of k-NN methods for generic non-metric spaces</strong>". In testing <a href="http://www.benfrederickson.com/approximate-nearest-neighbours-for-recommender-systems/">Ben Frederickson found</a> that between nmslib, <a href="https://engineering.fb.com/ml-applications/faiss-a-library-for-efficient-similarity-search/">FAISS</a> (Facebook) and <a href="https://github.com/spotify/annoy">annoy</a> (Spotify) nmslib was the fastest nearest neighbours library for CPU. Note FAISS on GPU is blazes past nmslib and annoy, but can also difficult to set up.</li>
 </ul>
-<p><strong><a href="https://github.com/milvus-io/milvus">Milvus</a></strong> is an interesting library that was open sourced in late 2019 which offers similarity search using FAISS, nmslib or annoy as well as GPU capability. If I had had more time I would have explored this further</p>
-<p>**<a href="https://www.elastic.co/blog/text-similarity-search-with-vectors-in-elasticsearch">ElasticSearch</a> and <a href="https://medium.com/analytics-vidhya/elasticbert-information-retrieval-using-bert-and-elasticsearch-51fef465b9ae">article</a> is yet another tool we could use to carry out the similarity search between our text embeddings.</p>
-<p><strong><a href="www.dair.ai">DAIR.ai</a></strong> recently posted a video called <a href="https://www.youtube.com/watch?v=VHm6_uC4vxM">"101 Ways to Solve Search"</a> by <a href="www.pratik.ai">Pratik Bhavsar</a> which is a great introduction to how search (including semantic search) works in general.</p>
-<p><strong><a href="models.pratik.ai">models.pratik.ai</a></strong> is a really great flow chart visualisation which he tries to keep up to date of the models and techniques available for semantic search and NLP in general</p>
-<p><strong>Spotify's annoy</strong>: <a href="https://www.kaggle.com/hmendonca/proper-clustering-with-facenet-embeddings-eda">@hmendonca's EDA notebook on kaggle</a> is an excellent example showing how to use annoy to group and display similar images (faces in this case).</p>
+<ul>
+<li><strong><a href="https://github.com/milvus-io/milvus">Milvus</a></strong> is an interesting library that was open sourced in late 2019 which offers similarity search using FAISS, nmslib or annoy as well as GPU capability. If I had had more time I would have explored this further</li>
+</ul>
+<ul>
+<li>**<a href="https://www.elastic.co/blog/text-similarity-search-with-vectors-in-elasticsearch">ElasticSearch</a> and <a href="https://medium.com/analytics-vidhya/elasticbert-information-retrieval-using-bert-and-elasticsearch-51fef465b9ae">article</a> is yet another tool we could use to carry out the similarity search between our text embeddings.</li>
+</ul>
+<ul>
+<li><strong><a href="www.dair.ai">DAIR.ai</a></strong> recently posted a video called <a href="https://www.youtube.com/watch?v=VHm6_uC4vxM">"101 Ways to Solve Search"</a> by <a href="www.pratik.ai">Pratik Bhavsar</a> which is a great introduction to how search (including semantic search) works in general. </li>
+</ul>
+<ul>
+<li><strong><a href="models.pratik.ai">models.pratik.ai</a></strong> is a really great flow chart visualisation which he tries to keep up to date of the models and techniques available for semantic search and NLP in general</li>
+</ul>
+<ul>
+<li><strong>Spotify's annoy</strong>: <a href="https://www.kaggle.com/hmendonca/proper-clustering-with-facenet-embeddings-eda">@hmendonca's EDA notebook on kaggle</a> is an excellent example showing how to use annoy to group and display similar images (faces in this case).</li>
+</ul>
 
 </div>
 </div>
 </div>
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="Generate-our-Embeddings">Generate our Embeddings<a class="anchor-link" href="#Generate-our-Embeddings"> </a></h2><h4 id="Load-Raw-ParaCrawl-Data">Load Raw ParaCrawl Data<a class="anchor-link" href="#Load-Raw-ParaCrawl-Data"> </a></h4><p>First lets load our raw data. This is data that has been crawled from the internet and contains a few different types of artifacts including:</p>
+<h2 id="ParaCrawl-Data">ParaCrawl Data<a class="anchor-link" href="#ParaCrawl-Data"> </a></h2><p>First lets load our raw <a href="https://paracrawl.eu/">ParaCrawl</a> data been crawled from the internet and contains a few different types of artifacts including:</p>
 <ul>
 <li>Non-latin scripts </li>
 <li>Other random characters (e.g. '©','³','º')</li>
@@ -221,8 +249,7 @@ window.onload = wrap_img;
 </ul>
 </li>
 </ul>
-<p>Lets see how much we can find by turning our samples into embeddings and using dimenstionality reduction to visualise them.</p>
-<p>For fun, we'll label texts that contain "sex", "lighting" and cyrillic characters like "и", "з" or "л" see if they get clustered together when we visualise our word embeddings later. We will also lowercae our entire dataset; many of the legal texts here are fully written in uppercase, however right now we care more about the content of the text as opposed to the style</p>
+<p>Lets see how much we can find by turning our samples into embeddings and using dimenstionality reduction to visualise them. For fun, we'll label texts that contain "sex", "lighting" and cyrillic characters like "и", "з" or "л" see if they get clustered together when we visualise our word embeddings later. We will also lowercae our entire dataset; many of the legal texts here are fully written in uppercase, however right now we care more about the content of the text as opposed to the style</p>
 
 </div>
 </div>
@@ -230,20 +257,6 @@ window.onload = wrap_img;
     
     
 <div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Dataset has : </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">df</span><span class="p">)</span><span class="si">}</span><span class="s1"> rows&#39;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">()</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;[en] : </span><span class="si">{</span><span class="n">df</span><span class="o">.</span><span class="n">en</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="mi">50</span><span class="p">]</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">()</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;[ga] : </span><span class="si">{</span><span class="n">df</span><span class="o">.</span><span class="n">ga</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="mi">50</span><span class="p">]</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
 
 <div class="output_wrapper">
 <div class="output">
@@ -268,19 +281,7 @@ window.onload = wrap_img;
 
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h4 id="Get-Pre-Trained-XLM-RoBERTa-Model">Get Pre-Trained XLM-RoBERTa Model<a class="anchor-link" href="#Get-Pre-Trained-XLM-RoBERTa-Model"> </a></h4><p>Next we will initialise our XLM-RoBERTa model (commonly known as "XLM-R"). I chose this model as it is a multilingual model trained on 100 languages, including both English and Irish, if we choose to look at the Irish embeddings too.</p>
-<p>Here we will embed the <strong>English</strong> samples as this is where a lot of the noise in the dataset seems to stem from.
-<div class="flash">
-    <svg class="octicon octicon-info" viewBox="0 0 14 16" version="1.1" width="14" height="16" aria-hidden="true"><path fill-rule="evenodd" d="M6.3 5.69a.942.942 0 01-.28-.7c0-.28.09-.52.28-.7.19-.18.42-.28.7-.28.28 0 .52.09.7.28.18.19.28.42.28.7 0 .28-.09.52-.28.7a1 1 0 01-.7.3c-.28 0-.52-.11-.7-.3zM8 7.99c-.02-.25-.11-.48-.31-.69-.2-.19-.42-.3-.69-.31H6c-.27.02-.48.13-.69.31-.2.2-.3.44-.31.69h1v3c.02.27.11.5.31.69.2.2.42.31.69.31h1c.27 0 .48-.11.69-.31.2-.19.3-.42.31-.69H8V7.98v.01zM7 2.3c-3.14 0-5.7 2.54-5.7 5.68 0 3.14 2.56 5.7 5.7 5.7s5.7-2.55 5.7-5.7c0-3.15-2.56-5.69-5.7-5.69v.01zM7 .98c3.86 0 7 3.14 7 7s-3.14 7-7 7-7-3.12-7-7 3.14-7 7-7z"></path></svg>
-    <strong>Note: </strong>We use XLM-R Large in this example, but XLM-R Base will also work well
-</div></p>
-
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<h4 id="Set-up-Tokenizer-and-Padding">Set up Tokenizer and Padding<a class="anchor-link" href="#Set-up-Tokenizer-and-Padding"> </a></h4><p>As part of setting up our dataloader we'll need to define our:</p>
+<h4 id="Create-our-Dataloader">Create our Dataloader<a class="anchor-link" href="#Create-our-Dataloader"> </a></h4><p>As part of setting up our dataloader we'll need to define our:</p>
 <ul>
 <li>Tokenizer Transform, which is a wrapper around the HuggingFace tokenizer </li>
 <li>Function to add padding to each sample so that we can batch our samples</li>
@@ -292,7 +293,7 @@ window.onload = wrap_img;
 </div>
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h4 id="Create-our-Dataloader">Create our Dataloader<a class="anchor-link" href="#Create-our-Dataloader"> </a></h4><p>Now we are ready to create our dataloader so that we can quickly iterate through our samples. I'm using fastai here, however you could also use either a PyTorch or Tensorflow dataloader here, the rest of this notebook doesn't have a fastai dependency.</p>
+<p>Now we are ready to create our dataloader so that we can quickly iterate through our samples. I'm using fastai here, however you could also use either a PyTorch or Tensorflow dataloader here, the rest of this notebook doesn't have a fastai dependency.</p>
 <p>To start, we'll look at a random sample of 40,000 samples, about 5% of our data. Remember we are only retrieving embeddings for our English samples for now.</p>
 
 </div>
@@ -338,13 +339,7 @@ window.onload = wrap_img;
 
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h3 id="Grab-the-Embeddings">Grab the Embeddings<a class="anchor-link" href="#Grab-the-Embeddings"> </a></h3>
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<p>Now we're ready to retrieve our embeddings from the pretrained multi-lingual model. We do this by simply passing our samples to the model and saving the output activations from the last layer of the model. From this we can generate an embedding of size (40000, 1024) which we can then pass to our dimensionality reduction algorithm.</p>
+<h2 id="Grab-the-Embeddings">Grab the Embeddings<a class="anchor-link" href="#Grab-the-Embeddings"> </a></h2><p>Now we're ready to retrieve our embeddings from the pretrained multi-lingual model. We do this by simply passing our samples to the model and saving the output activations from the last layer of the model. From this we can generate an embedding of size (40000, 1024) which we can then pass to our dimensionality reduction algorithm.</p>
 <p>Processing 40k samples with UMAP takes about 5 minutes. After a little testing with <code>n_neighbors</code> and <code>min_dist</code> I found the defaults work quite well although its always worth playing around with the parameters and distance metric used.</p>
 
 </div>
@@ -383,7 +378,7 @@ window.onload = wrap_img;
 </div>
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>First we use umap to reduce the embedding space to 2 dimensions, then we plot the embedding using Bokeh, which enables us to dynamically select different regions of interest, enabling us to interactively explore our dataset</p>
+<p>First we use umap to reduce the embedding space to 2 dimensions using <strong>UMAP</strong>, then we plot the embedding usingthe <strong>Bokeh</strong> visualisation library, which enables us to dynamically select different regions of interest, enabling us to interactively explore our dataset</p>
 
 </div>
 </div>
@@ -660,7 +655,7 @@ xhr.send();
 </div>
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h3 id="Sci-kit-Learn's-cosine_similarity">Sci-kit Learn's cosine_similarity<a class="anchor-link" href="#Sci-kit-Learn's-cosine_similarity"> </a></h3><p>By calculating the average embedding of our selected datapoints we can calculate the cosine similarity between it and all of the other embeddings in our full dataset, providing decent results!</p>
+<h4 id="Sci-kit-Learn's-cosine_similarity">Sci-kit Learn's cosine_similarity<a class="anchor-link" href="#Sci-kit-Learn's-cosine_similarity"> </a></h4><p>By calculating the average embedding of our selected datapoints we can calculate the cosine similarity between it and all of the other embeddings in our full dataset, providing decent results!</p>
 
 </div>
 </div>
@@ -784,8 +779,8 @@ xhr.send();
 </div>
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h3 id="Creating-a-nmslib-Index">Creating a nmslib Index<a class="anchor-link" href="#Creating-a-nmslib-Index"> </a></h3><p><div class="flash">
-    <svg class="octicon octicon-info octicon octicon-info" viewBox="0 0 14 16" version="1.1" width="14" height="16" aria-hidden="true"><path fill-rule="evenodd" d="M6.3 5.69a.942.942 0 01-.28-.7c0-.28.09-.52.28-.7.19-.18.42-.28.7-.28.28 0 .52.09.7.28.18.19.28.42.28.7 0 .28-.09.52-.28.7a1 1 0 01-.7.3c-.28 0-.52-.11-.7-.3zM8 7.99c-.02-.25-.11-.48-.31-.69-.2-.19-.42-.3-.69-.31H6c-.27.02-.48.13-.69.31-.2.2-.3.44-.31.69h1v3c.02.27.11.5.31.69.2.2.42.31.69.31h1c.27 0 .48-.11.69-.31.2-.19.3-.42.31-.69H8V7.98v.01zM7 2.3c-3.14 0-5.7 2.54-5.7 5.68 0 3.14 2.56 5.7 5.7 5.7s5.7-2.55 5.7-5.7c0-3.15-2.56-5.69-5.7-5.69v.01zM7 .98c3.86 0 7 3.14 7 7s-3.14 7-7 7-7-3.12-7-7 3.14-7 7-7z"></path></svg>
+<h4 id="Creating-a-nmslib-Index">Creating a nmslib Index<a class="anchor-link" href="#Creating-a-nmslib-Index"> </a></h4><p><div class="flash">
+    <svg class="octicon octicon-info" viewBox="0 0 14 16" version="1.1" width="14" height="16" aria-hidden="true"><path fill-rule="evenodd" d="M6.3 5.69a.942.942 0 01-.28-.7c0-.28.09-.52.28-.7.19-.18.42-.28.7-.28.28 0 .52.09.7.28.18.19.28.42.28.7 0 .28-.09.52-.28.7a1 1 0 01-.7.3c-.28 0-.52-.11-.7-.3zM8 7.99c-.02-.25-.11-.48-.31-.69-.2-.19-.42-.3-.69-.31H6c-.27.02-.48.13-.69.31-.2.2-.3.44-.31.69h1v3c.02.27.11.5.31.69.2.2.42.31.69.31h1c.27 0 .48-.11.69-.31.2-.19.3-.42.31-.69H8V7.98v.01zM7 2.3c-3.14 0-5.7 2.54-5.7 5.68 0 3.14 2.56 5.7 5.7 5.7s5.7-2.55 5.7-5.7c0-3.15-2.56-5.69-5.7-5.69v.01zM7 .98c3.86 0 7 3.14 7 7s-3.14 7-7 7-7-3.12-7-7 3.14-7 7-7z"></path></svg>
     <strong>Note: </strong><em>As an alternative to Sci-kit Learn&#8217;s cosine similarity function we can also use nmslib to calculate our similarity. Note this method is slower given our needs in this example, but its always fun to work with a new technology</em> 😀
 </div></p>
 
@@ -797,7 +792,7 @@ xhr.send();
 <p>Once we have all of our embeddings we can create our index with nmslib. This is the most time-consuming part of this process, it took 47minutes for the index to be created in this example, although there are other nmslib settings thatn can reduce this to ~15minutes.</p>
 <p>We create an index for our entire dataset <strong>only once</strong>.  We create an index for the entire dataset because we will likely have multiple queries we do not want to re-create a new index each time as it will really slow down how fast we can identify and remove low quality data.
 <div class="flash">
-    <svg class="octicon octicon-info octicon octicon-info octicon octicon-info" viewBox="0 0 14 16" version="1.1" width="14" height="16" aria-hidden="true"><path fill-rule="evenodd" d="M6.3 5.69a.942.942 0 01-.28-.7c0-.28.09-.52.28-.7.19-.18.42-.28.7-.28.28 0 .52.09.7.28.18.19.28.42.28.7 0 .28-.09.52-.28.7a1 1 0 01-.7.3c-.28 0-.52-.11-.7-.3zM8 7.99c-.02-.25-.11-.48-.31-.69-.2-.19-.42-.3-.69-.31H6c-.27.02-.48.13-.69.31-.2.2-.3.44-.31.69h1v3c.02.27.11.5.31.69.2.2.42.31.69.31h1c.27 0 .48-.11.69-.31.2-.19.3-.42.31-.69H8V7.98v.01zM7 2.3c-3.14 0-5.7 2.54-5.7 5.68 0 3.14 2.56 5.7 5.7 5.7s5.7-2.55 5.7-5.7c0-3.15-2.56-5.69-5.7-5.69v.01zM7 .98c3.86 0 7 3.14 7 7s-3.14 7-7 7-7-3.12-7-7 3.14-7 7-7z"></path></svg>
+    <svg class="octicon octicon-info octicon octicon-info" viewBox="0 0 14 16" version="1.1" width="14" height="16" aria-hidden="true"><path fill-rule="evenodd" d="M6.3 5.69a.942.942 0 01-.28-.7c0-.28.09-.52.28-.7.19-.18.42-.28.7-.28.28 0 .52.09.7.28.18.19.28.42.28.7 0 .28-.09.52-.28.7a1 1 0 01-.7.3c-.28 0-.52-.11-.7-.3zM8 7.99c-.02-.25-.11-.48-.31-.69-.2-.19-.42-.3-.69-.31H6c-.27.02-.48.13-.69.31-.2.2-.3.44-.31.69h1v3c.02.27.11.5.31.69.2.2.42.31.69.31h1c.27 0 .48-.11.69-.31.2-.19.3-.42.31-.69H8V7.98v.01zM7 2.3c-3.14 0-5.7 2.54-5.7 5.68 0 3.14 2.56 5.7 5.7 5.7s5.7-2.55 5.7-5.7c0-3.15-2.56-5.69-5.7-5.69v.01zM7 .98c3.86 0 7 3.14 7 7s-3.14 7-7 7-7-3.12-7-7 3.14-7 7-7z"></path></svg>
     <strong>Note: </strong>(This index will now include our sample datapoints, which are the same datapoints that we use in our query to the index. Therefore we will have to exclude these sample datapoints from our query result)
 </div></p>
 
@@ -806,7 +801,7 @@ xhr.send();
 </div>
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h3 id="Querying-the-Index">Querying the Index<a class="anchor-link" href="#Querying-the-Index"> </a></h3><p>Below are the sampled results from querying the full dataset, found through similarity search with an average embedding of the selection from the bokeh plot:</p>
+<h4 id="Querying-the-Index">Querying the Index<a class="anchor-link" href="#Querying-the-Index"> </a></h4><p>Below are the sampled results from querying the full dataset, found through similarity search with an average embedding of the selection from the bokeh plot:</p>
 
 </div>
 </div>
@@ -1226,7 +1221,7 @@ xhr.send();
 
 
 
-  </div><a class="u-url" href="/2020/06/29/Text-Cleaning-With-Clustering.html" hidden></a>
+  </div><a class="u-url" href="/nlp/visualization/bokeh/clustering/2020/06/29/Text-Cleaning-With-Clustering.html" hidden></a>
 </article>
       </div>
     </main><footer class="site-footer h-card">
