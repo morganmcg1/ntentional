@@ -123,7 +123,7 @@ window.onload = wrap_img;
        • <span class="read-time" title="Estimated read time">
     
     
-      14 min read
+      17 min read
     
 </span></p>
 
@@ -183,13 +183,6 @@ window.onload = wrap_img;
 
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p><img src="https://giphy.com/gifs/hoIvQD6OaRhSt6PgJI" alt="" /></p>
-
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
 <p>In order for Machine Translation to be useful in the real world, we should should strive to train it on high quality translation data. This is doubly true for lower-resource languages such as Irish, where clean training data is relatively limited. In this article we will try and identify and remove clusters of dirty/noisey samples in our parallalel dataset. The stages we will go through are:</p>
 <ul>
 <li><strong>Generate</strong> embeddings from a pre-trained multi-lingual model, XLM-RoBERTa</li>
@@ -201,6 +194,388 @@ window.onload = wrap_img;
 </div>
 </div>
 </div>
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p><div class="flash flash-error">
+    <svg class="octicon octicon-alert" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path fill-rule="evenodd" d="M8.893 1.5c-.183-.31-.52-.5-.887-.5s-.703.19-.886.5L.138 13.499a.98.98 0 000 1.001c.193.31.53.501.886.501h13.964c.367 0 .704-.19.877-.5a1.03 1.03 0 00.01-1.002L8.893 1.5zm.133 11.497H6.987v-2.003h2.039v2.003zm0-3.004H6.987V5.987h2.039v4.006z"></path></svg>
+    <strong>Warning: </strong><strong>Spoiler, the weird text I found!</strong>
+</div></p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p><strong>Arabic</strong> ⁉️</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>1691 ids returned from query
+</pre>
+</div>
+</div>
+
+<div class="output_area">
+
+
+<div class="output_html rendered_html output_subarea output_execute_result">
+<div>
+<style scoped="">
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>ga</th>
+      <th>en</th>
+      <th>noise_type</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>566807</th>
+      <td>قلعة فن البكسل ( pixels art )</td>
+      <td>طريقه عمل اطار منقط</td>
+      <td>na</td>
+    </tr>
+    <tr>
+      <th>571586</th>
+      <td>مواقع الارسال المجانى free sms ( 1 2)</td>
+      <td>لا تستطيع الرد على المواضيع</td>
+      <td>na</td>
+    </tr>
+    <tr>
+      <th>571682</th>
+      <td>قلعة دروس الفيكتور illustrator و coreldraw</td>
+      <td>اللهم صلي وسلم على نبينا محمد</td>
+      <td>na</td>
+    </tr>
+    <tr>
+      <th>570557</th>
+      <td>مــحل الإقـامة: jordan - palestine</td>
+      <td>قلعة الصور الخاصة بالتصميم</td>
+      <td>na</td>
+    </tr>
+    <tr>
+      <th>566810</th>
+      <td>مــحل الإقـامة: jordan - palestine</td>
+      <td>مــحل الإقـامة: في الفوتوشوب</td>
+      <td>na</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p><strong>Lighting</strong> 💡</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>1699 ids returned from query
+</pre>
+</div>
+</div>
+
+<div class="output_area">
+
+
+<div class="output_html rendered_html output_subarea output_execute_result">
+<div>
+<style scoped="">
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>ga</th>
+      <th>en</th>
+      <th>noise_type</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>690718</th>
+      <td>an tsín bhí guangdong soilse linn snámha faoi stiúir monaróirí agus atá liostaithe anseo a fháil ag an soilsiú karnar.</td>
+      <td>the featured china guangdong 3x5 watts led-e27 manufacturers and listed here are sourced by the karnar lighting.</td>
+      <td>lighting</td>
+    </tr>
+    <tr>
+      <th>477330</th>
+      <td>foinse do gairdín lawn monaróirí ag soilsiú karnar zhongshan &amp; leictreon mhonarcha.</td>
+      <td>source for high power led wall washer 144w led wall washer manufacturers at zhongshan karnar lighting &amp; electron factory.</td>
+      <td>lighting</td>
+    </tr>
+    <tr>
+      <th>479274</th>
+      <td>an tsín bhí guangdong cumhacht ard-éadrom lawn faoi stiúir monaróirí agus atá liostaithe anseo a fháil ag an soilsiú karnar.</td>
+      <td>the featured china guangdong 3 watts led under ground lights round type manufacturers and listed here are sourced by the karnar lighting.</td>
+      <td>lighting</td>
+    </tr>
+    <tr>
+      <th>636797</th>
+      <td>an tsín bhí guangdong faoi stiúir tube monaróirí agus atá liostaithe anseo a fháil ag an soilsiú karnar.</td>
+      <td>the featured china guangdong led spot light flash lamp and fancy ball manufacturers and listed here are sourced by the karnar lighting.</td>
+      <td>lighting</td>
+    </tr>
+    <tr>
+      <th>692603</th>
+      <td>an tsín bhí guangdong faoi stiúir connectable soilse na nollag monaróirí agus atá liostaithe anseo a fháil ag an soilsiú karnar.</td>
+      <td>the featured china guangdong high-power led colorful 500w led wall washer manufacturers and listed here are sourced by the karnar lighting.</td>
+      <td>lighting</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p><strong>Website Footers 📇</strong></p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>1825 ids returned from query
+</pre>
+</div>
+</div>
+
+<div class="output_area">
+
+
+<div class="output_html rendered_html output_subarea output_execute_result">
+<div>
+<style scoped="">
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>ga</th>
+      <th>en</th>
+      <th>noise_type</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>696159</th>
+      <td>©2005-2010 karnardéan teagmháil linnnasc linnléarscáil an láithreáinlast modified: august 08 2016 02:43:19.</td>
+      <td>©2005-2010 karnarsambandlink okkurveftrélast modified: august 08 2016 04:06:45.</td>
+      <td>na</td>
+    </tr>
+    <tr>
+      <th>478396</th>
+      <td>©2005-2010 karnardéan teagmháil linnnasc linnléarscáil an láithreáinlast modified: july 31 2016 00:39:06.</td>
+      <td>©2005-2010 karnarcontact uslink ussite maplast modified: july 30 2016 22:04:01.</td>
+      <td>na</td>
+    </tr>
+    <tr>
+      <th>538977</th>
+      <td>©2005-2010 karnardéan teagmháil linnnasc linnléarscáil an láithreáinlast modified: july 14 2016 20:20:33.</td>
+      <td>©2005-2010 karnarcontact uslink ussite maplast modified: july 15 2016 01:50:20.</td>
+      <td>na</td>
+    </tr>
+    <tr>
+      <th>684675</th>
+      <td>©2005-2010 karnardéan teagmháil linnnasc linnléarscáil an láithreáinlast modified: august 08 2016 01:19:15.</td>
+      <td>©2005-2010 karnarcontactez-nousnous lierplan du sitelast modified: august 08 2016 03:54:30.</td>
+      <td>na</td>
+    </tr>
+    <tr>
+      <th>534904</th>
+      <td>©2005-2010 karnardéan teagmháil linnnasc linnléarscáil an láithreáinlast modified: july 31 2016 11:57:09.</td>
+      <td>©2005-2010 karnarcontact uslink ussite maplast modified: july 31 2016 09:46:30.</td>
+      <td>na</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p><strong>Clothing and Jewelery</strong> 👑</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>1938 ids returned from query
+</pre>
+</div>
+</div>
+
+<div class="output_area">
+
+
+<div class="output_html rendered_html output_subarea output_execute_result">
+<div>
+<style scoped="">
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>ga</th>
+      <th>en</th>
+      <th>noise_type</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>641483</th>
+      <td>home:: uaireadóirí hublot:: sraith fusion classic:: sraith 45mm fusion classic:: macasamhail hublot classic comhleá sraith faire 45mm 511.zx.1170</td>
+      <td>home:: hublot watches:: classic fusion series:: classic fusion 45mm series:: replica hublot classic fusion 45mm watch series 401.mx.0123.gr [da02]</td>
+      <td>na</td>
+    </tr>
+    <tr>
+      <th>79453</th>
+      <td>pandora bead óir ivy óir - €10.23 : jewelry pandora saor, pandoraaustraliabracelets.com</td>
+      <td>pandora gold bead ivy gold - $11.00 : cheap pandora jewelry, pandoraaustraliabracelets.com</td>
+      <td>na</td>
+    </tr>
+    <tr>
+      <th>615744</th>
+      <td>clrip036a 925 sterling silver bán crystal ring - €28.83 : jewelry pandora saor , pandoraforyou.com</td>
+      <td>clrip036a 925 sterling silver white crystal ring - $31.00 : cheap pandora jewelry, pandoraforyou.com</td>
+      <td>na</td>
+    </tr>
+    <tr>
+      <th>67287</th>
+      <td>ard-chumhacht táirgí faoi stiúir &gt; cumhacht ard-threoraithe colorful &gt; product-list</td>
+      <td>led lighting &gt; high-power led colorful &gt; product-list lww-10 lww-10-108p lww-10-206p lww-8c-108p</td>
+      <td>lighting</td>
+    </tr>
+    <tr>
+      <th>635957</th>
+      <td>prada málaí láimhe p - br4692 caife leathar : seaicéad spyder, pradahandbags.top</td>
+      <td>prada borse p - br4692 coffee leather : spyder giacca , pradahandbags.top</td>
+      <td>na</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <h2 id="Text-Embeddings-for-Fun-and-Profit">Text Embeddings for Fun and Profit<a class="anchor-link" href="#Text-Embeddings-for-Fun-and-Profit"> </a></h2><p>Text embeddings can be incredibly useful for a variety of tasks; have a look at <a href="https://blog.usejournal.com/a-simple-spell-checker-built-from-word-vectors-9f28452b6f26">@er214's post</a> and <a href="https://github.com/er214/spellchecker">notebook</a> to see how they <strong>used GloVe word embeddings to create a spell-checker</strong> for their dataset. And this <a href="https://forums.fast.ai/t/nlp-any-libraries-dictionaries-out-there-for-fixing-common-spelling-errors/16411">fastai forums post</a> outlines how they created a "pretentiousness" embedding to score news outlets 🤣. While we are using embeddings for chunks of text, as opposed to individual words, the concept is the same.</p>
