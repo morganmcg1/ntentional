@@ -123,7 +123,7 @@ window.onload = wrap_img;
        • <span class="read-time" title="Estimated read time">
     
     
-      17 min read
+      18 min read
     
 </span></p>
 
@@ -174,6 +174,20 @@ window.onload = wrap_img;
 
 <div class="container" id="notebook-container">
         
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="tl;dr">tl;dr<a class="anchor-link" href="#tl;dr"> </a></h2><p>If there is one thing I would like you to take away from this article it is the ability to use the Bokeh library to dynamically visualise, select and <strong>extract</strong> text embeddings of interest <strong>directly from a plot</strong> into a list for further processing with pandas, numpy etc:</p>
+
+</div>
+</div>
+</div>
     
     
 <div class="cell border-box-sizing code_cell rendered">
@@ -578,16 +592,15 @@ window.onload = wrap_img;
 
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="Text-Embeddings-for-Fun-and-Profit">Text Embeddings for Fun and Profit<a class="anchor-link" href="#Text-Embeddings-for-Fun-and-Profit"> </a></h2><p>Text embeddings can be incredibly useful for a variety of tasks; have a look at <a href="https://blog.usejournal.com/a-simple-spell-checker-built-from-word-vectors-9f28452b6f26">@er214's post</a> and <a href="https://github.com/er214/spellchecker">notebook</a> to see how they <strong>used GloVe word embeddings to create a spell-checker</strong> for their dataset. And this <a href="https://forums.fast.ai/t/nlp-any-libraries-dictionaries-out-there-for-fixing-common-spelling-errors/16411">fastai forums post</a> outlines how they created a "pretentiousness" embedding to score news outlets 🤣. While we are using embeddings for chunks of text, as opposed to individual words, the concept is the same.</p>
-<h4 id="Pre-Trained-XLM-RoBERTa-Model">Pre-Trained XLM-RoBERTa Model<a class="anchor-link" href="#Pre-Trained-XLM-RoBERTa-Model"> </a></h4><p>We derive our text embedding by passing a text sample though <a href="https://arxiv.org/abs/1911.02116">XLM-RoBERTa Large</a> (XLM-R), a multilingual model which should work reasonably well for both Irish and English.</p>
-<p>For out embeddings we will extract the values in <strong>final</strong> hidden layer. Note that some research done on BERT shows that by concatenating the <strong>final 4 layers</strong> of the model one gets even richer contextual embeddings. In the interest of simplicity we will stick to the final layer only for the moment, although using additional layers would be an interesting area of exploration!</p>
+<h2 id="Text-Embeddings-for-Fun-and-Profit">Text Embeddings for Fun and Profit<a class="anchor-link" href="#Text-Embeddings-for-Fun-and-Profit"> </a></h2><p>Text embeddings can be incredibly useful for a variety of tasks, a couple of interesting examples include <a href="https://blog.usejournal.com/a-simple-spell-checker-built-from-word-vectors-9f28452b6f26">@er214's post</a> and <a href="https://github.com/er214/spellchecker">notebook</a> demonstrating how they used GloVe word embeddings to <strong>create a spell-checker</strong> for their dataset. They also created a <a href="https://forums.fast.ai/t/nlp-any-libraries-dictionaries-out-there-for-fixing-common-spelling-errors/16411">"pretentiousness" embedding</a> to score news outlets 🤣. While these examples used word embeddings, we will generate embeddings for chunks of text, but the concept remains the same.</p>
+<h4 id="Pre-Trained-XLM-RoBERTa-Model">Pre-Trained XLM-RoBERTa Model<a class="anchor-link" href="#Pre-Trained-XLM-RoBERTa-Model"> </a></h4><p>We derive our text embedding by passing a text sample though <a href="https://arxiv.org/abs/1911.02116">XLM-RoBERTa Large</a> (XLM-R), a multilingual model which should work reasonably well for both Irish and English. For our embeddings we will extract the values in <strong>final</strong> hidden layer. Note that some research done on BERT shows that by concatenating the <strong>final 4 layers</strong> of the model one gets even richer contextual embeddings. In the interest of simplicity we will stick to the final layer only for the moment, although using additional layers would be an interesting area of exploration!</p>
 
 </div>
 </div>
 </div>
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="Dimension-Reduction---UMAP">Dimension Reduction - UMAP<a class="anchor-link" href="#Dimension-Reduction---UMAP"> </a></h2><p>Dimensionality reduction techniques attempt to find the latent features in your data. Uniform Manifold Approximation and Projection or <a href="https://umap-learn.readthedocs.io/en/latest/index.html">"UMAP"</a> is a dimension reduction technique published in <a href="https://arxiv.org/abs/1802.03426">2018 by McInnes and Healy</a> that can be used for visualisation of high dimensional data, in a similar manner to t-SNE. Its main advantage is that <strong>it is fast</strong> (faster than t-SNE when dealing with large datasets) and also better maintains the global structure of the data.</p>
+<h2 id="Dimension-Reduction-with-UMAP">Dimension Reduction with UMAP<a class="anchor-link" href="#Dimension-Reduction-with-UMAP"> </a></h2><p>Dimensionality reduction techniques attempt to find the latent features in your data. Uniform Manifold Approximation and Projection or <a href="https://umap-learn.readthedocs.io/en/latest/index.html">"UMAP"</a> is a dimension reduction technique published in <a href="https://arxiv.org/abs/1802.03426">2018 by McInnes and Healy</a> that can be used for visualisation of high dimensional data, in a similar manner to t-SNE. Its main advantage is that <strong>it is fast</strong> (faster than t-SNE when dealing with large datasets) and also better maintains the global structure of the data.</p>
 <p>UMAP also has <a href="https://umap-learn.readthedocs.io/en/latest/index.html">beautifully well-written</a> documentation. To learn more, McInnes gives a <a href="https://www.youtube.com/watch?v=nq6iPZVUxZU">helpful overview</a> of UMAP at the SciPy 2018 conference and Pair Code has an <a href="https://pair-code.github.io/understanding-umap/#:~:text=In%20the%20simplest%20sense%2C%20UMAP,behind%20them%20is%20remarkably%20simple">excellent explanation</a> complete with many different visualisations that aid in understanding.</p>
 
 </div>
@@ -595,7 +608,7 @@ window.onload = wrap_img;
 </div>
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="Similarity-Search">Similarity Search<a class="anchor-link" href="#Similarity-Search"> </a></h2><p>In order to calculate the similarity between our embeddings there are a multitude of tools and techniques we can try. In this article we will demonstrate both Sci-kit Learn's <code>cosine_similarity</code> as well as <code>nmslib</code>'s functionality. See the end of this article for the similarity search resources I found useful</p>
+<h2 id="Similarity-Search">Similarity Search<a class="anchor-link" href="#Similarity-Search"> </a></h2><p>In order to calculate the similarity between our embeddings there are a multitude of tools and techniques we can try. In this article we will demonstrate both Sci-kit Learn's <code>cosine_similarity</code> as well as <code>nmslib</code>'s functionality. See the end of this article for the similarity search resources I found useful.</p>
 
 </div>
 </div>
@@ -605,10 +618,10 @@ window.onload = wrap_img;
 <h2 id="ParaCrawl-Data">ParaCrawl Data<a class="anchor-link" href="#ParaCrawl-Data"> </a></h2><p>First lets load our raw <a href="https://paracrawl.eu/">ParaCrawl</a> data been crawled from the internet and contains a few different types of artifacts including:</p>
 <ul>
 <li>Non-latin scripts </li>
-<li>Other random characters (e.g. '©','³','º')</li>
-<li>Text samples that are unlikely to have been translated to Irish by a human, including<ul>
+<li>Non alphanumeric characters (e.g. '©','³','º')</li>
+<li>Text samples that are unlikely to have been translated to Irish by a human, including text from<ul>
 <li>Porn sites</li>
-<li>Lighting sites (who knows why?)</li>
+<li>Lighting equipment sites (who knows why?)</li>
 </ul>
 </li>
 </ul>
@@ -727,7 +740,7 @@ window.onload = wrap_img;
 </div>
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>First we use umap to reduce the embedding space to 2 dimensions using <strong>UMAP</strong>, then we plot the embedding usingthe <strong>Bokeh</strong> visualisation library, which enables us to dynamically select different regions of interest, enabling us to interactively explore our dataset</p>
+<p>First we reduce the embedding space down from 1024 to 2 dimensions using <strong>UMAP</strong>, then we plot the embedding using the <strong>Bokeh</strong> visualisation library, which enables us to dynamically select different regions of interest, enabling us to interactively explore our dataset.</p>
 
 </div>
 </div>
@@ -795,6 +808,13 @@ xhr.send();
 </div>
     
 
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Below we can see how we can explore how our data has been clustered together and more interestingly <strong>select and extract</strong> datapoints of interest <strong>directly from the plot</strong> into a list for further processing with pandas, numpy etc</p>
+
+</div>
+</div>
+</div>
     
     
 <div class="cell border-box-sizing code_cell rendered">
