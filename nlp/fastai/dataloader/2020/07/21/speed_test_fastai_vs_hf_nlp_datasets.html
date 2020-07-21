@@ -192,8 +192,14 @@ dataset = load_dataset('csv', data_files='my_file.csv')</code></pre>
 <div class="flash">
     <svg class="octicon octicon-info octicon octicon-info octicon octicon-info" viewBox="0 0 14 16" version="1.1" width="14" height="16" aria-hidden="true"><path fill-rule="evenodd" d="M6.3 5.69a.942.942 0 01-.28-.7c0-.28.09-.52.28-.7.19-.18.42-.28.7-.28.28 0 .52.09.7.28.18.19.28.42.28.7 0 .28-.09.52-.28.7a1 1 0 01-.7.3c-.28 0-.52-.11-.7-.3zM8 7.99c-.02-.25-.11-.48-.31-.69-.2-.19-.42-.3-.69-.31H6c-.27.02-.48.13-.69.31-.2.2-.3.44-.31.69h1v3c.02.27.11.5.31.69.2.2.42.31.69.31h1c.27 0 .48-.11.69-.31.2-.19.3-.42.31-.69H8V7.98v.01zM7 2.3c-3.14 0-5.7 2.54-5.7 5.68 0 3.14 2.56 5.7 5.7 5.7s5.7-2.55 5.7-5.7c0-3.15-2.56-5.69-5.7-5.69v.01zM7 .98c3.86 0 7 3.14 7 7s-3.14 7-7 7-7-3.12-7-7 3.14-7 7-7z"></path></svg>
     <strong>Note: </strong>If you love the sound of laptop fans spinning like sonic the hedgehog 🦔, redhot battery packs 🔥 and the adrenaline 😰 of living on the edge  of pandas&#8217; capabilities as you explore, plot and manipulate your giant text datasets, then the <code>nlp</code> Datasets library probably isn&#8217;t for you. 
+</div></p>
+
 </div>
-Otherwise, regardless about using it for your final DL pipeline or not, <code>nlp</code> Datasets is definitely worth using just for the shear speed at which it can apply functions to GB's of data.</p>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Otherwise, regardless about using it for your final DL pipeline or not, <code>nlp</code> Datasets is definitely worth using just for the shear speed at which it can apply functions to GB's of data.</p>
 <p>So, is it faster? Lets see!</p>
 <h2 id="The-Setup">The Setup<a class="anchor-link" href="#The-Setup"> </a></h2><p>To find out we'll be comparing Fastai's high-level <code>TextDataloders</code> class to a custom dataprocessing pipeline using HuggingFace's <code>nlp</code> datasets library.</p>
 <h4 id="Fastai">Fastai<a class="anchor-link" href="#Fastai"> </a></h4><p>This Fastai class does a bunch of different things, all by calling just 1 line of code, including:</p>
@@ -312,11 +318,13 @@ Lowercases everything
     
     
 <div class="cell border-box-sizing code_cell rendered">
-<div class="input">
+<details class="description">
+      <summary class="btn btn-sm" data-open="Hide Code" data-close="Show Code"></summary>
+        <p><div class="input">
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="c1">#hide_collapse</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1">#collapse-hide</span>
 <span class="c1"># Imports</span>
 <span class="o">%</span><span class="k">reload_ext</span> autoreload
 <span class="o">%</span><span class="k">autoreload</span> 2
@@ -339,7 +347,8 @@ Lowercases everything
     </div>
 </div>
 </div>
-
+</p>
+    </details>
 </div>
     
 
@@ -353,11 +362,13 @@ Lowercases everything
     
     
 <div class="cell border-box-sizing code_cell rendered">
-<div class="input">
+<details class="description">
+      <summary class="btn btn-sm" data-open="Hide Code" data-close="Show Code"></summary>
+        <p><div class="input">
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="c1">#hide_collapse</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1">#collapse-hide</span>
 <span class="c1">#%%timeit -n 1 -r 3</span>
 
 <span class="c1"># Download data and save as csv</span>
@@ -383,7 +394,8 @@ Lowercases everything
     </div>
 </div>
 </div>
-
+</p>
+    </details>
 <div class="output_wrapper">
 <div class="output">
 
@@ -412,11 +424,13 @@ Lowercases everything
     
     
 <div class="cell border-box-sizing code_cell rendered">
-<div class="input">
+<details class="description">
+      <summary class="btn btn-sm" data-open="Hide Code" data-close="Show Code"></summary>
+        <p><div class="input">
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="c1">#hide_collapse</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1">#collapse-hide</span>
 
 <span class="k">del</span> <span class="n">df</span><span class="p">,</span> <span class="n">res</span>
 <span class="n">gc</span><span class="o">.</span><span class="n">collect</span><span class="p">()</span>
@@ -432,7 +446,8 @@ Lowercases everything
     </div>
 </div>
 </div>
-
+</p>
+    </details>
 <div class="output_wrapper">
 <div class="output">
 
@@ -460,7 +475,7 @@ Lowercases everything
 </div>
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>Tokenizer, Numericalizer and Padding functions:</p>
+<p>Tokenizer, Numericalizer and Padding functions, modified from Fastai's functions</p>
 
 </div>
 </div>
@@ -468,11 +483,13 @@ Lowercases everything
     
     
 <div class="cell border-box-sizing code_cell rendered">
-<div class="input">
+<details class="description">
+      <summary class="btn btn-sm" data-open="Hide Code" data-close="Show Code"></summary>
+        <p><div class="input">
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="c1">#hide_collapse</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1">#collapse-hide</span>
 <span class="k">class</span> <span class="nc">SpacyTokenizerNLP</span><span class="p">():</span>
     <span class="s2">&quot;Spacy tokenizer for `lang`&quot;</span>
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">lang</span><span class="o">=</span><span class="s1">&#39;en&#39;</span><span class="p">,</span> <span class="n">special_toks</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">buf_sz</span><span class="o">=</span><span class="mi">5000</span><span class="p">):</span>
@@ -526,7 +543,8 @@ Lowercases everything
     </div>
 </div>
 </div>
-
+</p>
+    </details>
 </div>
     
 
@@ -540,11 +558,13 @@ Lowercases everything
     
     
 <div class="cell border-box-sizing code_cell rendered">
-<div class="input">
+<details class="description">
+      <summary class="btn btn-sm" data-open="Hide Code" data-close="Show Code"></summary>
+        <p><div class="input">
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="c1">#hide_collapse</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1">#collapse-hide</span>
 
 <span class="c1"># Download text, a clean version of the dataset is downloaded (not included in the timings), &#39;train[:10%]&#39;</span>
 <span class="n">senti_dataset</span> <span class="o">=</span> <span class="n">load_dataset</span><span class="p">(</span><span class="s1">&#39;sentiment140&#39;</span><span class="p">,</span> <span class="n">split</span><span class="o">=</span><span class="s1">&#39;train&#39;</span><span class="p">,</span> <span class="n">download_mode</span><span class="o">=</span><span class="s1">&#39;reuse_cache_if_exists&#39;</span><span class="p">)</span>
@@ -591,7 +611,8 @@ Lowercases everything
     </div>
 </div>
 </div>
-
+</p>
+    </details>
 <div class="output_wrapper">
 <div class="output">
 
@@ -620,11 +641,13 @@ Dataset sentiment140 downloaded and prepared to /home/morgan/.cache/huggingface/
     
     
 <div class="cell border-box-sizing code_cell rendered">
-<div class="input">
+<details class="description">
+      <summary class="btn btn-sm" data-open="Hide Code" data-close="Show Code"></summary>
+        <p><div class="input">
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="c1">#hide_collapse</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1">#collapse-hide</span>
 <span class="c1">#%%timeit -n 1 -r 1</span>
 
 <span class="c1"># Do all of the text processing, tokenization and numericalization</span>
@@ -651,7 +674,8 @@ Dataset sentiment140 downloaded and prepared to /home/morgan/.cache/huggingface/
     </div>
 </div>
 </div>
-
+</p>
+    </details>
 <div class="output_wrapper">
 <div class="output">
 
@@ -793,11 +817,13 @@ init dataloaders
     
     
 <div class="cell border-box-sizing code_cell rendered">
-<div class="input">
+<details class="description">
+      <summary class="btn btn-sm" data-open="Hide Code" data-close="Show Code"></summary>
+        <p><div class="input">
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="c1">#hide_collapse</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1">#collapse-hide</span>
 <span class="c1">#%%timeit</span>
 
 <span class="n">s</span> <span class="o">=</span> <span class="s2">&quot;for b in train_dataloader: pass&quot;</span>
@@ -808,7 +834,8 @@ init dataloaders
     </div>
 </div>
 </div>
-
+</p>
+    </details>
 <div class="output_wrapper">
 <div class="output">
 
