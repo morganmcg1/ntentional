@@ -1,0 +1,865 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1"><!-- Begin Jekyll SEO tag v2.6.1 -->
+<title>Speedtesting HuggingFace nlp Datasets vs Fastai | ntentional</title>
+<meta name="generator" content="Jekyll v4.0.0" />
+<meta property="og:title" content="Speedtesting HuggingFace nlp Datasets vs Fastai" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Can we get an additional text processing speedup with the nlp Datasets library" />
+<meta property="og:description" content="Can we get an additional text processing speedup with the nlp Datasets library" />
+<link rel="canonical" href="https://www.ntentional.com/nlp/fastai/dataloader/2020/07/21/speed_test_fastai_vs_hf_nlp_datasets.html" />
+<meta property="og:url" content="https://www.ntentional.com/nlp/fastai/dataloader/2020/07/21/speed_test_fastai_vs_hf_nlp_datasets.html" />
+<meta property="og:site_name" content="ntentional" />
+<meta property="og:image" content="https://www.ntentional.com/images/bokeh_mini.png" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2020-07-21T00:00:00-05:00" />
+<script type="application/ld+json">
+{"description":"Can we get an additional text processing speedup with the nlp Datasets library","mainEntityOfPage":{"@type":"WebPage","@id":"https://www.ntentional.com/nlp/fastai/dataloader/2020/07/21/speed_test_fastai_vs_hf_nlp_datasets.html"},"@type":"BlogPosting","url":"https://www.ntentional.com/nlp/fastai/dataloader/2020/07/21/speed_test_fastai_vs_hf_nlp_datasets.html","headline":"Speedtesting HuggingFace nlp Datasets vs Fastai","dateModified":"2020-07-21T00:00:00-05:00","datePublished":"2020-07-21T00:00:00-05:00","image":"https://www.ntentional.com/images/bokeh_mini.png","@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+<link rel="stylesheet" href="/assets/css/style.css"><link type="application/atom+xml" rel="alternate" href="https://www.ntentional.com/feed.xml" title="ntentional" /><!-- the google_analytics_id gets auto inserted from the config file -->
+
+
+
+<script>(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)})(window,document,'script','//www.google-analytics.com/analytics.js','ga');ga('create','G-QM13ZPPXRV','auto');ga('require','displayfeatures');ga('send','pageview');</script>
+
+<link rel="shortcut icon" type="image/x-icon" href="/images/favicon.ico"><!-- Begin Jekyll SEO tag v2.6.1 -->
+<title>Speedtesting HuggingFace nlp Datasets vs Fastai | ntentional</title>
+<meta name="generator" content="Jekyll v4.0.0" />
+<meta property="og:title" content="Speedtesting HuggingFace nlp Datasets vs Fastai" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Can we get an additional text processing speedup with the nlp Datasets library" />
+<meta property="og:description" content="Can we get an additional text processing speedup with the nlp Datasets library" />
+<link rel="canonical" href="https://www.ntentional.com/nlp/fastai/dataloader/2020/07/21/speed_test_fastai_vs_hf_nlp_datasets.html" />
+<meta property="og:url" content="https://www.ntentional.com/nlp/fastai/dataloader/2020/07/21/speed_test_fastai_vs_hf_nlp_datasets.html" />
+<meta property="og:site_name" content="ntentional" />
+<meta property="og:image" content="https://www.ntentional.com/images/bokeh_mini.png" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2020-07-21T00:00:00-05:00" />
+<script type="application/ld+json">
+{"description":"Can we get an additional text processing speedup with the nlp Datasets library","mainEntityOfPage":{"@type":"WebPage","@id":"https://www.ntentional.com/nlp/fastai/dataloader/2020/07/21/speed_test_fastai_vs_hf_nlp_datasets.html"},"@type":"BlogPosting","url":"https://www.ntentional.com/nlp/fastai/dataloader/2020/07/21/speed_test_fastai_vs_hf_nlp_datasets.html","headline":"Speedtesting HuggingFace nlp Datasets vs Fastai","dateModified":"2020-07-21T00:00:00-05:00","datePublished":"2020-07-21T00:00:00-05:00","image":"https://www.ntentional.com/images/bokeh_mini.png","@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+
+<link href="https://unpkg.com/@primer/css/dist/primer.css" rel="stylesheet" />
+<link rel="stylesheet" href="//use.fontawesome.com/releases/v5.0.7/css/all.css"><link type="application/atom+xml" rel="alternate" href="https://www.ntentional.com/feed.xml" title="ntentional" /><!-- the google_analytics_id gets auto inserted from the config file -->
+
+
+
+<script>(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)})(window,document,'script','//www.google-analytics.com/analytics.js','ga');ga('create','G-QM13ZPPXRV','auto');ga('require','displayfeatures');ga('send','pageview');</script>
+
+
+
+<script>
+function wrap_img(fn) {
+    if (document.attachEvent ? document.readyState === "complete" : document.readyState !== "loading") {
+        var elements = document.querySelectorAll(".post img");
+        Array.prototype.forEach.call(elements, function(el, i) {
+            if (el.getAttribute("title") && (el.className != "emoji")) {
+                const caption = document.createElement('figcaption');
+                var node = document.createTextNode(el.getAttribute("title"));
+                caption.appendChild(node);
+                const wrapper = document.createElement('figure');
+                wrapper.className = 'image';
+                el.parentNode.insertBefore(wrapper, el);
+                el.parentNode.removeChild(el);
+                wrapper.appendChild(el);
+                wrapper.appendChild(caption);
+            }
+        });
+    } else { document.addEventListener('DOMContentLoaded', fn); }
+}
+window.onload = wrap_img;
+</script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function(){
+    // add link icon to anchor tags
+    var elem = document.querySelectorAll(".anchor-link")
+    elem.forEach(e => (e.innerHTML = '<i class="fas fa-link fa-xs"></i>'));
+    });
+</script>
+</head><body><header class="site-header">
+
+  <div class="wrapper"><a class="site-title" rel="author" href="/">ntentional</a><nav class="site-nav">
+        <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+        <label for="nav-trigger">
+          <span class="menu-icon">
+            <svg viewBox="0 0 18 15" width="18px" height="15px">
+              <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"/>
+            </svg>
+          </span>
+        </label>
+
+        <div class="trigger"><a class="page-link" href="/about/">Morgan (Me)</a><a class="page-link" href="/search/">Search</a><a class="page-link" href="/categories/">Tags</a></div>
+      </nav></div>
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title p-name" itemprop="name headline">Speedtesting HuggingFace nlp Datasets vs Fastai</h1><p class="page-description">Can we get an additional text processing speedup with the nlp Datasets library</p><p class="post-meta post-meta-title"><time class="dt-published" datetime="2020-07-21T00:00:00-05:00" itemprop="datePublished">
+        Jul 21, 2020
+      </time>
+       • <span class="read-time" title="Estimated read time">
+    
+    
+      10 min read
+    
+</span></p>
+
+    
+      <p class="category-tags"><i class="fas fa-tags category-tags-icon"></i></i> 
+      
+        <a class="category-tags-link" href="/categories/#nlp">nlp</a>
+        &nbsp;
+      
+        <a class="category-tags-link" href="/categories/#fastai">fastai</a>
+        &nbsp;
+      
+        <a class="category-tags-link" href="/categories/#dataloader">dataloader</a>
+        
+      
+      </p>
+    
+
+    
+      
+        <div class="pb-5 d-flex flex-wrap flex-justify-end">
+          <div class="px-2">
+
+    <a href="https://github.com/morganmcg1/ntentional/tree/master/_notebooks/2020-07-21-speed_test_fastai_vs_hf_nlp_datasets.ipynb" role="button" target="_blank">
+<img class="notebook-badge-image" src="/assets/badges/github.svg" alt="View On GitHub">
+    </a>
+</div>
+
+          
+          <div class="px-2">
+    <a href="https://colab.research.google.com/github/morganmcg1/ntentional/blob/master/_notebooks/2020-07-21-speed_test_fastai_vs_hf_nlp_datasets.ipynb" target="_blank">
+        <img class="notebook-badge-image" src="/assets/badges/colab.svg" alt="Open In Colab"/>
+    </a>
+</div>
+        </div>
+      </header>
+
+  <div class="post-content e-content" itemprop="articleBody">
+    <!--
+#################################################
+### THIS FILE WAS AUTOGENERATED! DO NOT EDIT! ###
+#################################################
+# file to edit: _notebooks/2020-07-21-speed_test_fastai_vs_hf_nlp_datasets.ipynb
+-->
+
+<div class="container" id="notebook-container">
+        
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="tl;dr">tl;dr<a class="anchor-link" href="#tl;dr"> </a></h2><ul>
+<li>Fastai's <code>Textdataloader</code> is well optimised and appears to come in faster on <code>nlp</code> Datasets for a dataset of 1.6M</li>
+</ul>
+<h2 id="Speed">Speed<a class="anchor-link" href="#Speed"> </a></h2><p>I started playing around with HuggingFace's <a href="https://huggingface.co/nlp"><code>nlp</code> Datasets library</a> recently and was blown away by the speed at which you can iterate through the data, thanks to some PyArrow wizardry its seriously fast!
+
+<center>
+    <div class="jekyll-twitter-plugin"><blockquote class="twitter-tweet"><p lang="en" dir="ltr">There is a bit of magic in the new 🤗nlp library besides giving dead-simple access to 120+ datasets🧙‍♂️<br /><br />We&#39;ve tested it with <a href="https://twitter.com/qlhoest?ref_src=twsrc%5Etfw">@qlhoest</a> and loading a 17GB+ dataset like English Wikipedia only takes... 9MB in RAM🐣<br /><br />And you can iterate over the data at 2-3 Gbit/s🚀<br /><br />Try it yourself👇 <a href="https://t.co/wx7x7fzhqf">pic.twitter.com/wx7x7fzhqf</a></p>&mdash; Thomas Wolf (@Thom_Wolf) <a href="https://twitter.com/Thom_Wolf/status/1272512974935203841?ref_src=twsrc%5Etfw">June 15, 2020</a></blockquote>
+<script async="" src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+</div>
+</center>
+
+So I wondered if there was a significant speed up to be gained by doing as much text processing as I could with this library as opposed to Fastai's default text processing. (Also, after previously discovering Fastai's functionality to do <a href="https://forums.fast.ai/t/nlp-speed-up-if-using-sorteddl/74636">faster text loading</a> I was in the mood for further speed-ups! 💨)</p>
+<h2 id="nlp-Datasets"><code>nlp</code> Datasets<a class="anchor-link" href="#nlp-Datasets"> </a></h2><p>The <a href="https://huggingface.co/nlp"><code>nlp</code> Datasets library</a> is incredibly memory efficient:</p>
+<blockquote><p>It provides a very efficient way to load and process data from raw files (CSV/JSON/text) or in-memory data (python dict, pandas dataframe) with a special focus on memory efficency and speed. As a matter of example, <strong>loading a 18GB dataset like English Wikipedia allocate 9 MB in RAM</strong> and you can iterate over the dataset <strong>at 1-2 GBit/s</strong> in python.</p>
+</blockquote>
+<p>It also hosts 130+ common nlp research datasets AND (thanks to <a href="https://discuss.huggingface.co/t/nlp-0-3-0-is-out/50/3">this pointer from Thomas Wolf</a> on the new HuggingFace forums) I also learned that you can also easily load your own CSVs (or jsons, pandas dataframes) and bask in all of that speedy goodness, for example like below:</p>
+
+<pre><code>from nlp import load_dataset
+dataset = load_dataset('csv', data_files='my_file.csv')</code></pre>
+<p>By the way, if you're curious to learn more about PyArrow then I highly recommend Dejan Simic's <a href="https://towardsdatascience.com/apache-arrow-read-dataframe-with-zero-memory-69634092b1a">post about it</a>
+
+<center>
+    <div class="jekyll-twitter-plugin"><blockquote class="twitter-tweet"><p lang="en" dir="ltr">Hot off the press - the last few days I did some research, explored <a href="https://twitter.com/hashtag/ApacheArrow?src=hash&amp;ref_src=twsrc%5Etfw">#ApacheArrow</a> and figured out how to read &amp; write Arrow files - here is everything I learned so far:<a href="https://t.co/6E174oQ5eT">https://t.co/6E174oQ5eT</a></p>&mdash; Dejan Simic (@simicdds) <a href="https://twitter.com/simicdds/status/1276521257304023046?ref_src=twsrc%5Etfw">June 26, 2020</a></blockquote>
+<script async="" src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+</div>
+</center>
+<div class="flash">
+    <svg class="octicon octicon-info octicon octicon-info octicon octicon-info" viewBox="0 0 14 16" version="1.1" width="14" height="16" aria-hidden="true"><path fill-rule="evenodd" d="M6.3 5.69a.942.942 0 01-.28-.7c0-.28.09-.52.28-.7.19-.18.42-.28.7-.28.28 0 .52.09.7.28.18.19.28.42.28.7 0 .28-.09.52-.28.7a1 1 0 01-.7.3c-.28 0-.52-.11-.7-.3zM8 7.99c-.02-.25-.11-.48-.31-.69-.2-.19-.42-.3-.69-.31H6c-.27.02-.48.13-.69.31-.2.2-.3.44-.31.69h1v3c.02.27.11.5.31.69.2.2.42.31.69.31h1c.27 0 .48-.11.69-.31.2-.19.3-.42.31-.69H8V7.98v.01zM7 2.3c-3.14 0-5.7 2.54-5.7 5.68 0 3.14 2.56 5.7 5.7 5.7s5.7-2.55 5.7-5.7c0-3.15-2.56-5.69-5.7-5.69v.01zM7 .98c3.86 0 7 3.14 7 7s-3.14 7-7 7-7-3.12-7-7 3.14-7 7-7z"></path></svg>
+    <strong>Note: </strong>If you love the sound of laptop fans spinning like sonic the hedgehog 🦔, redhot battery packs 🔥 and the adrenaline 😰 of living on the edge  of pandas&#8217; capabilities as you explore, plot and manipulate your giant text datasets, then the <code>nlp</code> Datasets library probably isn&#8217;t for you. 
+</div>
+Otherwise, regardless about using it for your final DL pipeline or not, <code>nlp</code> Datasets is definitely worth using just for the shear speed at which it can apply functions to GB's of data.</p>
+<p>So, is it faster? Lets see!</p>
+<h2 id="The-Setup">The Setup<a class="anchor-link" href="#The-Setup"> </a></h2><p>To find out we'll be comparing Fastai's high-level <code>TextDataloders</code> class to a custom dataprocessing pipeline using HuggingFace's <code>nlp</code> datasets library.</p>
+<h4 id="Fastai">Fastai<a class="anchor-link" href="#Fastai"> </a></h4><p>This Fastai class does a bunch of different things, all by calling just 1 line of code, including:</p>
+<ul>
+<li>Pre and Post Processing</li>
+<li>Tokenization with Spacy's tokenizer, including creating a vocabulary and <strong>parallelising</strong> the tokenization</li>
+<li>Speed optimizations including sorting data by text sample length and padding only to the longest item in the sequence, <a href="https://towardsdatascience.com/divide-hugging-face-transformers-training-time-by-2-or-more-21bf7129db9q-21bf7129db9e">similar what was described here</a></li>
+<li>Creating the train and validation dataloaders and putting them onto the gpu</li>
+</ul>
+<h4 id="HuggingFace-nlp-Datasets">HuggingFace <code>nlp</code> Datasets<a class="anchor-link" href="#HuggingFace-nlp-Datasets"> </a></h4><p>The <code>nlp</code> Datasets pipeline I wrote tries to replicate all of the core functionality of <code>TextDataloaders</code> as best I could. 
+<div class="flash">
+    <svg class="octicon octicon-info octicon octicon-info octicon octicon-info octicon octicon-info" viewBox="0 0 14 16" version="1.1" width="14" height="16" aria-hidden="true"><path fill-rule="evenodd" d="M6.3 5.69a.942.942 0 01-.28-.7c0-.28.09-.52.28-.7.19-.18.42-.28.7-.28.28 0 .52.09.7.28.18.19.28.42.28.7 0 .28-.09.52-.28.7a1 1 0 01-.7.3c-.28 0-.52-.11-.7-.3zM8 7.99c-.02-.25-.11-.48-.31-.69-.2-.19-.42-.3-.69-.31H6c-.27.02-.48.13-.69.31-.2.2-.3.44-.31.69h1v3c.02.27.11.5.31.69.2.2.42.31.69.31h1c.27 0 .48-.11.69-.31.2-.19.3-.42.31-.69H8V7.98v.01zM7 2.3c-3.14 0-5.7 2.54-5.7 5.68 0 3.14 2.56 5.7 5.7 5.7s5.7-2.55 5.7-5.7c0-3.15-2.56-5.69-5.7-5.69v.01zM7 .98c3.86 0 7 3.14 7 7s-3.14 7-7 7-7-3.12-7-7 3.14-7 7-7z"></path></svg>
+    <strong>Note: </strong>I couldn&#8217;t figure out how to parallelise the text processing with <code>nlp</code> although this is probably down to my lack of experience with parallelism as opposed to a limitation of the library
+</div></p>
+<h2 id="Sentiment-Dataset">Sentiment Dataset<a class="anchor-link" href="#Sentiment-Dataset"> </a></h2><p>For this experiment I used the <a href="https://huggingface.co/datasets/sentiment140">Sentiment140</a> dataset, a sentiment classifcation dataset of Twitter data.</p>
+<p>For our experiment we'll use</p>
+<ul>
+<li>10% of sentiment dataset (160,000 tweets, 11.8M space-separated tokens), pulled from nlp library</li>
+<li>80/20 train/val split</li>
+</ul>
+<h2 id="Experiment-Settings">Experiment Settings<a class="anchor-link" href="#Experiment-Settings"> </a></h2><p>The timings will consist of 2 elements, an "init" and "1 epoch". The former will covering the entire process from loading the data (already downloaded) to creating the dataloaders. The second element will simply consist of iterating through the entire training dataset once.</p>
+<h3 id="init-Details">init Details<a class="anchor-link" href="#init-Details"> </a></h3><p>"init" consists of:</p>
+<ol>
+<li><p>Reading the data from disk, from a csv for fastai and from a PyArrow file for <code>nlp</code></p>
+</li>
+<li><p>Applying <a href="http://dev.fast.ai/text.core#Preprocessing-rules">fastai's default text pre-processing functions</a>. These will:</p>
+</li>
+</ol>
+
+<pre><code>Fix various messy bits of html sometimes seen in documents
+Replace repetitions at the character level, e.g. `cccc` becomes: `TK_REP 4 c`
+Replace word repetitions, e.g. `cow cow cow cow` becomes: `TK_WREP 4 cow`
+Add spaces around / and #
+Remove multiple spaces 
+Replace tokens in ALL CAPS by their lower version and add TK_UP before.
+Replace characters in ALL CAPS by their lower version and add TK_UP before.
+Lowercases everything
+
+
+</code></pre>
+<ol>
+<li><p>Tokenizing based on Spacy's tokenizer (fastai's default)</p>
+</li>
+<li><p>Applying a post-processing rule which replaces embedded spaces in a token with unicode line char to allow for split/join</p>
+</li>
+<li><p>Performing 1 epoch iterating through the training data, bs = 64</p>
+</li>
+</ol>
+<h2 id="Results">Results<a class="anchor-link" href="#Results"> </a></h2><h4 id="10%-Data">10% Data<a class="anchor-link" href="#10%-Data"> </a></h4><p>Results are...mixed! While the Fastai convienience function had a faster init (48s vs 71s), the PyArrow-backed <code>nlp</code> run through a single epoch was significantly faster (11s vs 14s).</p>
+<table>
+<thead><tr>
+<th style="text-align:left">0.16M ROWS:</th>
+<th style="text-align:center">Init (s)</th>
+<th style="text-align:center">1 epoch (s)</th>
+<th style="text-align:center">1 mini-batch [bs=64] (ms)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>Fastai</strong></td>
+<td style="text-align:center">124</td>
+<td style="text-align:center">14.3</td>
+<td style="text-align:center">7.4</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Fastai w/sorted</strong></td>
+<td style="text-align:center"><strong>48.1</strong></td>
+<td style="text-align:center">14.3</td>
+<td style="text-align:center">7.4</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>nlp</strong></td>
+<td style="text-align:center">71.2</td>
+<td style="text-align:center"><strong>11.3</strong></td>
+<td style="text-align:center"><strong>5.6</strong></td>
+</tr>
+</tbody>
+</table>
+<h4 id="100%-Data">100% Data<a class="anchor-link" href="#100%-Data"> </a></h4><p>Surprisingly for the full dataset of 1.6M tweets, Fastai dramatically outperforms <code>nlp</code> Datasets.</p>
+<table>
+<thead><tr>
+<th style="text-align:left">1.6M ROWS:</th>
+<th style="text-align:center">Init (s)</th>
+<th style="text-align:center">1 epoch (s)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>Fastai w/sorted</strong></td>
+<td style="text-align:center"><strong>484</strong></td>
+<td style="text-align:center"><strong>142</strong></td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>nlp</strong></td>
+<td style="text-align:center">1290</td>
+<td style="text-align:center">323</td>
+</tr>
+</tbody>
+</table>
+<h2 id="Thoughts">Thoughts<a class="anchor-link" href="#Thoughts"> </a></h2><ul>
+<li><strong>Memory</strong> Note that Fastai was much faster on the full dataset, but I also had to delete the pandas dataframe used to calculate the text lengths as it was taking up too much memory and causing my dataloaders to fail, I probably should find a more memory efficient way to do this calculation. On the other hand, <code>nlp</code> datasets won't incur this issue.</li>
+<li><strong>nlp pipeline</strong> Given the large difference for the full dataset, I am suspicious about some parts of my implementation, for example sorting the entire dataset takes 416s and splitting it into a train and validation set takes 416s. Do I need to sort the full dataset? Should chopping the dataset in 2 really take so long? Removing these two steps bring the timing down to 458s, slightly faster than Fastai.</li>
+</ul>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Thanks-for-Reading-&#128515;">Thanks for Reading &#128515;<a class="anchor-link" href="#Thanks-for-Reading-&#128515;"> </a></h2><p>As always, I would love to hear if you have any comments, thoughts or criticisms, you can find me on Twitter at <a href="www.twitter.com/mcgenergy">@mcgenergy</a></p>
+<h2 id="[Appendix]">[Appendix]<a class="anchor-link" href="#[Appendix]"> </a></h2><h2 id="Code:">Code:<a class="anchor-link" href="#Code:"> </a></h2><p>For those curious, you can peek the code used in testing this below 👇</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1">#hide_collapse</span>
+<span class="c1"># Imports</span>
+<span class="o">%</span><span class="k">reload_ext</span> autoreload
+<span class="o">%</span><span class="k">autoreload</span> 2
+
+<span class="kn">from</span> <span class="nn">fastai2.basics</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">fastai2.text.all</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="c1"># from fastai2.callback.all import *</span>
+<span class="c1"># from fastai2.data.transforms import RandomSplitter</span>
+<span class="kn">from</span> <span class="nn">fastai2.text.core</span> <span class="kn">import</span> <span class="n">defaults</span>
+
+<span class="kn">from</span> <span class="nn">nlp</span> <span class="kn">import</span> <span class="n">load_dataset</span>
+
+<span class="kn">import</span> <span class="nn">spacy</span><span class="o">,</span><span class="nn">html</span>
+<span class="kn">from</span> <span class="nn">spacy.symbols</span> <span class="kn">import</span> <span class="n">ORTH</span>
+
+<span class="kn">import</span> <span class="nn">timeit</span>
+<span class="kn">import</span> <span class="nn">gc</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="Fastai-Testing">Fastai Testing<a class="anchor-link" href="#Fastai-Testing"> </a></h3><p>Init timing:</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1">#hide_collapse</span>
+<span class="c1">#%%timeit -n 1 -r 3</span>
+
+<span class="c1"># Download data and save as csv</span>
+<span class="c1"># senti_dataset = load_dataset(&#39;sentiment140&#39;, split=&#39;train[:100%]&#39;, download_mode=&#39;reuse_cache_if_exists&#39;)</span>
+<span class="c1"># df = senti_dataset.data.to_pandas()</span>
+<span class="c1"># df.to_csv(&#39;sentiment140.csv&#39;)</span>
+
+<span class="c1"># Read data; the first 10% of the sentiment140 dataset, extraced from the `nlp` library and saved as a csv</span>
+<span class="c1">#fn_10pct = &#39;sentiment140_10pct.csv&#39;</span>
+<span class="n">fn</span> <span class="o">=</span> <span class="s1">&#39;sentiment140.csv&#39;</span>
+<span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">fn</span><span class="p">,</span> <span class="n">index_col</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+
+<span class="c1"># SORT: Calculate text sample lengths</span>
+<span class="n">df</span><span class="p">[</span><span class="s1">&#39;word_count&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;text&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">split</span><span class="p">()</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="nb">len</span><span class="p">)</span>
+
+<span class="n">res</span><span class="o">=</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;word_count&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span>
+
+<span class="c1"># Create Dataloaders</span>
+<span class="n">dls</span> <span class="o">=</span> <span class="n">TextDataLoaders</span><span class="o">.</span><span class="n">from_csv</span><span class="p">(</span><span class="n">path</span><span class="o">=</span><span class="s1">&#39;.&#39;</span><span class="p">,</span> <span class="n">csv_fname</span><span class="o">=</span><span class="n">fn</span><span class="p">,</span> <span class="n">valid_pct</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span> <span class="n">bs</span><span class="o">=</span><span class="mi">64</span><span class="p">,</span> 
+                               <span class="n">text_col</span><span class="o">=</span><span class="s1">&#39;text&#39;</span><span class="p">,</span> <span class="n">label_col</span><span class="o">=</span><span class="s1">&#39;sentiment&#39;</span> <span class="p">,</span> <span class="n">res</span><span class="o">=</span><span class="n">res</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_html rendered_html output_subarea ">
+
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>1 epoch timing</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1">#hide_collapse</span>
+
+<span class="k">del</span> <span class="n">df</span><span class="p">,</span> <span class="n">res</span>
+<span class="n">gc</span><span class="o">.</span><span class="n">collect</span><span class="p">()</span>
+
+<span class="c1"># Do 1 pass of the training dataloader</span>
+<span class="n">s</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;for b in dls.train: pass</span>
+<span class="s2">    &quot;&quot;&quot;</span>
+
+<span class="n">time</span> <span class="o">=</span> <span class="n">timeit</span><span class="o">.</span><span class="n">timeit</span><span class="p">(</span><span class="n">stmt</span><span class="o">=</span><span class="n">s</span><span class="p">,</span> <span class="n">number</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="nb">globals</span><span class="o">=</span><span class="nb">globals</span><span class="p">());</span> <span class="n">time</span>
+<span class="n">time</span><span class="p">,</span> <span class="n">time</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">dls</span><span class="o">.</span><span class="n">train</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>(143.04122078799992, 0.007152061039399996)</pre>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="HuggingFace-nlp-Datasets-Testing">HuggingFace <code>nlp</code> Datasets Testing<a class="anchor-link" href="#HuggingFace-nlp-Datasets-Testing"> </a></h3>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Tokenizer, Numericalizer and Padding functions:</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1">#hide_collapse</span>
+<span class="k">class</span> <span class="nc">SpacyTokenizerNLP</span><span class="p">():</span>
+    <span class="s2">&quot;Spacy tokenizer for `lang`&quot;</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">lang</span><span class="o">=</span><span class="s1">&#39;en&#39;</span><span class="p">,</span> <span class="n">special_toks</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">buf_sz</span><span class="o">=</span><span class="mi">5000</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">special_toks</span> <span class="o">=</span> <span class="n">ifnone</span><span class="p">(</span><span class="n">special_toks</span><span class="p">,</span> <span class="n">defaults</span><span class="o">.</span><span class="n">text_spec_tok</span><span class="p">)</span>
+        <span class="n">nlp</span> <span class="o">=</span> <span class="n">spacy</span><span class="o">.</span><span class="n">blank</span><span class="p">(</span><span class="n">lang</span><span class="p">,</span> <span class="n">disable</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;parser&quot;</span><span class="p">,</span> <span class="s2">&quot;tagger&quot;</span><span class="p">,</span> <span class="s2">&quot;ner&quot;</span><span class="p">])</span>
+        <span class="k">for</span> <span class="n">w</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">special_toks</span><span class="p">:</span> <span class="n">nlp</span><span class="o">.</span><span class="n">tokenizer</span><span class="o">.</span><span class="n">add_special_case</span><span class="p">(</span><span class="n">w</span><span class="p">,</span> <span class="p">[{</span><span class="n">ORTH</span><span class="p">:</span> <span class="n">w</span><span class="p">}])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pipe</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">buf_sz</span> <span class="o">=</span> <span class="n">nlp</span><span class="o">.</span><span class="n">pipe</span><span class="p">,</span><span class="n">buf_sz</span>
+        
+    <span class="k">def</span> <span class="nf">encodes</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">items</span><span class="p">):</span>
+        <span class="n">tmp</span> <span class="o">=</span> <span class="p">[</span><span class="nb">list</span><span class="p">(</span><span class="n">doc</span><span class="p">)</span> <span class="k">for</span> <span class="n">doc</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">pipe</span><span class="p">(</span><span class="n">items</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">buf_sz</span><span class="p">)]</span>
+        <span class="k">return</span> <span class="p">{</span><span class="s1">&#39;tok_text_pre&#39;</span><span class="p">:</span> <span class="p">[</span><span class="nb">list</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">t</span><span class="p">)</span> <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">l</span><span class="p">)</span> <span class="k">for</span> <span class="n">l</span> <span class="ow">in</span> <span class="n">tmp</span><span class="p">]}</span>
+
+<span class="k">def</span> <span class="nf">make_vocab</span><span class="p">(</span><span class="n">count</span><span class="p">,</span> <span class="n">min_freq</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">max_vocab</span><span class="o">=</span><span class="mi">60000</span><span class="p">,</span> <span class="n">special_toks</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="s2">&quot;Create a vocab of `max_vocab` size from `Counter` `count` with items present more than `min_freq`&quot;</span>
+    <span class="n">vocab</span> <span class="o">=</span> <span class="p">[</span><span class="n">o</span> <span class="k">for</span> <span class="n">o</span><span class="p">,</span><span class="n">c</span> <span class="ow">in</span> <span class="n">count</span><span class="o">.</span><span class="n">most_common</span><span class="p">(</span><span class="n">max_vocab</span><span class="p">)</span> <span class="k">if</span> <span class="n">c</span> <span class="o">&gt;=</span> <span class="n">min_freq</span><span class="p">]</span>
+    <span class="n">special_toks</span> <span class="o">=</span> <span class="n">ifnone</span><span class="p">(</span><span class="n">special_toks</span><span class="p">,</span> <span class="n">defaults</span><span class="o">.</span><span class="n">text_spec_tok</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">o</span> <span class="ow">in</span> <span class="nb">reversed</span><span class="p">(</span><span class="n">special_toks</span><span class="p">):</span> <span class="c1">#Make sure all special tokens are in the vocab</span>
+        <span class="k">if</span> <span class="n">o</span> <span class="ow">in</span> <span class="n">vocab</span><span class="p">:</span> <span class="n">vocab</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">o</span><span class="p">)</span>
+        <span class="n">vocab</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">o</span><span class="p">)</span>
+    <span class="n">vocab</span> <span class="o">=</span> <span class="n">vocab</span><span class="p">[:</span><span class="n">max_vocab</span><span class="p">]</span>
+    <span class="k">return</span> <span class="n">vocab</span> <span class="o">+</span> <span class="p">[</span><span class="sa">f</span><span class="s1">&#39;xxfake&#39;</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">8</span><span class="o">-</span><span class="nb">len</span><span class="p">(</span><span class="n">vocab</span><span class="p">)</span><span class="o">%</span><span class="k">8</span>)]
+
+<span class="k">class</span> <span class="nc">NumericalizeNLP</span><span class="p">(</span><span class="n">Transform</span><span class="p">):</span>
+    <span class="s2">&quot;Reversible transform of tokenized texts to numericalized ids&quot;</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dsets</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">vocab</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">min_freq</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">max_vocab</span><span class="o">=</span><span class="mi">60000</span><span class="p">,</span> <span class="n">special_toks</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">pad_tok</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="n">store_attr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s1">&#39;vocab,min_freq,max_vocab,special_toks,pad_tok&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">vocab</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">special_toks</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">min_freq</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">max_vocab</span> <span class="o">=</span> <span class="n">vocab</span><span class="p">,</span> <span class="n">special_toks</span><span class="p">,</span> <span class="n">min_freq</span><span class="p">,</span> <span class="n">max_vocab</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">o2i</span> <span class="o">=</span> <span class="kc">None</span> <span class="k">if</span> <span class="n">vocab</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">defaultdict</span><span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="p">{</span><span class="n">v</span><span class="p">:</span><span class="n">k</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span><span class="n">v</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">vocab</span><span class="p">)})</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">vocab</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">count</span> <span class="o">=</span> <span class="n">Counter</span><span class="p">(</span><span class="n">p</span> <span class="k">for</span> <span class="n">o</span> <span class="ow">in</span> <span class="n">dsets</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">o</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">vocab</span> <span class="o">=</span> <span class="n">make_vocab</span><span class="p">(</span><span class="n">count</span><span class="p">,</span> <span class="n">min_freq</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">min_freq</span><span class="p">,</span> <span class="n">max_vocab</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">max_vocab</span><span class="p">,</span> <span class="n">special_toks</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">special_toks</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">o2i</span> <span class="o">=</span> <span class="n">defaultdict</span><span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="p">{</span><span class="n">v</span><span class="p">:</span><span class="n">k</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span><span class="n">v</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">vocab</span><span class="p">)</span> <span class="k">if</span> <span class="n">v</span> <span class="o">!=</span> <span class="s1">&#39;xxfake&#39;</span><span class="p">})</span>
+    
+    <span class="k">def</span> <span class="nf">encodes_nlp</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">o</span><span class="p">):</span> <span class="k">return</span> <span class="n">TensorText</span><span class="p">(</span><span class="n">tensor</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">o2i</span>  <span class="p">[</span><span class="n">o_</span><span class="p">]</span> <span class="k">for</span> <span class="n">o_</span> <span class="ow">in</span> <span class="n">o</span><span class="p">]))</span>
+    <span class="k">def</span> <span class="nf">encodes_nlp</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">b</span><span class="p">):</span> <span class="k">return</span> <span class="p">{</span><span class="s1">&#39;toks&#39;</span> <span class="p">:</span> <span class="p">[[</span><span class="bp">self</span><span class="o">.</span><span class="n">o2i</span><span class="p">[</span><span class="n">o_</span><span class="p">]</span> <span class="k">for</span> <span class="n">o_</span> <span class="ow">in</span> <span class="n">oo</span><span class="p">]</span> <span class="k">for</span> <span class="n">oo</span> <span class="ow">in</span> <span class="n">b</span><span class="p">[</span><span class="s1">&#39;tok_text&#39;</span><span class="p">]]}</span>
+    
+<span class="c1"># Padding functions</span>
+<span class="k">def</span> <span class="nf">pad_seq</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">max_batch_len</span><span class="p">,</span> <span class="n">pad_idx</span><span class="p">):</span>    
+    <span class="n">pad</span> <span class="o">=</span>  <span class="n">x</span><span class="o">.</span><span class="n">new_zeros</span><span class="p">(</span><span class="n">max_batch_len</span><span class="o">-</span><span class="n">x</span><span class="o">.</span><span class="n">size</span><span class="p">(</span><span class="mi">0</span><span class="p">))</span><span class="o">+</span><span class="n">pad_idx</span>
+    <span class="k">return</span> <span class="n">torch</span><span class="o">.</span><span class="n">cat</span><span class="p">([</span><span class="n">x</span><span class="p">,</span> <span class="n">pad</span><span class="p">])</span>
+ 
+<span class="c1"># Pad up to longest item in the batch and put batch on the GPU</span>
+<span class="k">def</span> <span class="nf">pad_batch</span><span class="p">(</span><span class="n">batch</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">pad_token_id</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+    <span class="n">batch_inputs</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
+    <span class="n">max_size</span> <span class="o">=</span> <span class="nb">max</span><span class="p">([</span><span class="nb">len</span><span class="p">(</span><span class="n">item</span><span class="p">[</span><span class="s1">&#39;toks&#39;</span><span class="p">])</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">batch</span><span class="p">])</span>
+    <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">batch</span><span class="p">:</span> <span class="n">batch_inputs</span> <span class="o">+=</span> <span class="p">[</span><span class="n">pad_seq</span><span class="p">(</span><span class="n">item</span><span class="p">[</span><span class="s1">&#39;toks&#39;</span><span class="p">],</span> <span class="n">max_size</span><span class="p">,</span> <span class="n">pad_token_id</span><span class="p">)]</span>
+    <span class="k">return</span> <span class="n">torch</span><span class="o">.</span><span class="n">stack</span><span class="p">(</span><span class="n">batch_inputs</span><span class="p">)</span><span class="o">.</span><span class="n">cuda</span><span class="p">()</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Data loading and processing functions:</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1">#hide_collapse</span>
+
+<span class="c1"># Download text, a clean version of the dataset is downloaded (not included in the timings), &#39;train[:10%]&#39;</span>
+<span class="n">senti_dataset</span> <span class="o">=</span> <span class="n">load_dataset</span><span class="p">(</span><span class="s1">&#39;sentiment140&#39;</span><span class="p">,</span> <span class="n">split</span><span class="o">=</span><span class="s1">&#39;train&#39;</span><span class="p">,</span> <span class="n">download_mode</span><span class="o">=</span><span class="s1">&#39;reuse_cache_if_exists&#39;</span><span class="p">)</span>
+
+<span class="n">spacy_tok</span> <span class="o">=</span> <span class="n">SpacyTokenizerNLP</span><span class="p">(</span><span class="n">lang</span><span class="o">=</span><span class="s1">&#39;en&#39;</span><span class="p">,</span> <span class="n">special_toks</span><span class="o">=</span><span class="n">defaults</span><span class="o">.</span><span class="n">text_spec_tok</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">preproc_and_tok</span><span class="p">(</span><span class="n">b</span><span class="p">):</span> <span class="k">return</span> <span class="n">spacy_tok</span><span class="o">.</span><span class="n">encodes</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">maps</span><span class="p">(</span><span class="o">*</span><span class="n">defaults</span><span class="o">.</span><span class="n">text_proc_rules</span><span class="p">,</span> <span class="n">b</span><span class="p">[</span><span class="s1">&#39;text&#39;</span><span class="p">])))</span>
+
+<span class="k">def</span> <span class="nf">postproc</span><span class="p">(</span><span class="n">b</span><span class="p">):</span> 
+    <span class="k">return</span> <span class="p">{</span><span class="s1">&#39;tok_text&#39;</span><span class="p">:</span> <span class="p">[</span><span class="nb">list</span><span class="p">(</span><span class="n">maps</span><span class="p">(</span><span class="o">*</span><span class="n">defaults</span><span class="o">.</span><span class="n">text_postproc_rules</span><span class="p">,</span> <span class="n">_b</span><span class="p">))</span> <span class="k">for</span> <span class="n">_b</span> <span class="ow">in</span> <span class="n">b</span><span class="p">[</span><span class="s1">&#39;tok_text_pre&#39;</span><span class="p">]]}</span>
+
+<span class="k">def</span> <span class="nf">get_tok_lengths</span><span class="p">(</span><span class="n">example_batch</span><span class="p">):</span> <span class="k">return</span> <span class="p">{</span><span class="s1">&#39;tok_lens&#39;</span><span class="p">:</span> <span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">e</span><span class="p">)</span> <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">example_batch</span><span class="p">[</span><span class="s1">&#39;toks&#39;</span><span class="p">]]}</span>
+
+<span class="k">def</span> <span class="nf">prepare_dataset</span><span class="p">(</span><span class="n">dataset</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Takes a raw nlp dataset and returns a processed, tokenized, numericalised dataset</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="c1"># Apply processing rules and tokenize</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;pre-proc and tokenize&#39;</span><span class="p">)</span>
+    <span class="n">dataset</span> <span class="o">=</span> <span class="n">dataset</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="n">preproc_and_tok</span><span class="p">,</span> <span class="n">batched</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="c1"># Apply post-processing rules </span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;post=proc&#39;</span><span class="p">)</span>
+    <span class="n">dataset</span> <span class="o">=</span> <span class="n">dataset</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="n">postproc</span><span class="p">,</span> <span class="n">batched</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="c1"># Init Numericalizer and create vocab</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;init numericalizer&#39;</span><span class="p">)</span>
+    <span class="n">numeric</span> <span class="o">=</span> <span class="n">NumericalizeNLP</span><span class="p">(</span><span class="n">dsets</span><span class="o">=</span><span class="n">dataset</span><span class="p">[</span><span class="s1">&#39;tok_text_pre&#39;</span><span class="p">],</span> <span class="n">special_toks</span><span class="o">=</span><span class="n">defaults</span><span class="o">.</span><span class="n">text_spec_tok</span><span class="p">,</span> <span class="n">pad_tok</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+    <span class="c1"># Numericalize</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;numericalizing&#39;</span><span class="p">)</span>
+    <span class="n">dataset</span> <span class="o">=</span> <span class="n">dataset</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="n">numeric</span><span class="o">.</span><span class="n">encodes_nlp</span><span class="p">,</span> <span class="n">batched</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="c1"># Get sample lengths for sorting</span>
+    <span class="n">dataset</span><span class="o">=</span><span class="n">dataset</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="n">get_tok_lengths</span><span class="p">,</span> <span class="n">batched</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;sorting&#39;</span><span class="p">)</span>
+    <span class="c1"># Sort dataset from small to large</span>
+    <span class="n">dataset</span> <span class="o">=</span> <span class="n">dataset</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="s1">&#39;tok_lens&#39;</span><span class="p">)</span>
+    
+    <span class="k">return</span> <span class="n">dataset</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>Downloading and preparing dataset sentiment140/sentiment140 (download: 77.59 MiB, generated: 214.21 MiB, total: 291.81 MiB) to /home/morgan/.cache/huggingface/datasets/sentiment140/sentiment140/1.0.0...
+Dataset sentiment140 downloaded and prepared to /home/morgan/.cache/huggingface/datasets/sentiment140/sentiment140/1.0.0. Subsequent calls will reuse this data.
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Init Timing</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1">#hide_collapse</span>
+<span class="c1">#%%timeit -n 1 -r 1</span>
+
+<span class="c1"># Do all of the text processing, tokenization and numericalization</span>
+<span class="n">senti_dataset_f</span> <span class="o">=</span> <span class="n">prepare_dataset</span><span class="p">(</span><span class="n">senti_dataset</span><span class="p">)</span>
+
+<span class="c1"># Create train and test splits: `.train_test_split` is giving me an error, lets use `.select` instead</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;splitting&#39;</span><span class="p">)</span>
+<span class="n">train_split</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">senti_dataset_f</span><span class="p">)</span><span class="o">*</span><span class="mf">0.8</span><span class="p">)</span>
+<span class="n">train_senti</span> <span class="o">=</span> <span class="n">senti_dataset_f</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="n">train_split</span><span class="p">)))</span>
+<span class="n">test_senti</span> <span class="o">=</span> <span class="n">senti_dataset_f</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="n">train_split</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">senti_dataset_f</span><span class="p">))))</span>
+
+<span class="c1"># Format our dataset to outputs torch.Tensor to train a pytorch model</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;setting format&#39;</span><span class="p">)</span>
+<span class="n">columns</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;toks&#39;</span><span class="p">,</span><span class="s1">&#39;sentiment&#39;</span><span class="p">]</span>
+<span class="n">train_senti</span><span class="o">.</span><span class="n">set_format</span><span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="s1">&#39;torch&#39;</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="n">columns</span><span class="p">)</span>
+<span class="n">test_senti</span><span class="o">.</span><span class="n">set_format</span><span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="s1">&#39;torch&#39;</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="n">columns</span><span class="p">)</span>
+
+<span class="c1"># Instantiate out PyTorch Dataloaders </span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;init dataloaders&#39;</span><span class="p">)</span>
+<span class="n">train_dataloader</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">DataLoader</span><span class="p">(</span><span class="n">train_senti</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="mi">64</span><span class="p">,</span> <span class="n">collate_fn</span><span class="o">=</span><span class="n">pad_batch</span><span class="p">)</span>
+<span class="n">test_dataloader</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">DataLoader</span><span class="p">(</span><span class="n">test_senti</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="mi">64</span><span class="p">,</span> <span class="n">collate_fn</span><span class="o">=</span><span class="n">pad_batch</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stderr output_text">
+<pre>  0%|          | 0/1600 [00:00&lt;?, ?it/s]</pre>
+</div>
+</div>
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>pre-proc and tokenize
+</pre>
+</div>
+</div>
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stderr output_text">
+<pre>100%|██████████| 1600/1600 [07:00&lt;00:00,  3.81it/s]
+  0%|          | 1/1600 [00:00&lt;02:57,  9.03it/s]</pre>
+</div>
+</div>
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>post=proc
+</pre>
+</div>
+</div>
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stderr output_text">
+<pre>100%|██████████| 1600/1600 [00:27&lt;00:00, 58.42it/s]
+</pre>
+</div>
+</div>
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>init numericalizer
+numericalizing
+</pre>
+</div>
+</div>
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stderr output_text">
+<pre>100%|██████████| 1600/1600 [00:31&lt;00:00, 50.96it/s]
+100%|██████████| 1600/1600 [00:34&lt;00:00, 46.88it/s]
+</pre>
+</div>
+</div>
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>sorting
+</pre>
+</div>
+</div>
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stderr output_text">
+<pre>100%|██████████| 1600000/1600000 [06:56&lt;00:00, 3842.47it/s]
+</pre>
+</div>
+</div>
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>splitting
+</pre>
+</div>
+</div>
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stderr output_text">
+<pre>100%|██████████| 1280000/1280000 [04:43&lt;00:00, 4522.59it/s]
+100%|██████████| 320000/320000 [02:19&lt;00:00, 2298.56it/s]</pre>
+</div>
+</div>
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>setting format
+init dataloaders
+</pre>
+</div>
+</div>
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stderr output_text">
+<pre>
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Init timings:</p>
+<ul>
+<li>pre-proc and tokenize: 374</li>
+<li>post-proc : 26</li>
+<li>init numericalizer, numericalizing create vocab: 27</li>
+<li>get sample lengths: 28</li>
+<li>sorting: 416</li>
+<li>splitting: 416</li>
+<li>setting format: 1</li>
+</ul>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Time <code>nlp</code> 1 epoch</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1">#hide_collapse</span>
+<span class="c1">#%%timeit</span>
+
+<span class="n">s</span> <span class="o">=</span> <span class="s2">&quot;for b in train_dataloader: pass&quot;</span>
+<span class="n">time</span> <span class="o">=</span> <span class="n">timeit</span><span class="o">.</span><span class="n">timeit</span><span class="p">(</span><span class="n">stmt</span><span class="o">=</span><span class="n">s</span><span class="p">,</span> <span class="n">number</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="nb">globals</span><span class="o">=</span><span class="nb">globals</span><span class="p">());</span> <span class="n">time</span>
+<span class="n">time</span><span class="p">,</span> <span class="n">time</span> <span class="o">/</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">train_senti</span><span class="p">)</span><span class="o">/</span><span class="mi">64</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>(323.86245587099984, 0.01619312279354999)</pre>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+</div>
+
+
+
+  </div><a class="u-url" href="/nlp/fastai/dataloader/2020/07/21/speed_test_fastai_vs_hf_nlp_datasets.html" hidden></a>
+</article>
+      </div>
+    </main><footer class="site-footer h-card">
+  <data class="u-url" href="/"></data>
+
+  <div class="wrapper">
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col">
+        <p class="feed-subscribe">
+          <a href="/feed.xml">
+            <svg class="svg-icon orange">
+              <use xlink:href="/assets/minima-social-icons.svg#rss"></use>
+            </svg><span>Subscribe</span>
+          </a>
+        </p>
+      </div>
+      <div class="footer-col">
+        <p>Morgan McGuire&#39;s machine learning journey through blogs and code</p>
+      </div>
+    </div>
+
+    <div class="social-links"><ul class="social-media-list"><li><a rel="me" href="https://github.com/morganmcg1" title="morganmcg1"><svg class="svg-icon grey"><use xlink:href="/assets/minima-social-icons.svg#github"></use></svg></a></li><li><a rel="me" href="https://twitter.com/mcgenergy" title="mcgenergy"><svg class="svg-icon grey"><use xlink:href="/assets/minima-social-icons.svg#twitter"></use></svg></a></li></ul>
+</div>
+
+  </div>
+
+</footer>
+</body>
+
+</html>
