@@ -223,37 +223,27 @@ dataset = load_dataset('csv', data_files='my_file.csv')</code></pre>
 </ul>
 <h2 id="Experiment-Settings">Experiment Settings<a class="anchor-link" href="#Experiment-Settings"> </a></h2><p>The timings will consist of 2 elements, an "init" and "1 epoch". The former will covering the entire process from loading the data (already downloaded) to creating the dataloaders. The second element will simply consist of iterating through the entire training dataset once.</p>
 <h3 id="Init-Details">Init Details<a class="anchor-link" href="#Init-Details"> </a></h3><p>The initialisation consists of:</p>
-<ol>
-<li>Reading the data from disk, from a csv for fastai and from a PyArrow file for <code>nlp Datasets</code><ul>
+<p>0) Reading the data from disk, from a csv for fastai and from a PyArrow file for <code>nlp Datasets</code></p>
+<ul>
 <li>Note that for <code>nlp Datasets</code> a train set and a validation set were downloaded separately. Previously I had used <code>.select</code> or <code>.train_test_split</code> to generate a train and val set, however using either of these methods added over 7minutes to the pre-processing time.</li>
 </ul>
-</li>
-</ol>
-<ol>
-<li>Applying <a href="http://dev.fast.ai/text.core#Preprocessing-rules">fastai's default text pre-processing functions</a>. These will:</li>
-</ol>
+<p>1) Applying <a href="http://dev.fast.ai/text.core#Preprocessing-rules">fastai's default text pre-processing functions</a>. These will:</p>
 
-<pre><code>Fix various messy bits of html sometimes seen in documents
-Replace repetitions at the character level, e.g. `cccc` becomes: `TK_REP 4 c`
-Replace word repetitions, e.g. `cow cow cow cow` becomes: `TK_WREP 4 cow`
-Add spaces around / and #
-Remove multiple spaces 
-Replace tokens in ALL CAPS by their lower version and add TK_UP before.
-Replace characters in ALL CAPS by their lower version and add TK_UP before.
-Lowercases everything
+<pre><code>- Fix various messy bits of html sometimes seen in documents
+- Replace repetitions at the character level, e.g. `cccc` becomes: `TK_REP 4 c`
+- Replace word repetitions, e.g. `cow cow cow cow` becomes: `TK_WREP 4 cow`
+- Add spaces around / and #
+- Remove multiple spaces 
+- Replace tokens in ALL CAPS by their lower version and add TK_UP before.
+- Replace characters in ALL CAPS by their lower version and add TK_UP before.
+- Lowercases everything
 
 
 </code></pre>
-<ol>
-<li><p>Tokenizing based on Spacy's tokenizer (fastai's default)</p>
-</li>
-<li><p>Applying a post-processing rule which replaces embedded spaces in a token with unicode line char to allow for split/join</p>
-</li>
-<li><p>Adding padding and sorting the samples by length for more efficient gpu usage</p>
-</li>
-<li><p>Creation of the train and validation dataloaders</p>
-</li>
-</ol>
+<p>2) Tokenizing based on Spacy's tokenizer (fastai's default)</p>
+<p>3) Applying a post-processing rule which replaces embedded spaces in a token with unicode line char to allow for split/join</p>
+<p>4) Adding padding and sorting the samples by length for more efficient gpu usage</p>
+<p>5) Creation of the train and validation dataloaders</p>
 <h2 id="Results">Results<a class="anchor-link" href="#Results"> </a></h2><h4 id="10%-Data">10% Data<a class="anchor-link" href="#10%-Data"> </a></h4><p>Results are...mixed! While the Fastai convienience function had a faster init (48s vs 71s), the PyArrow-backed <code>nlp</code> run through a single epoch was significantly faster (11s vs 14s).</p>
 <table>
 <thead><tr>
