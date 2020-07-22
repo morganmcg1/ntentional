@@ -215,12 +215,8 @@ dataset = load_dataset('csv', data_files='my_file.csv')</code></pre>
     <svg class="octicon octicon-info octicon octicon-info octicon octicon-info octicon octicon-info" viewBox="0 0 14 16" version="1.1" width="14" height="16" aria-hidden="true"><path fill-rule="evenodd" d="M6.3 5.69a.942.942 0 01-.28-.7c0-.28.09-.52.28-.7.19-.18.42-.28.7-.28.28 0 .52.09.7.28.18.19.28.42.28.7 0 .28-.09.52-.28.7a1 1 0 01-.7.3c-.28 0-.52-.11-.7-.3zM8 7.99c-.02-.25-.11-.48-.31-.69-.2-.19-.42-.3-.69-.31H6c-.27.02-.48.13-.69.31-.2.2-.3.44-.31.69h1v3c.02.27.11.5.31.69.2.2.42.31.69.31h1c.27 0 .48-.11.69-.31.2-.19.3-.42.31-.69H8V7.98v.01zM7 2.3c-3.14 0-5.7 2.54-5.7 5.68 0 3.14 2.56 5.7 5.7 5.7s5.7-2.55 5.7-5.7c0-3.15-2.56-5.69-5.7-5.69v.01zM7 .98c3.86 0 7 3.14 7 7s-3.14 7-7 7-7-3.12-7-7 3.14-7 7-7z"></path></svg>
     <strong>Note: </strong>I couldn&#8217;t figure out how to parallelise the text processing with <code>nlp Datasets</code>, although this is probably down to my lack of experience with parallelism as opposed to a limitation of the library
 </div></p>
-<h2 id="Sentiment-Dataset">Sentiment Dataset<a class="anchor-link" href="#Sentiment-Dataset"> </a></h2><p>For this experiment I used the <a href="https://huggingface.co/datasets/sentiment140">Sentiment140</a> dataset, a sentiment classifcation dataset of Twitter data.</p>
-<p>For our experiment we'll use</p>
-<ul>
-<li>10% of sentiment dataset (160,000 tweets, 11.8M space-separated tokens), pulled from nlp library</li>
-<li>80/20 train/val split</li>
-</ul>
+<h2 id="Sentiment-Dataset">Sentiment Dataset<a class="anchor-link" href="#Sentiment-Dataset"> </a></h2><p>For this experiment I used the <a href="https://huggingface.co/datasets/sentiment140">Sentiment140</a> dataset, a sentiment classifcation dataset of Twitter data with 1,600,000 tweets and ~120M space-separated tokens.</p>
+<p>For our experiment we'll test with both 10% and 100% of the dataset with a 80/20 train/val split</p>
 <h2 id="Experiment-Settings">Experiment Settings<a class="anchor-link" href="#Experiment-Settings"> </a></h2><p>The timings will consist of 2 elements, an "init" and "1 epoch". The former will covering the entire process from loading the data (already downloaded) to creating the dataloaders. The second element will simply consist of iterating through the entire training dataset once.</p>
 <h3 id="Init-Details">Init Details<a class="anchor-link" href="#Init-Details"> </a></h3><p>The initialisation consists of:</p>
 <p>0) Reading the data from disk, from a csv for fastai and from a PyArrow file for <code>nlp Datasets</code></p>
