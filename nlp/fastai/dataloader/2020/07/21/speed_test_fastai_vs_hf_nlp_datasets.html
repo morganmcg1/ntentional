@@ -164,9 +164,9 @@ window.onload = wrap_img;
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <h2 id="tl;dr">tl;dr<a class="anchor-link" href="#tl;dr"> </a></h2><ul>
-<li>Fastai's <code>Textdataloader</code> is well optimised and appears to come in faster on <code>nlp Datasets</code> for a dataset of 1.6M</li>
+<li>Fastai's <code>Textdataloader</code> is well optimised and appears to be faster than <code>nlp Datasets</code> in the context of setting up your dataloaders (pre-processing, tokenizing, sorting) for a dataset of 1.6M tweets</li>
 </ul>
-<h2 id="Speed">Speed<a class="anchor-link" href="#Speed"> </a></h2><p>I started playing around with HuggingFace's <a href="https://huggingface.co/nlp"><code>nlp</code> Datasets library</a> recently and was blown away by the speed at which you can iterate through the data, thanks to some PyArrow wizardry its seriously fast!
+<h2 id="Speed">Speed<a class="anchor-link" href="#Speed"> </a></h2><p>I started playing around with HuggingFace's <code>nlp Datasets</code>  library recently and was blown away by the speed at which you can iterate through the data, thanks to some PyArrow wizardry its seriously fast!
 
 <center>
     <div class="jekyll-twitter-plugin"><blockquote class="twitter-tweet"><p lang="en" dir="ltr">There is a bit of magic in the new 🤗nlp library besides giving dead-simple access to 120+ datasets🧙‍♂️<br /><br />We&#39;ve tested it with <a href="https://twitter.com/qlhoest?ref_src=twsrc%5Etfw">@qlhoest</a> and loading a 17GB+ dataset like English Wikipedia only takes... 9MB in RAM🐣<br /><br />And you can iterate over the data at 2-3 Gbit/s🚀<br /><br />Try it yourself👇 <a href="https://t.co/wx7x7fzhqf">pic.twitter.com/wx7x7fzhqf</a></p>&mdash; Thomas Wolf (@Thom_Wolf) <a href="https://twitter.com/Thom_Wolf/status/1272512974935203841?ref_src=twsrc%5Etfw">June 15, 2020</a></blockquote>
@@ -174,15 +174,15 @@ window.onload = wrap_img;
 </div>
 </center>
 
-So I wondered if there was a significant speed up to be gained by doing as much text processing as I could with this library as opposed to Fastai's default text processing. (Also, after previously discovering Fastai's functionality to do <a href="https://forums.fast.ai/t/nlp-speed-up-if-using-sorteddl/74636">faster text loading</a> I was in the mood for further speed-ups! 💨)</p>
-<h2 id="nlp-Datasets"><code>nlp Datasets</code><a class="anchor-link" href="#nlp-Datasets"> </a></h2><p>The <a href="https://huggingface.co/nlp"><code>nlp</code> Datasets library</a> is incredibly memory efficient:</p>
+So I wondered if there was a significant speed-up to be gained by doing as much text processing as I could with this library as opposed to Fastai's default text processing. Also, after previously discovering Fastai's functionality to do <a href="https://forums.fast.ai/t/nlp-speed-up-if-using-sorteddl/74636">faster text loading</a> I was in the mood for further speed-ups! 💨</p>
+<h2 id="nlp-Datasets"><code>nlp Datasets</code><a class="anchor-link" href="#nlp-Datasets"> </a></h2><p>The <code>nlp Datasets</code> library is incredibly memory efficient; from the docs:</p>
 <blockquote><p>It provides a very efficient way to load and process data from raw files (CSV/JSON/text) or in-memory data (python dict, pandas dataframe) with a special focus on memory efficency and speed. As a matter of example, <strong>loading a 18GB dataset like English Wikipedia allocate 9 MB in RAM</strong> and you can iterate over the dataset <strong>at 1-2 GBit/s</strong> in python.</p>
 </blockquote>
 <p>It also hosts 130+ common nlp research datasets AND (thanks to <a href="https://discuss.huggingface.co/t/nlp-0-3-0-is-out/50/3">this pointer from Thomas Wolf</a> on the new HuggingFace forums) I also learned that you can also easily load your own CSVs (or jsons, pandas dataframes) and bask in all of that speedy goodness, for example like below:</p>
 
 <pre><code>from nlp import load_dataset
 dataset = load_dataset('csv', data_files='my_file.csv')</code></pre>
-<p>Another thing about <code>nlp Datasets</code>' speed is that even if processing all of your data turns out to be slower than your current conventional processing method, the <strong>results of its processing are cached</strong>, which means that the second time around it is likely to be much faster than your current methodology!</p>
+<h4 id="Caching">Caching<a class="anchor-link" href="#Caching"> </a></h4><p>Another great thing about <code>nlp Datasets</code>' speed is that even if processing all of your data turns out to be slower than your current conventional processing method, the <strong>results of its processing are cached</strong>, which means that the second time around it will be <strong>much faster</strong> than your current processing method! This also applies for a new python session, i.e. if you restart your jupyter notebook!</p>
 <p>If you're curious to learn more about PyArrow then I highly recommend Dejan Simic's <a href="https://towardsdatascience.com/apache-arrow-read-dataframe-with-zero-memory-69634092b1a">post about it</a>
 
 <center>
@@ -208,12 +208,12 @@ dataset = load_dataset('csv', data_files='my_file.csv')</code></pre>
 <li>Pre and Post Processing</li>
 <li>Tokenization with Spacy's tokenizer, including creating a vocabulary and <strong>parallelising</strong> the tokenization</li>
 <li>Speed optimizations including sorting data by text sample length and padding only to the longest item in the sequence, <a href="https://towardsdatascience.com/divide-hugging-face-transformers-training-time-by-2-or-more-21bf7129db9q-21bf7129db9e">similar what was described here</a></li>
-<li>Creating the train and validation dataloaders and putting them onto the gpu</li>
+<li>Creating the train and validation dataloaders and putting them onto the GPU</li>
 </ul>
 <h4 id="HuggingFace-nlp-Datasets">HuggingFace <code>nlp Datasets</code><a class="anchor-link" href="#HuggingFace-nlp-Datasets"> </a></h4><p>The <code>nlp</code> Datasets pipeline I wrote tries to replicate all of the core functionality of <code>TextDataloaders</code> as best I could. 
 <div class="flash">
     <svg class="octicon octicon-info octicon octicon-info octicon octicon-info octicon octicon-info" viewBox="0 0 14 16" version="1.1" width="14" height="16" aria-hidden="true"><path fill-rule="evenodd" d="M6.3 5.69a.942.942 0 01-.28-.7c0-.28.09-.52.28-.7.19-.18.42-.28.7-.28.28 0 .52.09.7.28.18.19.28.42.28.7 0 .28-.09.52-.28.7a1 1 0 01-.7.3c-.28 0-.52-.11-.7-.3zM8 7.99c-.02-.25-.11-.48-.31-.69-.2-.19-.42-.3-.69-.31H6c-.27.02-.48.13-.69.31-.2.2-.3.44-.31.69h1v3c.02.27.11.5.31.69.2.2.42.31.69.31h1c.27 0 .48-.11.69-.31.2-.19.3-.42.31-.69H8V7.98v.01zM7 2.3c-3.14 0-5.7 2.54-5.7 5.68 0 3.14 2.56 5.7 5.7 5.7s5.7-2.55 5.7-5.7c0-3.15-2.56-5.69-5.7-5.69v.01zM7 .98c3.86 0 7 3.14 7 7s-3.14 7-7 7-7-3.12-7-7 3.14-7 7-7z"></path></svg>
-    <strong>Note: </strong>I couldn&#8217;t figure out how to parallelise the text processing with <code>nlp</code> although this is probably down to my lack of experience with parallelism as opposed to a limitation of the library
+    <strong>Note: </strong>I couldn&#8217;t figure out how to parallelise the text processing with <code>nlp Datasets</code>, although this is probably down to my lack of experience with parallelism as opposed to a limitation of the library
 </div></p>
 <h2 id="Sentiment-Dataset">Sentiment Dataset<a class="anchor-link" href="#Sentiment-Dataset"> </a></h2><p>For this experiment I used the <a href="https://huggingface.co/datasets/sentiment140">Sentiment140</a> dataset, a sentiment classifcation dataset of Twitter data.</p>
 <p>For our experiment we'll use</p>
@@ -257,7 +257,7 @@ Lowercases everything
 <h2 id="Results">Results<a class="anchor-link" href="#Results"> </a></h2><h4 id="10%-Data">10% Data<a class="anchor-link" href="#10%-Data"> </a></h4><p>Results are...mixed! While the Fastai convienience function had a faster init (48s vs 71s), the PyArrow-backed <code>nlp</code> run through a single epoch was significantly faster (11s vs 14s).</p>
 <table>
 <thead><tr>
-<th style="text-align:left">0.16M ROWS:</th>
+<th style="text-align:left">160K ROWS:</th>
 <th style="text-align:center">Init (s)</th>
 <th style="text-align:center">1 epoch (s)</th>
 <th style="text-align:center">1 mini-batch [bs=64] (ms)</th>
@@ -305,9 +305,11 @@ Lowercases everything
 </tr>
 </tbody>
 </table>
-<h2 id="But-maybe-nlp-Datasets-might-be-faster?">But maybe <code>nlp Datasets</code> might be faster?<a class="anchor-link" href="#But-maybe-nlp-Datasets-might-be-faster?"> </a></h2><h4 id="nlp-Datasets-pipeline">nlp Datasets pipeline<a class="anchor-link" href="#nlp-Datasets-pipeline"> </a></h4><p>Given the large difference in speed on the full dataset, I am suspicious about some parts of my implementation, specifically <strong>sorting</strong> the entire dataset which takes takes 416s. Do I need to sort the full dataset? Maybe there is a smarter way to serve up a sorted dataset similar to how Fastai achieves it?</p>
-<p>Removing sorting brings <code>nlp Datasets</code> timing down to <strong>XXXs</strong>, slightly faster than Fastai's 484s.</p>
+<h2 id="But-maybe-nlp-Datasets-might-be-faster?">But maybe <code>nlp Datasets</code> might be faster?<a class="anchor-link" href="#But-maybe-nlp-Datasets-might-be-faster?"> </a></h2><p>Given the large difference in speed on the full dataset, I am suspicious about some parts of my implementation, specifically <strong>sorting</strong> the entire dataset which takes takes <strong>416s</strong>. Do I need to sort the full dataset? Maybe there is a smarter way to serve up a sorted dataset similar to how Fastai achieves it? Removing sorting brings <code>nlp Datasets</code> timing down to <strong>618s</strong>, still slower than Fastai's <strong>484s</strong>. Possibly with parallelism Fastai could be matched?</p>
+<p>In addition, <code>nlp Datasets</code>'s caching means that the second time around you do your pre-processing it will be <strong>significantly faster</strong>.</p>
 <h2 id="RAM-Usage">RAM Usage<a class="anchor-link" href="#RAM-Usage"> </a></h2><p>Note that Fastai was faster on the full 1.6M row dataset, but I also had to delete the pandas dataframe used to calculate the text lengths as it was taking up too much RAM and causing my dataloaders to fail. On the other hand, <code>nlp Datasets</code> won't incur this issue as it is reading directly from disk. So even if Fastai is faster, <code>nlp Datasets</code> could still save you a few headaches when deadling with large datasets.</p>
+<h2 id="To-End">To End<a class="anchor-link" href="#To-End"> </a></h2><p>While not as definitive as I would like, it appears Fastai's <code>TextDataloaders</code> convenience function is faster than <code>nlp Datasets</code> for datasets of this scale for an intial setup. The question of parallelism remains. <code>nlp Datasets</code> caching will mean that if going through the same setup a second time it will be significantly faster.</p>
+<p>I still plan on using the <code>nlp Datasets</code> library for one-off processing and experimentation as I think it offers incredible speed and flexiblility, the team at HuggingFace have done amazing work here.</p>
 
 </div>
 </div>
@@ -649,11 +651,15 @@ Dataset sentiment140 downloaded and prepared to /home/morgan/.cache/huggingface/
     
     
 <div class="cell border-box-sizing code_cell rendered">
-<div class="input">
+<details class="description">
+      <summary class="btn btn-sm" data-open="Hide Code" data-close="Show Code"></summary>
+        <p><div class="input">
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">s</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1">#collapse-hide</span>
+
+<span class="n">s</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span>
 <span class="s2"># Load train and validation datasets from downloaded files</span>
 <span class="s2">train_senti_dataset = load_dataset(&#39;sentiment140&#39;, split=&#39;train[:80%]&#39;)</span>
 <span class="s2">val_senti_dataset = load_dataset(&#39;sentiment140&#39;, split=&#39;train[80%:100%]&#39;)</span>
@@ -681,182 +687,11 @@ Dataset sentiment140 downloaded and prepared to /home/morgan/.cache/huggingface/
     </div>
 </div>
 </div>
-
-</div>
-    
-
-    
-    
-<div class="cell border-box-sizing code_cell rendered">
-<details class="description">
-      <summary class="btn btn-sm" data-open="Hide Code" data-close="Show Code"></summary>
-        <p><div class="input">
-
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="c1">#collapse-hide</span>
-<span class="c1">#%%timeit -n 1 -r 1</span>
-
-<span class="c1"># Do all of the text processing, tokenization and numericalization</span>
-<span class="n">senti_dataset_f</span> <span class="o">=</span> <span class="n">prepare_dataset</span><span class="p">(</span><span class="n">senti_dataset</span><span class="p">)</span>
-
-<span class="c1"># Create train and test splits: `.train_test_split` is giving me an error, lets use `.select` instead</span>
-<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;splitting&#39;</span><span class="p">)</span>
-<span class="n">senti_dataset_f</span><span class="o">.</span><span class="n">train_test_split</span><span class="p">(</span><span class="n">test_size</span><span class="o">=</span><span class="mf">0.2</span><span class="p">)</span>
-<span class="n">train_split</span><span class="o">=</span><span class="n">senti_dataset_f</span><span class="p">[</span><span class="s1">&#39;train&#39;</span><span class="p">]</span>
-<span class="n">test_senti</span><span class="o">=</span><span class="n">senti_dataset_f</span><span class="p">[</span><span class="s1">&#39;test&#39;</span><span class="p">]</span>
-<span class="c1"># train_split=int(len(senti_dataset_f)*0.8)</span>
-<span class="c1"># train_senti = senti_dataset_f.select(list(range(train_split)))</span>
-<span class="c1"># test_senti = senti_dataset_f.select(list(range(train_split, len(senti_dataset_f))))</span>
-
-<span class="c1"># Format our dataset to outputs torch.Tensor to train a pytorch model</span>
-<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;setting format&#39;</span><span class="p">)</span>
-<span class="n">columns</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;toks&#39;</span><span class="p">,</span><span class="s1">&#39;sentiment&#39;</span><span class="p">]</span>
-<span class="n">train_senti</span><span class="o">.</span><span class="n">set_format</span><span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="s1">&#39;torch&#39;</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="n">columns</span><span class="p">)</span>
-<span class="n">test_senti</span><span class="o">.</span><span class="n">set_format</span><span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="s1">&#39;torch&#39;</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="n">columns</span><span class="p">)</span>
-
-<span class="c1"># Instantiate out PyTorch Dataloaders </span>
-<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;init dataloaders&#39;</span><span class="p">)</span>
-<span class="n">train_dataloader</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">DataLoader</span><span class="p">(</span><span class="n">train_senti</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="mi">64</span><span class="p">,</span> <span class="n">collate_fn</span><span class="o">=</span><span class="n">pad_batch</span><span class="p">)</span>
-<span class="n">test_dataloader</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">DataLoader</span><span class="p">(</span><span class="n">test_senti</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="mi">64</span><span class="p">,</span> <span class="n">collate_fn</span><span class="o">=</span><span class="n">pad_batch</span><span class="p">)</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
 </p>
     </details>
-<div class="output_wrapper">
-<div class="output">
-
-<div class="output_area">
-
-<div class="output_subarea output_stream output_stderr output_text">
-<pre>  0%|          | 0/1600 [00:00&lt;?, ?it/s]</pre>
-</div>
-</div>
-
-<div class="output_area">
-
-<div class="output_subarea output_stream output_stdout output_text">
-<pre>pre-proc and tokenize
-</pre>
-</div>
-</div>
-
-<div class="output_area">
-
-<div class="output_subarea output_stream output_stderr output_text">
-<pre>100%|██████████| 1600/1600 [07:00&lt;00:00,  3.81it/s]
-  0%|          | 1/1600 [00:00&lt;02:57,  9.03it/s]</pre>
-</div>
-</div>
-
-<div class="output_area">
-
-<div class="output_subarea output_stream output_stdout output_text">
-<pre>post=proc
-</pre>
-</div>
-</div>
-
-<div class="output_area">
-
-<div class="output_subarea output_stream output_stderr output_text">
-<pre>100%|██████████| 1600/1600 [00:27&lt;00:00, 58.42it/s]
-</pre>
-</div>
-</div>
-
-<div class="output_area">
-
-<div class="output_subarea output_stream output_stdout output_text">
-<pre>init numericalizer
-numericalizing
-</pre>
-</div>
-</div>
-
-<div class="output_area">
-
-<div class="output_subarea output_stream output_stderr output_text">
-<pre>100%|██████████| 1600/1600 [00:31&lt;00:00, 50.96it/s]
-100%|██████████| 1600/1600 [00:34&lt;00:00, 46.88it/s]
-</pre>
-</div>
-</div>
-
-<div class="output_area">
-
-<div class="output_subarea output_stream output_stdout output_text">
-<pre>sorting
-</pre>
-</div>
-</div>
-
-<div class="output_area">
-
-<div class="output_subarea output_stream output_stderr output_text">
-<pre>100%|██████████| 1600000/1600000 [06:56&lt;00:00, 3842.47it/s]
-</pre>
-</div>
-</div>
-
-<div class="output_area">
-
-<div class="output_subarea output_stream output_stdout output_text">
-<pre>splitting
-</pre>
-</div>
-</div>
-
-<div class="output_area">
-
-<div class="output_subarea output_stream output_stderr output_text">
-<pre>100%|██████████| 1280000/1280000 [04:43&lt;00:00, 4522.59it/s]
-100%|██████████| 320000/320000 [02:19&lt;00:00, 2298.56it/s]</pre>
-</div>
-</div>
-
-<div class="output_area">
-
-<div class="output_subarea output_stream output_stdout output_text">
-<pre>setting format
-init dataloaders
-</pre>
-</div>
-</div>
-
-<div class="output_area">
-
-<div class="output_subarea output_stream output_stderr output_text">
-<pre>
-</pre>
-</div>
-</div>
-
-</div>
-</div>
-
 </div>
     
 
-<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<p>Init timings:</p>
-<ul>
-<li>pre-proc and tokenize: 374</li>
-<li>post-proc : 26</li>
-<li>init numericalizer, numericalizing create vocab: 27</li>
-<li>get sample lengths: 28</li>
-<li>sorting: 416</li>
-<li>splitting: 416</li>
-<li>setting format: 1</li>
-</ul>
-
-</div>
-</div>
-</div>
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <p>Time <code>nlp</code> 1 epoch</p>
@@ -874,8 +709,6 @@ init dataloaders
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="c1">#collapse-hide</span>
-<span class="c1">#%%timeit</span>
-
 <span class="n">s</span> <span class="o">=</span> <span class="s2">&quot;for b in train_dataloader: pass&quot;</span>
 <span class="n">time</span> <span class="o">=</span> <span class="n">timeit</span><span class="o">.</span><span class="n">timeit</span><span class="p">(</span><span class="n">stmt</span><span class="o">=</span><span class="n">s</span><span class="p">,</span> <span class="n">number</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="nb">globals</span><span class="o">=</span><span class="nb">globals</span><span class="p">());</span> <span class="n">time</span>
 <span class="n">time</span><span class="p">,</span> <span class="n">time</span> <span class="o">/</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">train_senti</span><span class="p">)</span><span class="o">/</span><span class="mi">64</span><span class="p">)</span>
