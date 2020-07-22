@@ -163,9 +163,7 @@ window.onload = wrap_img;
 
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="tl;dr">tl;dr<a class="anchor-link" href="#tl;dr"> </a></h2><ul>
-<li>Fastai's <code>Textdataloader</code> is well optimised and appears to be faster than <code>nlp Datasets</code> in the context of setting up your dataloaders (pre-processing, tokenizing, sorting) for a dataset of 1.6M tweets</li>
-</ul>
+<h2 id="tl;dr">tl;dr<a class="anchor-link" href="#tl;dr"> </a></h2><p>Fastai's <code>Textdataloader</code> is well optimised and appears to be faster than <code>nlp Datasets</code> in the context of setting up your dataloaders (pre-processing, tokenizing, sorting) for a dataset of 1.6M tweets. However <code>nlp Datasets</code> caching means that it will be faster when repeating the same setup.</p>
 <h2 id="Speed">Speed<a class="anchor-link" href="#Speed"> </a></h2><p>I started playing around with HuggingFace's <code>nlp Datasets</code>  library recently and was blown away by the speed at which you can iterate through the data, thanks to some PyArrow wizardry its seriously fast!
 
 <center>
@@ -175,7 +173,7 @@ window.onload = wrap_img;
 </center>
 
 So I wondered if there was a significant speed-up to be gained by doing as much text processing as I could with this library as opposed to Fastai's default text processing. Also, after previously discovering Fastai's functionality to do <a href="https://forums.fast.ai/t/nlp-speed-up-if-using-sorteddl/74636">faster text loading</a> I was in the mood for further speed-ups! 💨</p>
-<h2 id="nlp-Datasets"><code>nlp Datasets</code><a class="anchor-link" href="#nlp-Datasets"> </a></h2><p>The <code>nlp Datasets</code> library is incredibly memory efficient; from the docs:</p>
+<h2 id="nlp-Datasets">nlp Datasets<a class="anchor-link" href="#nlp-Datasets"> </a></h2><p>The <code>nlp Datasets</code> library is incredibly memory efficient; from the docs:</p>
 <blockquote><p>It provides a very efficient way to load and process data from raw files (CSV/JSON/text) or in-memory data (python dict, pandas dataframe) with a special focus on memory efficency and speed. As a matter of example, <strong>loading a 18GB dataset like English Wikipedia allocate 9 MB in RAM</strong> and you can iterate over the dataset <strong>at 1-2 GBit/s</strong> in python.</p>
 </blockquote>
 <p>It also hosts 130+ common nlp research datasets AND (thanks to <a href="https://discuss.huggingface.co/t/nlp-0-3-0-is-out/50/3">this pointer from Thomas Wolf</a> on the new HuggingFace forums) I also learned that you can also easily load your own CSVs (or jsons, pandas dataframes) and bask in all of that speedy goodness, for example like below:</p>
