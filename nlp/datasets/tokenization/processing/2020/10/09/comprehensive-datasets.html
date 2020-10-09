@@ -106,7 +106,7 @@ window.onload = wrap_img;
        • <span class="read-time" title="Estimated read time">
     
     
-      12 min read
+      13 min read
     
 </span></p>
 
@@ -181,7 +181,21 @@ window.onload = wrap_img;
 </div>
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h1 id="HuggingFace-Datasets-Library">HuggingFace Datasets Library<a class="anchor-link" href="#HuggingFace-Datasets-Library"> </a></h1><p>Lets start our guide to using the Datasets library to get your data ready to train. But before starting I wanted to say <strong>huge kudos to the team working on Datasets</strong>, the library and docs have really improved lately 👌. Some of the examples in this post are taken from the <a href="https://huggingface.co/docs/datasets">🤗 Datasets docs</a>, becasue "why fix it if it ain't broken!".</p>
+<h1 id="HuggingFace-Datasets-Library">HuggingFace Datasets Library<a class="anchor-link" href="#HuggingFace-Datasets-Library"> </a></h1><h4 id="Why-Should-I-use-this-&quot;Datasets&quot;-library?">Why Should I use this "Datasets" library?<a class="anchor-link" href="#Why-Should-I-use-this-&quot;Datasets&quot;-library?"> </a></h4><p>Lets see what the docs have to say:</p>
+<blockquote><ul>
+<li><p>Built-in interoperability with Numpy, Pandas, PyTorch and Tensorflow 2 Lightweight and fast with a transparent and pythonic API Strive on large datasets</p>
+</li>
+<li><p>🤗Datasets naturally frees the user from RAM memory limitation, all datasets are memory-mapped on drive by default.</p>
+</li>
+<li><p>Smart caching:never wait for your data to process several times &gt; - 🤗Datasets currently provides access to ~100 NLP datasets and ~10 evaluation metrics and is designed to let the community easily add and share new datasets and evaluation metrics.</p>
+</li>
+<li><p>You can browse the full set of datasets with the live <a href="https://huggingface.co/nlp/viewer/">🤗Datasets viewer</a>
+#### My fav
+For me personally, I am irrationally fond of this library. It just has so many useful features for handling your text data! I have really enjoyed the speed of data processing and the fact that caching means that running your processing a second time is lightening fast! I've spent about 6 weeks working with it and I feel I've only scratched the surface of what it can do in some aras. But enough of what I think, lets get stuck in some data processing woop woop!</p>
+</li>
+</ul>
+</blockquote>
+<h4 id="Lets-Go-&#128678;">Lets Go &#128678;<a class="anchor-link" href="#Lets-Go-&#128678;"> </a></h4><p>Lets start our guide to using the Datasets library to get your data ready to train. But before starting I wanted to say <strong>huge kudos to the team working on Datasets</strong>, the library and docs have really improved lately 👌. Some of the examples in this post are taken from the <a href="https://huggingface.co/docs/datasets">🤗 Datasets docs</a>, becasue "why fix it if it ain't broken!".</p>
 <p>To start, lets install the library with a handy to remember pip install:</p>
 
 </div>
