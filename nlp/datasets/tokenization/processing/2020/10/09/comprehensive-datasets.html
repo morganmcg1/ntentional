@@ -912,8 +912,8 @@ window.onload = wrap_img;
 <div class="flash flash-success">
     <svg class="octicon octicon-checklist octicon octicon-checklist octicon octicon-checklist" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path fill-rule="evenodd" d="M16 8.5l-6 6-3-3L8.5 10l1.5 1.5L14.5 7 16 8.5zM5.7 12.2l.8.8H2c-.55 0-1-.45-1-1V3c0-.55.45-1 1-1h7c.55 0 1 .45 1 1v6.5l-.8-.8c-.39-.39-1.03-.39-1.42 0L5.7 10.8a.996.996 0 000 1.41v-.01zM4 4h5V3H4v1zm0 2h5V5H4v1zm0 2h3V7H4v1zM3 9H2v1h1V9zm0-2H2v1h1V7zm0-2H2v1h1V5zm0-2H2v1h1V3z"></path></svg>
     <strong>Tip: </strong>In order to save precious GPU memory when training some of the <code>-large</code> transformer models I found that truncating the training text and setting a max length to be really useful. It worth experimenting with, if your text has very long sequences then truncation might degrade performance to an unacceptable level. In my case I was dealing with tweet data so I knew I wasn&#8217;t chopping too much from my texts. I didn&#8217;t truncate the validation text as the evaluation phases is generally less memory intensive than the training phase, so the model could handle the full text. You&#8217;ll want to consider when pursuing this strategy if you want to validate against the full text or truncated text. 
-</div>
-Given then above, lets do our tokenization like so:</p>
+</div></p>
+<p>Given the above, lets do our tokenization like so:</p>
 
 </div>
 </div>
