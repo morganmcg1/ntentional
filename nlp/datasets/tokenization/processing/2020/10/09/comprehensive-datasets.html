@@ -3,12 +3,12 @@
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1"><!-- Begin Jekyll SEO tag v2.6.1 -->
-<title>Comprehensive Language Model Fine-tuning, Part 1: 🤗 Datasets library | ntentional</title>
+<title>Comprehensive Language Model Fine Tuning, Part 1: 🤗 Datasets library | ntentional</title>
 <meta name="generator" content="Jekyll v4.0.0" />
-<meta property="og:title" content="Comprehensive Language Model Fine-tuning, Part 1: 🤗 Datasets library" />
+<meta property="og:title" content="Comprehensive Language Model Fine Tuning, Part 1: 🤗 Datasets library" />
 <meta property="og:locale" content="en_US" />
-<meta name="description" content="Get your data ready to train with the 🤗 Datasets library, plus more implementation tips and tricks" />
-<meta property="og:description" content="Get your data ready to train with the 🤗 Datasets library, plus more implementation tips and tricks" />
+<meta name="description" content="Get your data ready to train with the 🤗 Datasets library, plus Datasets implementation tips and tricks" />
+<meta property="og:description" content="Get your data ready to train with the 🤗 Datasets library, plus Datasets implementation tips and tricks" />
 <link rel="canonical" href="https://www.ntentional.com/nlp/datasets/tokenization/processing/2020/10/09/comprehensive-datasets.html" />
 <meta property="og:url" content="https://www.ntentional.com/nlp/datasets/tokenization/processing/2020/10/09/comprehensive-datasets.html" />
 <meta property="og:site_name" content="ntentional" />
@@ -16,7 +16,7 @@
 <meta property="og:type" content="article" />
 <meta property="article:published_time" content="2020-10-09T00:00:00-05:00" />
 <script type="application/ld+json">
-{"description":"Get your data ready to train with the 🤗 Datasets library, plus more implementation tips and tricks","@type":"BlogPosting","headline":"Comprehensive Language Model Fine-tuning, Part 1: 🤗 Datasets library","dateModified":"2020-10-09T00:00:00-05:00","datePublished":"2020-10-09T00:00:00-05:00","url":"https://www.ntentional.com/nlp/datasets/tokenization/processing/2020/10/09/comprehensive-datasets.html","image":"https://www.ntentional.com/images/datasets.png","mainEntityOfPage":{"@type":"WebPage","@id":"https://www.ntentional.com/nlp/datasets/tokenization/processing/2020/10/09/comprehensive-datasets.html"},"@context":"https://schema.org"}</script>
+{"description":"Get your data ready to train with the 🤗 Datasets library, plus Datasets implementation tips and tricks","@type":"BlogPosting","headline":"Comprehensive Language Model Fine Tuning, Part 1: 🤗 Datasets library","dateModified":"2020-10-09T00:00:00-05:00","datePublished":"2020-10-09T00:00:00-05:00","url":"https://www.ntentional.com/nlp/datasets/tokenization/processing/2020/10/09/comprehensive-datasets.html","image":"https://www.ntentional.com/images/datasets.png","mainEntityOfPage":{"@type":"WebPage","@id":"https://www.ntentional.com/nlp/datasets/tokenization/processing/2020/10/09/comprehensive-datasets.html"},"@context":"https://schema.org"}</script>
 <!-- End Jekyll SEO tag -->
 <link rel="stylesheet" href="/assets/css/style.css"><link type="application/atom+xml" rel="alternate" href="https://www.ntentional.com/feed.xml" title="ntentional" /><!-- the google_analytics_id gets auto inserted from the config file -->
 
@@ -26,12 +26,12 @@
 
 <link rel="shortcut icon" type="image/x-icon" href="/images/nt.ico">
 <!-- Begin Jekyll SEO tag v2.6.1 -->
-<title>Comprehensive Language Model Fine-tuning, Part 1: 🤗 Datasets library | ntentional</title>
+<title>Comprehensive Language Model Fine Tuning, Part 1: 🤗 Datasets library | ntentional</title>
 <meta name="generator" content="Jekyll v4.0.0" />
-<meta property="og:title" content="Comprehensive Language Model Fine-tuning, Part 1: 🤗 Datasets library" />
+<meta property="og:title" content="Comprehensive Language Model Fine Tuning, Part 1: 🤗 Datasets library" />
 <meta property="og:locale" content="en_US" />
-<meta name="description" content="Get your data ready to train with the 🤗 Datasets library, plus more implementation tips and tricks" />
-<meta property="og:description" content="Get your data ready to train with the 🤗 Datasets library, plus more implementation tips and tricks" />
+<meta name="description" content="Get your data ready to train with the 🤗 Datasets library, plus Datasets implementation tips and tricks" />
+<meta property="og:description" content="Get your data ready to train with the 🤗 Datasets library, plus Datasets implementation tips and tricks" />
 <link rel="canonical" href="https://www.ntentional.com/nlp/datasets/tokenization/processing/2020/10/09/comprehensive-datasets.html" />
 <meta property="og:url" content="https://www.ntentional.com/nlp/datasets/tokenization/processing/2020/10/09/comprehensive-datasets.html" />
 <meta property="og:site_name" content="ntentional" />
@@ -39,7 +39,7 @@
 <meta property="og:type" content="article" />
 <meta property="article:published_time" content="2020-10-09T00:00:00-05:00" />
 <script type="application/ld+json">
-{"description":"Get your data ready to train with the 🤗 Datasets library, plus more implementation tips and tricks","@type":"BlogPosting","headline":"Comprehensive Language Model Fine-tuning, Part 1: 🤗 Datasets library","dateModified":"2020-10-09T00:00:00-05:00","datePublished":"2020-10-09T00:00:00-05:00","url":"https://www.ntentional.com/nlp/datasets/tokenization/processing/2020/10/09/comprehensive-datasets.html","image":"https://www.ntentional.com/images/datasets.png","mainEntityOfPage":{"@type":"WebPage","@id":"https://www.ntentional.com/nlp/datasets/tokenization/processing/2020/10/09/comprehensive-datasets.html"},"@context":"https://schema.org"}</script>
+{"description":"Get your data ready to train with the 🤗 Datasets library, plus Datasets implementation tips and tricks","@type":"BlogPosting","headline":"Comprehensive Language Model Fine Tuning, Part 1: 🤗 Datasets library","dateModified":"2020-10-09T00:00:00-05:00","datePublished":"2020-10-09T00:00:00-05:00","url":"https://www.ntentional.com/nlp/datasets/tokenization/processing/2020/10/09/comprehensive-datasets.html","image":"https://www.ntentional.com/images/datasets.png","mainEntityOfPage":{"@type":"WebPage","@id":"https://www.ntentional.com/nlp/datasets/tokenization/processing/2020/10/09/comprehensive-datasets.html"},"@context":"https://schema.org"}</script>
 <!-- End Jekyll SEO tag -->
 
 <link href="https://unpkg.com/@primer/css/dist/primer.css" rel="stylesheet" />
@@ -100,13 +100,13 @@ window.onload = wrap_img;
         <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
 
   <header class="post-header">
-    <h1 class="post-title p-name" itemprop="name headline">Comprehensive Language Model Fine-tuning, Part 1: 🤗 Datasets library</h1><p class="page-description">Get your data ready to train with the 🤗 Datasets library, plus more implementation tips and tricks</p><p class="post-meta post-meta-title"><time class="dt-published" datetime="2020-10-09T00:00:00-05:00" itemprop="datePublished">
+    <h1 class="post-title p-name" itemprop="name headline">Comprehensive Language Model Fine Tuning, Part 1: 🤗 Datasets library</h1><p class="page-description">Get your data ready to train with the 🤗 Datasets library, plus Datasets implementation tips and tricks</p><p class="post-meta post-meta-title"><time class="dt-published" datetime="2020-10-09T00:00:00-05:00" itemprop="datePublished">
         Oct 9, 2020
       </time>
        • <span class="read-time" title="Estimated read time">
     
     
-      11 min read
+      12 min read
     
 </span></p>
 
@@ -166,19 +166,27 @@ window.onload = wrap_img;
 
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>In the following posts, I'll walk through using the 🤗 Datasets libray:</p>
+<p>In the following post, I'll walk through using the HuggingFace Datasets libray:</p>
 <ul>
-<li>Loading data</li>
-<li>Processing data with 11 processing functions</li>
+<li>Loading data, single or multiple files, csv, txt or dataframes, train/test splits</li>
+<li>Processing data with 11 text processing functions</li>
 <li>Tokenizing data for use with MobileBERT</li>
 <li>Saving processed data to disk</li>
-<li>Datasets tips and tricks</li>
+<li>Datasets tips and tricks along the way</li>
 </ul>
 <p><strong>Version:</strong> Note this script was written with Transformers 3.3.1, Datasets 1.1 and Pytorch 1.6</p>
 
 </div>
 </div>
 </div>
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h1 id="HuggingFace-Datasets-Library">HuggingFace Datasets Library<a class="anchor-link" href="#HuggingFace-Datasets-Library"> </a></h1><p>Lets start our guide to using the Datasets library to get your data ready to train. But before starting I wanted to say <strong>huge kudos to the team working on Datasets</strong>, the library and docs have really improved lately 👌. Some of the examples in this post are taken from the <a href="https://huggingface.co/docs/datasets">🤗 Datasets docs</a>, becasue "why fix it if it ain't broken!".</p>
+<p>To start, lets install the library with a handy to remember pip install:</p>
+
+</div>
+</div>
+</div>
     
     
 <div class="cell border-box-sizing code_cell rendered">
@@ -186,42 +194,7 @@ window.onload = wrap_img;
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># !git clone https://github.com/huggingface/transformers.git</span>
-<span class="c1"># !cd transformers &amp;&amp; pip install -e &quot;.[dev]&quot;</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-</div>
-    
-
-    
-    
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="ch">#!pip install --upgrade tensorflow    # upgrade as transformers installs an outdated version of tensorflow</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-</div>
-    
-
-    
-    
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># !pip install --upgrade transformers</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="o">!</span>pip install datasets
 </pre></div>
 
     </div>
@@ -233,9 +206,7 @@ window.onload = wrap_img;
 
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h1 id="Datasets">Datasets<a class="anchor-link" href="#Datasets"> </a></h1><p>Some of the examples here are taken from the Datasets docs becasue why fix what isn't broken, <a href="https://huggingface.co/docs/datasets"><strong>check them out here</strong></a>.</p>
-<p><em>Also, huge kudos to the team working on Datasets, the docs have really improved lately 👌</em></p>
-<h2 id="Loading-our-Data">Loading our Data<a class="anchor-link" href="#Loading-our-Data"> </a></h2><p>The first thing we'll do is to load a dataset. If we are loading from one or more <code>.txt</code> or <code>.csv</code> files we can load like so:</p>
+<h2 id="Loading-our-Data">Loading our Data<a class="anchor-link" href="#Loading-our-Data"> </a></h2><p>Now we have the library, lets load a dataset. If we are loading from one or more <code>.txt</code> or <code>.csv</code> files we can load like so:</p>
 
 </div>
 </div>
@@ -262,7 +233,8 @@ window.onload = wrap_img;
 
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>If we would like to define our Train/Test split there are a few differant ways to do that. If its split by file we can do the following</p>
+<h2 id="Train/Test-Split">Train/Test Split<a class="anchor-link" href="#Train/Test-Split"> </a></h2><p><img src="https://media.giphy.com/media/l41lKFzpUyuHSK03S/giphy.gif" alt="" /></p>
+<h4 id="Train/Test-Split-by-File">Train/Test Split by File<a class="anchor-link" href="#Train/Test-Split-by-File"> </a></h4><p>If we would like to define our Train/Test split there are a few differant ways to do that. If your training data is already split by file we can do the following:</p>
 
 </div>
 </div>
@@ -286,6 +258,12 @@ window.onload = wrap_img;
 
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
+<h4 id="Splitting-a-Single-FIle">Splitting a Single FIle<a class="anchor-link" href="#Splitting-a-Single-FIle"> </a></h4>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
 <p>Alternatively we can split a single file ourselves. Lets grab some Shakespeare text from Andrej Karpathy. Because this is a sinlge file, lets do a 80/20 train/test split</p>
 
 </div>
@@ -294,48 +272,27 @@ window.onload = wrap_img;
     
     
 <div class="cell border-box-sizing code_cell rendered">
-<div class="input">
+<details class="description">
+      <summary class="btn btn-sm" data-open="Hide Code" data-close="Show Code"></summary>
+        <p><div class="input">
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># hide_collapse</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># collapse-hide</span>
 <span class="o">!</span>wget https://raw.githubusercontent.com/karpathy/char-rnn/master/data/tinyshakespeare/input.txt
 </pre></div>
 
     </div>
 </div>
 </div>
-
-<div class="output_wrapper">
-<div class="output">
-
-<div class="output_area">
-
-<div class="output_subarea output_stream output_stdout output_text">
-<pre>--2020-10-09 19:07:00--  https://raw.githubusercontent.com/karpathy/char-rnn/master/data/tinyshakespeare/input.txt
-Resolving raw.githubusercontent.com (raw.githubusercontent.com)... 151.101.0.133, 151.101.64.133, 151.101.128.133, ...
-Connecting to raw.githubusercontent.com (raw.githubusercontent.com)|151.101.0.133|:443... connected.
-HTTP request sent, awaiting response... 200 OK
-Length: 1115394 (1.1M) [text/plain]
-Saving to: ‘input.txt’
-
-input.txt           100%[===================&gt;]   1.06M  --.-KB/s    in 0.1s    
-
-2020-10-09 19:07:00 (7.71 MB/s) - ‘input.txt’ saved [1115394/1115394]
-
-</pre>
-</div>
-</div>
-
-</div>
-</div>
-
+</p>
+    </details>
 </div>
     
 
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>We can see that after loading, this dataset contains a <code>DatasetDict</code> with a sinlge key called <code>train</code>, which in turn has a sinlge column called <code>text</code>, with 32,777 rows of text.</p>
+<p>We can see that after loading, this dataset contains a <code>DatasetDict</code> with a sinlge key called <code>train</code>, which in turn has <code>Dataset</code> object with a sinlge column called <code>text</code>, with 32,777 rows of text:</p>
 
 </div>
 </div>
@@ -343,37 +300,24 @@ input.txt           100%[===================&gt;]   1.06M  --.-KB/s    in 0.1s
     
     
 <div class="cell border-box-sizing code_cell rendered">
-<div class="input">
+<details class="description">
+      <summary class="btn btn-sm" data-open="Hide Code" data-close="Show Code"></summary>
+        <p><div class="input">
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">full_ds</span> <span class="o">=</span> <span class="n">datasets</span><span class="o">.</span><span class="n">load_dataset</span><span class="p">(</span><span class="s1">&#39;text&#39;</span><span class="p">,</span> <span class="n">data_files</span><span class="o">=</span><span class="s1">&#39;input.txt&#39;</span><span class="p">)</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1">#collapse-hide</span>
+<span class="n">full_ds</span> <span class="o">=</span> <span class="n">datasets</span><span class="o">.</span><span class="n">load_dataset</span><span class="p">(</span><span class="s1">&#39;text&#39;</span><span class="p">,</span> <span class="n">data_files</span><span class="o">=</span><span class="s1">&#39;input.txt&#39;</span><span class="p">)</span>
 <span class="n">full_ds</span>
 </pre></div>
 
     </div>
 </div>
 </div>
-
+</p>
+    </details>
 <div class="output_wrapper">
 <div class="output">
-
-<div class="output_area">
-
-<div class="output_subarea output_stream output_stderr output_text">
-<pre>Using custom data configuration default
-</pre>
-</div>
-</div>
-
-<div class="output_area">
-
-<div class="output_subarea output_stream output_stdout output_text">
-<pre>Downloading and preparing dataset text/default-c4ba2ddddb8383e0 (download: Unknown size, generated: Unknown size, post-processed: Unknown size, total: Unknown size) to /root/.cache/huggingface/datasets/text/default-c4ba2ddddb8383e0/0.0.0/52cefbb2b82b015d4253f1aeb1e6ee5591124a6491e834acfe1751f765925155...
-Dataset text downloaded and prepared to /root/.cache/huggingface/datasets/text/default-c4ba2ddddb8383e0/0.0.0/52cefbb2b82b015d4253f1aeb1e6ee5591124a6491e834acfe1751f765925155. Subsequent calls will reuse this data.
-</pre>
-</div>
-</div>
 
 <div class="output_area">
 
@@ -452,7 +396,7 @@ Dataset text downloaded and prepared to /root/.cache/huggingface/datasets/text/d
 </div>
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>If we only want to take a small part of the dataset to enable us to develop rapidly we can specify the number of rows we would like to load, lets take 400 rows for example:</p>
+<h4 id="Loading-only-a-small-section-of-our-data-file">Loading only a small section of our data file<a class="anchor-link" href="#Loading-only-a-small-section-of-our-data-file"> </a></h4><p>If we only want to take a small part of the dataset to enable us to develop rapidly we can specify the number of rows we would like to load, lets take 400 rows for example. Here we use the <code>ReadInstruction</code> method, have a look through <a href="https://huggingface.co/docs/datasets/">the docs</a> for even more interesting ways to use this.</p>
 
 </div>
 </div>
@@ -465,6 +409,7 @@ Dataset text downloaded and prepared to /root/.cache/huggingface/datasets/text/d
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">mini_ds</span> <span class="o">=</span> <span class="n">load_dataset</span><span class="p">(</span><span class="s1">&#39;text&#39;</span><span class="p">,</span> <span class="n">data_files</span><span class="o">=</span><span class="s1">&#39;input.txt&#39;</span><span class="p">,</span> <span class="n">split</span><span class="o">=</span><span class="n">ReadInstruction</span><span class="p">(</span><span class="s1">&#39;train&#39;</span><span class="p">,</span> <span class="n">from_</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">to</span><span class="o">=</span><span class="mi">400</span><span class="p">,</span> <span class="n">unit</span><span class="o">=</span><span class="s1">&#39;abs&#39;</span><span class="p">))</span>
+<span class="n">mini_ds</span>
 </pre></div>
 
     </div>
@@ -476,11 +421,12 @@ Dataset text downloaded and prepared to /root/.cache/huggingface/datasets/text/d
 
 <div class="output_area">
 
-<div class="output_subarea output_stream output_stderr output_text">
-<pre>Using custom data configuration default
-Reusing dataset text (/root/.cache/huggingface/datasets/text/default-c4ba2ddddb8383e0/0.0.0/52cefbb2b82b015d4253f1aeb1e6ee5591124a6491e834acfe1751f765925155)
-</pre>
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>Dataset(features: {&#39;text&#39;: Value(dtype=&#39;string&#39;, id=None)}, num_rows: 400)</pre>
 </div>
+
 </div>
 
 </div>
@@ -489,6 +435,12 @@ Reusing dataset text (/root/.cache/huggingface/datasets/text/default-c4ba2ddddb8
 </div>
     
 
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h4 id="80/20-Split">80/20 Split<a class="anchor-link" href="#80/20-Split"> </a></h4>
+</div>
+</div>
+</div>
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <p>Since this is a single block of text lets create an 80/20 train/test split for ourselves by specifying a <code>split</code> when loading the data, like so: <code>split=['train[:80%]']</code>. There are additional useful examples of splits such as, <code>K-fold cross validation</code>, in the <a href="https://huggingface.co/docs/datasets/splits.html">docs here</a></p>
@@ -518,17 +470,6 @@ Reusing dataset text (/root/.cache/huggingface/datasets/text/default-c4ba2ddddb8
 
 <div class="output_area">
 
-<div class="output_subarea output_stream output_stderr output_text">
-<pre>Using custom data configuration default
-Reusing dataset text (/root/.cache/huggingface/datasets/text/default-c4ba2ddddb8383e0/0.0.0/52cefbb2b82b015d4253f1aeb1e6ee5591124a6491e834acfe1751f765925155)
-Using custom data configuration default
-Reusing dataset text (/root/.cache/huggingface/datasets/text/default-c4ba2ddddb8383e0/0.0.0/52cefbb2b82b015d4253f1aeb1e6ee5591124a6491e834acfe1751f765925155)
-</pre>
-</div>
-</div>
-
-<div class="output_area">
-
 
 
 <div class="output_text output_subarea output_execute_result">
@@ -546,7 +487,7 @@ Reusing dataset text (/root/.cache/huggingface/datasets/text/default-c4ba2ddddb8
 
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>If we like, we can also specify the exact rows we would like to extract using <code>select()</code> on an already-loaded dataset. Here we select <code>50</code> random indices from the full dataset</p>
+<h4 id="Selecting-Specific-Row-Indices">Selecting Specific Row Indices<a class="anchor-link" href="#Selecting-Specific-Row-Indices"> </a></h4><p>If we like, we can also specify the exact rows we would like to extract using <code>select()</code> on an already-loaded dataset. Here we select <code>50</code> random indices from the full dataset</p>
 
 </div>
 </div>
@@ -558,13 +499,28 @@ Reusing dataset text (/root/.cache/huggingface/datasets/text/default-c4ba2ddddb8
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># hide_output</span>
-<span class="n">r</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="mi">50</span><span class="p">)</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">r</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="mi">50</span><span class="p">)</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
 <span class="n">rand_dataset</span> <span class="o">=</span> <span class="n">full_ds</span><span class="p">[</span><span class="s1">&#39;train&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="n">r</span><span class="p">)</span>
 <span class="n">rand_dataset</span>
 </pre></div>
 
     </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>Dataset(features: {&#39;text&#39;: Value(dtype=&#39;string&#39;, id=None)}, num_rows: 50)</pre>
+</div>
+
+</div>
+
 </div>
 </div>
 
@@ -580,7 +536,8 @@ Reusing dataset text (/root/.cache/huggingface/datasets/text/default-c4ba2ddddb8
 </div>
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="Processing-our-Data">Processing our Data<a class="anchor-link" href="#Processing-our-Data"> </a></h2><p>Now we have data loaded lets take a look at some processing options. <code>.map()</code> will be the main tool we'll use to apply processing functions our text. Note here are additional modifications you can make including shuffling  and sorting with <code>.shuffle()</code> and  <code>.sort()</code> respectively, but I'll leave those to you to explore in the docs 🔎</p>
+<h2 id="Processing-our-Data">Processing our Data<a class="anchor-link" href="#Processing-our-Data"> </a></h2><p><img src="https://media.giphy.com/media/C1nEwzSrlVW80/giphy.gif" alt="" /></p>
+<p>Now we have data loaded lets take a look at some processing options. <code>.map()</code> will be the main tool we'll use to apply processing functions our text. Note here are additional modifications you can make including shuffling  and sorting with <code>.shuffle()</code> and  <code>.sort()</code> respectively, but I'll leave those to you to explore in the docs 🔎</p>
 <h3 id="map"><code>map</code><a class="anchor-link" href="#map"> </a></h3><p><code>map</code> applies a function to our dataset. Below you can see how to lowercase our data by passing the <code>lower_case</code> function to <code>map</code>.</p>
 <p>When applying <code>map</code> you can choose to feed your function a batch of items (with <code>batched=True</code> or a single item. You can also adjust this batch size, the default is <code>1000</code>. Feeding batches can be handy when using functions like tokenizers that can efficiently processes batches. Note that the structure of the processing</p>
 
@@ -616,8 +573,7 @@ Reusing dataset text (/root/.cache/huggingface/datasets/text/default-c4ba2ddddb8
 <div class="output_area">
 
 <div class="output_subarea output_stream output_stdout output_text">
-<pre>
-note me this, good friend; your most grave belly was deliberate, not rash like his accusers, and thus answer&#39;d:
+<pre>note me this, good friend; your most grave belly was deliberate, not rash like his accusers, and thus answer&#39;d:
 </pre>
 </div>
 </div>
@@ -628,14 +584,23 @@ note me this, good friend; your most grave belly was deliberate, not rash like h
 </div>
     
 
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h4 id="11-Processing-Functions-Ready-to-Use-with-Datasets">11 Processing Functions Ready to Use with Datasets<a class="anchor-link" href="#11-Processing-Functions-Ready-to-Use-with-Datasets"> </a></h4><p>Below are 11 useful text processing functions that you might need as part of your workflow; from html removal, to punctuation fixes, replacing username handles (e.g. twitter handles), dealing with emojis and more</p>
+
+</div>
+</div>
+</div>
     
     
 <div class="cell border-box-sizing code_cell rendered">
-<div class="input">
+<details class="description">
+      <summary class="btn btn-sm" data-open="Hide Code" data-close="Show Code"></summary>
+        <p><div class="input">
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># hide_collapse</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1">#collapse-hide</span>
 
 <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">  Below are a selection of often useful processing functions to apply to your text. </span>
@@ -774,22 +739,8 @@ note me this, good friend; your most grave belly was deliberate, not rash like h
     </div>
 </div>
 </div>
-
-<div class="output_wrapper">
-<div class="output">
-
-<div class="output_area">
-
-<div class="output_subarea output_stream output_stdout output_text">
-<pre>
-
-</pre>
-</div>
-</div>
-
-</div>
-</div>
-
+</p>
+    </details>
 </div>
     
 
@@ -818,7 +769,7 @@ note me this, good friend; your most grave belly was deliberate, not rash like h
     <span class="k">else</span><span class="p">:</span> <span class="k">return</span> <span class="p">{</span><span class="s1">&#39;text&#39;</span><span class="p">:</span> <span class="n">tmp_ls</span><span class="p">}</span>
 
 <span class="n">my_processing_funcs</span> <span class="o">=</span> <span class="n">compose</span><span class="p">(</span><span class="o">*</span><span class="p">[</span><span class="n">lower_case</span><span class="p">,</span> <span class="n">add_yo</span><span class="p">])</span>
-<span class="n">train_ds</span> <span class="o">=</span> <span class="n">train_ds</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="n">my_processing_funcs</span><span class="p">,</span> <span class="n">batched</span><span class="o">=</span><span class="kc">True</span><span class="p">);</span>
+<span class="n">train_ds</span> <span class="o">=</span> <span class="n">train_ds</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="n">my_processing_funcs</span><span class="p">,</span> <span class="n">batched</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <span class="n">train_ds</span><span class="p">[</span><span class="s1">&#39;text&#39;</span><span class="p">][</span><span class="mi">200</span><span class="p">:</span><span class="mi">203</span><span class="p">]</span>
 </pre></div>
 
@@ -828,14 +779,6 @@ note me this, good friend; your most grave belly was deliberate, not rash like h
 
 <div class="output_wrapper">
 <div class="output">
-
-<div class="output_area">
-
-<div class="output_subarea output_stream output_stdout output_text">
-<pre>
-</pre>
-</div>
-</div>
 
 <div class="output_area">
 
@@ -858,11 +801,13 @@ note me this, good friend; your most grave belly was deliberate, not rash like h
     
     
 <div class="cell border-box-sizing code_cell rendered">
-<div class="input">
+<details class="description">
+      <summary class="btn btn-sm" data-open="Hide Code" data-close="Show Code"></summary>
+        <p><div class="input">
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># hide_collapse</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1">#collapse-hide</span>
 
 <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">   Do processing of the train and validation set</span>
@@ -898,42 +843,8 @@ note me this, good friend; your most grave belly was deliberate, not rash like h
     </div>
 </div>
 </div>
-
-<div class="output_wrapper">
-<div class="output">
-
-<div class="output_area">
-
-<div class="output_subarea output_stream output_stdout output_text">
-<pre>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-</pre>
-</div>
-</div>
-
-</div>
-</div>
-
+</p>
+    </details>
 </div>
     
 
@@ -1092,14 +1003,15 @@ note me this, good friend; your most grave belly was deliberate, not rash like h
 
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="Ready-to-Train-&#127881;">Ready to Train &#127881;<a class="anchor-link" href="#Ready-to-Train-&#127881;"> </a></h2><p>Now that our data is loaded, processed, tokenized and formatted we are ready to train! Check out the next part in this series too see how how we fine-tune our Transformer Language Model!</p>
+<h1 id="Ready-to-Train-&#127881;">Ready to Train &#127881;<a class="anchor-link" href="#Ready-to-Train-&#127881;"> </a></h1><p><img src="https://media.giphy.com/media/PjOi4kgUeH0fQmr8aK/giphy.gif" alt="" /></p>
+<p>Now that our data is loaded, processed, tokenized and formatted we are ready to train! Check out the next part in this series too see how how we fine-tune our Transformer Language Model!</p>
 
 </div>
 </div>
 </div>
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="Coming-Post-2:-Training-your-Language-Model-Transformer-with-&#129303;-Trainer">Coming Post 2: Training your Language Model Transformer with &#129303; Trainer<a class="anchor-link" href="#Coming-Post-2:-Training-your-Language-Model-Transformer-with-&#129303;-Trainer"> </a></h2><p>Coming up in Post 2:</p>
+<h4 id="Coming-Up-in-Post-2:-Training-your-Language-Model-Transformer-with-&#129303;-Trainer">Coming Up in Post 2: Training your Language Model Transformer with &#129303; Trainer<a class="anchor-link" href="#Coming-Up-in-Post-2:-Training-your-Language-Model-Transformer-with-&#129303;-Trainer"> </a></h4><p>Coming up in Post 2:</p>
 <ul>
 <li>Getting your data collator</li>
 <li>Setting up all Training Arguments</li>
