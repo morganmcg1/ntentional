@@ -106,7 +106,7 @@ window.onload = wrap_img;
        • <span class="read-time" title="Estimated read time">
     
     
-      14 min read
+      13 min read
     
 </span></p>
 
@@ -172,16 +172,10 @@ window.onload = wrap_img;
 <li>Processing data with 11 text processing functions</li>
 <li>Tokenizing data for use with MobileBERT</li>
 <li>Saving processed data to disk</li>
-<li>Datasets tips and tricks along the way
-<div class="flash">
-    <svg class="octicon octicon-info octicon octicon-info octicon octicon-info octicon octicon-info octicon octicon-info" viewBox="0 0 14 16" version="1.1" width="14" height="16" aria-hidden="true"><path fill-rule="evenodd" d="M6.3 5.69a.942.942 0 01-.28-.7c0-.28.09-.52.28-.7.19-.18.42-.28.7-.28.28 0 .52.09.7.28.18.19.28.42.28.7 0 .28-.09.52-.28.7a1 1 0 01-.7.3c-.28 0-.52-.11-.7-.3zM8 7.99c-.02-.25-.11-.48-.31-.69-.2-.19-.42-.3-.69-.31H6c-.27.02-.48.13-.69.31-.2.2-.3.44-.31.69h1v3c.02.27.11.5.31.69.2.2.42.31.69.31h1c.27 0 .48-.11.69-.31.2-.19.3-.42.31-.69H8V7.98v.01zM7 2.3c-3.14 0-5.7 2.54-5.7 5.68 0 3.14 2.56 5.7 5.7 5.7s5.7-2.55 5.7-5.7c0-3.15-2.56-5.69-5.7-5.69v.01zM7 .98c3.86 0 7 3.14 7 7s-3.14 7-7 7-7-3.12-7-7 3.14-7 7-7z"></path></svg>
-    <strong>Note: </strong>Click the colab button to open this notebook in Google Colab and run it end to end
-</div><div class="flash">
-    <svg class="octicon octicon-info octicon octicon-info octicon octicon-info octicon octicon-info octicon octicon-info octicon octicon-info" viewBox="0 0 14 16" version="1.1" width="14" height="16" aria-hidden="true"><path fill-rule="evenodd" d="M6.3 5.69a.942.942 0 01-.28-.7c0-.28.09-.52.28-.7.19-.18.42-.28.7-.28.28 0 .52.09.7.28.18.19.28.42.28.7 0 .28-.09.52-.28.7a1 1 0 01-.7.3c-.28 0-.52-.11-.7-.3zM8 7.99c-.02-.25-.11-.48-.31-.69-.2-.19-.42-.3-.69-.31H6c-.27.02-.48.13-.69.31-.2.2-.3.44-.31.69h1v3c.02.27.11.5.31.69.2.2.42.31.69.31h1c.27 0 .48-.11.69-.31.2-.19.3-.42.31-.69H8V7.98v.01zM7 2.3c-3.14 0-5.7 2.54-5.7 5.68 0 3.14 2.56 5.7 5.7 5.7s5.7-2.55 5.7-5.7c0-3.15-2.56-5.69-5.7-5.69v.01zM7 .98c3.86 0 7 3.14 7 7s-3.14 7-7 7-7-3.12-7-7 3.14-7 7-7z"></path></svg>
-    <strong>Note: </strong><strong>Version:</strong> This script was written with Transformers 3.3.1, Datasets 1.1 and Pytorch 1.6
-</div>
-I would love to hear your feedback, what could have been written better or clearer, let me know what you think on twitter: <strong><a href="www.twitter.com/mcgenergy">@mcgenergy</a></strong></li>
+<li>Datasets tips and tricks along the way</li>
 </ul>
+<p>I would love to hear your feedback, what could have been written better or clearer, let me know what you think on twitter: <strong><a href="www.twitter.com/mcgenergy">@mcgenergy</a></strong></p>
+<p><strong>Version:</strong> Note this script was written with Transformers 3.3.1, Datasets 1.1 and Pytorch 1.6</p>
 
 </div>
 </div>
@@ -196,11 +190,12 @@ I would love to hear your feedback, what could have been written better or clear
 </li>
 <li><p>Smart caching:never wait for your data to process several times &gt; - 🤗Datasets currently provides access to ~100 NLP datasets and ~10 evaluation metrics and is designed to let the community easily add and share new datasets and evaluation metrics.</p>
 </li>
-<li><p>You can browse the full set of datasets with the live <a href="https://huggingface.co/nlp/viewer/">🤗Datasets viewer</a></p>
+<li><p>You can browse the full set of datasets with the live <a href="https://huggingface.co/nlp/viewer/">🤗Datasets viewer</a>
+#### My fav
+For me personally, I am irrationally fond of this library. It just has so many useful features for handling your text data! I have really enjoyed the speed of data processing and the fact that caching means that running your processing a second time is lightening fast! I've spent about 6 weeks working with it and I feel I've only scratched the surface of what it can do in some aras. But enough of what I think, lets get stuck in some data processing woop woop!</p>
 </li>
 </ul>
 </blockquote>
-<h4 id="My-fav">My fav<a class="anchor-link" href="#My-fav"> </a></h4><p>For me personally, I am irrationally fond of this library. It just has so many useful features for handling your text data! I have really enjoyed the speed of data processing and the fact that caching means that running your processing a second time is lightening fast! I've spent about 6 weeks working with it and I feel I've only scratched the surface of what it can do in some aras. But enough of what I think, lets get stuck in some data processing woop woop!</p>
 <h4 id="Lets-Go-&#128678;">Lets Go &#128678;<a class="anchor-link" href="#Lets-Go-&#128678;"> </a></h4><p>Lets start our guide to using the Datasets library to get your data ready to train. But before starting I wanted to say <strong>huge kudos to the team working on Datasets</strong>, the library and docs have really improved lately 👌. Some of the examples in this post are taken from the <a href="https://huggingface.co/docs/datasets">🤗 Datasets docs</a>, becasue "why fix it if it ain't broken!".</p>
 <p>To start, lets install the library with a handy to remember pip install:</p>
 
