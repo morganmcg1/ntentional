@@ -106,7 +106,7 @@ window.onload = wrap_img;
        • <span class="read-time" title="Estimated read time">
     
     
-      13 min read
+      14 min read
     
 </span></p>
 
@@ -166,15 +166,22 @@ window.onload = wrap_img;
 
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>In the following post, I'll walk through using the HuggingFace Datasets libray:</p>
+<p>In the following post, I'll walk through the following using the HuggingFace Datasets libray:</p>
 <ul>
 <li>Loading data, single or multiple files, csv, txt or dataframes, train/test splits</li>
 <li>Processing data with 11 text processing functions</li>
 <li>Tokenizing data for use with MobileBERT</li>
 <li>Saving processed data to disk</li>
-<li>Datasets tips and tricks along the way</li>
+<li>Datasets tips and tricks along the way
+<div class="flash">
+    <svg class="octicon octicon-info octicon octicon-info octicon octicon-info octicon octicon-info octicon octicon-info" viewBox="0 0 14 16" version="1.1" width="14" height="16" aria-hidden="true"><path fill-rule="evenodd" d="M6.3 5.69a.942.942 0 01-.28-.7c0-.28.09-.52.28-.7.19-.18.42-.28.7-.28.28 0 .52.09.7.28.18.19.28.42.28.7 0 .28-.09.52-.28.7a1 1 0 01-.7.3c-.28 0-.52-.11-.7-.3zM8 7.99c-.02-.25-.11-.48-.31-.69-.2-.19-.42-.3-.69-.31H6c-.27.02-.48.13-.69.31-.2.2-.3.44-.31.69h1v3c.02.27.11.5.31.69.2.2.42.31.69.31h1c.27 0 .48-.11.69-.31.2-.19.3-.42.31-.69H8V7.98v.01zM7 2.3c-3.14 0-5.7 2.54-5.7 5.68 0 3.14 2.56 5.7 5.7 5.7s5.7-2.55 5.7-5.7c0-3.15-2.56-5.69-5.7-5.69v.01zM7 .98c3.86 0 7 3.14 7 7s-3.14 7-7 7-7-3.12-7-7 3.14-7 7-7z"></path></svg>
+    <strong>Note: </strong>Click the colab button to open this notebook in Google Colab and run it end to end
+</div><div class="flash">
+    <svg class="octicon octicon-info octicon octicon-info octicon octicon-info octicon octicon-info octicon octicon-info octicon octicon-info" viewBox="0 0 14 16" version="1.1" width="14" height="16" aria-hidden="true"><path fill-rule="evenodd" d="M6.3 5.69a.942.942 0 01-.28-.7c0-.28.09-.52.28-.7.19-.18.42-.28.7-.28.28 0 .52.09.7.28.18.19.28.42.28.7 0 .28-.09.52-.28.7a1 1 0 01-.7.3c-.28 0-.52-.11-.7-.3zM8 7.99c-.02-.25-.11-.48-.31-.69-.2-.19-.42-.3-.69-.31H6c-.27.02-.48.13-.69.31-.2.2-.3.44-.31.69h1v3c.02.27.11.5.31.69.2.2.42.31.69.31h1c.27 0 .48-.11.69-.31.2-.19.3-.42.31-.69H8V7.98v.01zM7 2.3c-3.14 0-5.7 2.54-5.7 5.68 0 3.14 2.56 5.7 5.7 5.7s5.7-2.55 5.7-5.7c0-3.15-2.56-5.69-5.7-5.69v.01zM7 .98c3.86 0 7 3.14 7 7s-3.14 7-7 7-7-3.12-7-7 3.14-7 7-7z"></path></svg>
+    <strong>Note: </strong><strong>Version:</strong> This script was written with Transformers 3.3.1, Datasets 1.1 and Pytorch 1.6
+</div>
+I would love to hear your feedback, what could have been written better or clearer, let me know what you think on twitter: <strong><a href="www.twitter.com/mcgenergy">@mcgenergy</a></strong></li>
 </ul>
-<p><strong>Version:</strong> Note this script was written with Transformers 3.3.1, Datasets 1.1 and Pytorch 1.6</p>
 
 </div>
 </div>
@@ -552,8 +559,7 @@ For me personally, I am irrationally fond of this library. It just has so many u
 <div class="text_cell_render border-box-sizing rendered_html">
 <h2 id="Processing-our-Data">Processing our Data<a class="anchor-link" href="#Processing-our-Data"> </a></h2><p><img src="https://media.giphy.com/media/C1nEwzSrlVW80/giphy.gif" alt="" /></p>
 <p>Now we have data loaded lets take a look at some processing options. <code>.map()</code> will be the main tool we'll use to apply processing functions our text. Note here are additional modifications you can make including shuffling  and sorting with <code>.shuffle()</code> and  <code>.sort()</code> respectively, but I'll leave those to you to explore in the docs 🔎</p>
-<h3 id="map"><code>map</code><a class="anchor-link" href="#map"> </a></h3><p><code>map</code> applies a function to our dataset. Below you can see how to lowercase our data by passing the <code>lower_case</code> function to <code>map</code>.</p>
-<p>When applying <code>map</code> you can choose to feed your function a batch of items (with <code>batched=True</code> or a single item. You can also adjust this batch size, the default is <code>1000</code>. Feeding batches can be handy when using functions like tokenizers that can efficiently processes batches. Note that the structure of the processing</p>
+<h4 id="The-map-Function">The <code>map</code> Function<a class="anchor-link" href="#The-map-Function"> </a></h4><p><code>map</code> applies a function to our dataset. Below you can see how to lowercase our data by passing the <code>lower_case</code> function to <code>map</code>. When applying <code>map</code> you can choose to feed your function a batch of items (with <code>batched=True</code> or a single item. You can also adjust this batch size, the default is <code>1000</code>. Feeding batches can be handy when using functions like tokenizers that can efficiently processes batches. Note that the structure of the processing</p>
 
 </div>
 </div>
@@ -773,7 +779,8 @@ For me personally, I am irrationally fond of this library. It just has so many u
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">add_yo</span><span class="p">(</span><span class="n">example</span><span class="p">):</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># Lets add &quot;yo!&quot; to the beginning of each of our items</span>
+<span class="k">def</span> <span class="nf">add_yo</span><span class="p">(</span><span class="n">example</span><span class="p">):</span>
     <span class="sd">&#39;&#39;&#39;Add &quot;yo! &quot; to each example&#39;&#39;&#39;</span>
     <span class="n">tmp_ls</span><span class="o">=</span><span class="p">[]</span>
     <span class="n">example</span><span class="p">[</span><span class="s1">&#39;text&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">_listify</span><span class="p">(</span><span class="n">example</span><span class="p">[</span><span class="s1">&#39;text&#39;</span><span class="p">])</span> 
@@ -782,8 +789,13 @@ For me personally, I am irrationally fond of this library. It just has so many u
     <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">tmp_ls</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span> <span class="k">return</span> <span class="p">{</span><span class="s1">&#39;text&#39;</span><span class="p">:</span> <span class="n">tmp_ls</span><span class="p">}</span>
     <span class="k">else</span><span class="p">:</span> <span class="k">return</span> <span class="p">{</span><span class="s1">&#39;text&#39;</span><span class="p">:</span> <span class="n">tmp_ls</span><span class="p">}</span>
 
+<span class="c1"># Compose our lower_case and add_yo functions  </span>
 <span class="n">my_processing_funcs</span> <span class="o">=</span> <span class="n">compose</span><span class="p">(</span><span class="o">*</span><span class="p">[</span><span class="n">lower_case</span><span class="p">,</span> <span class="n">add_yo</span><span class="p">])</span>
+
+<span class="c1"># Apply both functions with map</span>
 <span class="n">train_ds</span> <span class="o">=</span> <span class="n">train_ds</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="n">my_processing_funcs</span><span class="p">,</span> <span class="n">batched</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="c1"># We have lowercased and added &quot;yo!&quot; to to each item in a single call to map!</span>
 <span class="n">train_ds</span><span class="p">[</span><span class="s1">&#39;text&#39;</span><span class="p">][</span><span class="mi">200</span><span class="p">:</span><span class="mi">203</span><span class="p">]</span>
 </pre></div>
 
@@ -799,9 +811,9 @@ For me personally, I am irrationally fond of this library. It just has so many u
 
 
 <div class="output_text output_subarea output_execute_result">
-<pre>[&#39;yo! note me this, good friend;&#39;,
- &#39;yo! your most grave belly was deliberate,&#39;,
- &#34;yo! not rash like his accusers, and thus answer&#39;d:&#34;]</pre>
+<pre>[&#39;yo! yo! note me this, good friend;&#39;,
+ &#39;yo! yo! your most grave belly was deliberate,&#39;,
+ &#34;yo! yo! not rash like his accusers, and thus answer&#39;d:&#34;]</pre>
 </div>
 
 </div>
@@ -871,7 +883,7 @@ For me personally, I am irrationally fond of this library. It just has so many u
 </div>
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="Tokenization">Tokenization<a class="anchor-link" href="#Tokenization"> </a></h2><p>Combining HuggingFaces "Fast" tokenizers with the Datasets library is a real dream, the speed is something else! Here we'll instantiate a tokenizer that <a href="https://arxiv.org/pdf/2004.02984.pdf">MobileBERT</a> was trained on.
+<h2 id="Tokenization">Tokenization<a class="anchor-link" href="#Tokenization"> </a></h2><p>Combining HuggingFaces "Fast" tokenizers with the Datasets library is a real dream, the speed is something else! Here we'll instantiate a tokenizer compatible with the <a href="https://arxiv.org/pdf/2004.02984.pdf">MobileBERT</a> model.
 <div class="flash flash-success">
     <svg class="octicon octicon-checklist octicon octicon-checklist" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path fill-rule="evenodd" d="M16 8.5l-6 6-3-3L8.5 10l1.5 1.5L14.5 7 16 8.5zM5.7 12.2l.8.8H2c-.55 0-1-.45-1-1V3c0-.55.45-1 1-1h7c.55 0 1 .45 1 1v6.5l-.8-.8c-.39-.39-1.03-.39-1.42 0L5.7 10.8a.996.996 0 000 1.41v-.01zM4 4h5V3H4v1zm0 2h5V5H4v1zm0 2h3V7H4v1zM3 9H2v1h1V9zm0-2H2v1h1V7zm0-2H2v1h1V5zm0-2H2v1h1V3z"></path></svg>
     <strong>Tip: </strong>HuggingFace&#8217;s <code>AutoTokenizer</code> class makes loading tokenizers super simple, removing the need to import the specific tokenizer class for each different model you use. <code>AutoModel</code> is the equivalent for model loading and we&#8217;ll use that in the next part of this series 
@@ -899,11 +911,12 @@ For me personally, I am irrationally fond of this library. It just has so many u
 
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>Here we use a <code>lambda</code> function with <code>map</code> to apply the tokenizer to the train and validation sets. With HuggingFace tokenizers we have map options such as adding padding, truncating the text and setting a max_length and more. We use <code>batched=True</code> to take full advantages of our tokenizers ability to handle batches
+<h4 id="'lambda'-and-'map'">'lambda' and 'map'<a class="anchor-link" href="#'lambda'-and-'map'"> </a></h4><p>Here we use a <code>lambda</code> function with <code>map</code> to apply the tokenizer to the train and validation sets. With HuggingFace tokenizers we have map options such as adding padding, truncating the text and setting a max_length and more. We use <code>batched=True</code> to take full advantages of our tokenizers ability to handle batches
 <div class="flash flash-success">
     <svg class="octicon octicon-checklist octicon octicon-checklist octicon octicon-checklist" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path fill-rule="evenodd" d="M16 8.5l-6 6-3-3L8.5 10l1.5 1.5L14.5 7 16 8.5zM5.7 12.2l.8.8H2c-.55 0-1-.45-1-1V3c0-.55.45-1 1-1h7c.55 0 1 .45 1 1v6.5l-.8-.8c-.39-.39-1.03-.39-1.42 0L5.7 10.8a.996.996 0 000 1.41v-.01zM4 4h5V3H4v1zm0 2h5V5H4v1zm0 2h3V7H4v1zM3 9H2v1h1V9zm0-2H2v1h1V7zm0-2H2v1h1V5zm0-2H2v1h1V3z"></path></svg>
     <strong>Tip: </strong>In order to save precious GPU memory when training some of the <code>-large</code> transformer models I found that truncating the training text and setting a max length to be really useful. It worth experimenting with, if your text has very long sequences then truncation might degrade performance to an unacceptable level. In my case I was dealing with tweet data so I knew I wasn&#8217;t chopping too much from my texts. I didn&#8217;t truncate the validation text as the evaluation phases is generally less memory intensive than the training phase, so the model could handle the full text. You&#8217;ll want to consider when pursuing this strategy if you want to validate against the full text or truncated text. 
-</div></p>
+</div>
+Given then above, lets do our tokenization like so:</p>
 
 </div>
 </div>
@@ -923,24 +936,15 @@ For me personally, I am irrationally fond of this library. It just has so many u
 </div>
 </div>
 
-<div class="output_wrapper">
-<div class="output">
-
-<div class="output_area">
-
-<div class="output_subarea output_stream output_stdout output_text">
-<pre>
-
-</pre>
-</div>
-</div>
-
-</div>
-</div>
-
 </div>
     
 
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h4 id="Set-Format">Set Format<a class="anchor-link" href="#Set-Format"> </a></h4>
+</div>
+</div>
+</div>
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <p>After tokenization, our tokenized data are all in lists. To be able to use them in our model we need to encode the data as either Pytorch or Tensorflow tensors. Here we convert the relevant columns to pytorch tensors, we can set <code>type = "tensorflow"</code> (or <code>"tf"</code>) if we are using Tensorflow here. You can see here we also specify <strong>only a subset</strong> of our columns as that is all that is needed for training our model.</p>
@@ -968,6 +972,19 @@ For me personally, I am irrationally fond of this library. It just has so many u
 
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
+<h4 id="Sweet,-Now-Let-Me-Go-Training!">Sweet, Now Let Me Go Training!<a class="anchor-link" href="#Sweet,-Now-Let-Me-Go-Training!"> </a></h4>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Our data has been loaded, processed, tokenized and formatted, you are now go for training right? Well, one more thing you might want to think about before jumping into your modelling is if you need to use your data on different machines...</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
 <h1 id="Saving-and-Loading-Data">Saving and Loading Data<a class="anchor-link" href="#Saving-and-Loading-Data"> </a></h1><p>If you typically only use one machine consistently there is probably no need to save your data as Datasets keeps a cache of everything you have done to it.</p>
 <p>However if your processing takes a significant amount of time and you need to move your data between machines, if you are using Kaggle notebooks, then I recommend saving your data for easy loading like so:</p>
 
@@ -993,7 +1010,7 @@ For me personally, I am irrationally fond of this library. It just has so many u
 
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>You can then easily load your data again:</p>
+<p>You can then easily load your data again like so:</p>
 
 </div>
 </div>
@@ -1019,13 +1036,7 @@ For me personally, I am irrationally fond of this library. It just has so many u
 <div class="text_cell_render border-box-sizing rendered_html">
 <h1 id="Ready-to-Train-&#127881;">Ready to Train &#127881;<a class="anchor-link" href="#Ready-to-Train-&#127881;"> </a></h1><p><img src="https://media.giphy.com/media/PjOi4kgUeH0fQmr8aK/giphy.gif" alt="" /></p>
 <p>Now that our data is loaded, processed, tokenized and formatted we are ready to train! Check out the next part in this series too see how how we fine-tune our Transformer Language Model!</p>
-
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<h4 id="Coming-Up-in-Post-2:-Training-your-Language-Model-Transformer-with-&#129303;-Trainer">Coming Up in Post 2: Training your Language Model Transformer with &#129303; Trainer<a class="anchor-link" href="#Coming-Up-in-Post-2:-Training-your-Language-Model-Transformer-with-&#129303;-Trainer"> </a></h4><p>Coming up in Post 2:</p>
+<h2 id="Coming-Up-in-Post-2:-Training-your-Language-Model-Transformer-with-&#129303;-Trainer">Coming Up in Post 2: Training your Language Model Transformer with &#129303; Trainer<a class="anchor-link" href="#Coming-Up-in-Post-2:-Training-your-Language-Model-Transformer-with-&#129303;-Trainer"> </a></h2><p>Coming up in Post 2:</p>
 <ul>
 <li>Getting your data collator</li>
 <li>Setting up all Training Arguments</li>
@@ -1034,7 +1045,7 @@ For me personally, I am irrationally fond of this library. It just has so many u
 <li>Training on TPUs</li>
 <li>Saving your model model</li>
 </ul>
-<p><em>As always, I would love to hear your feedback, what could have been written better or clearer, you can find me on twitter: <a href="www.twitter.com/mcgenergy">@mcgenergy</a></em></p>
+<h1 id="Thanks-for-Reading-This-Far-&#128591;">Thanks for Reading This Far &#128591;<a class="anchor-link" href="#Thanks-for-Reading-This-Far-&#128591;"> </a></h1><p>As always, I would love to hear your feedback, what could have been written better or clearer, you can find me on twitter: <strong><a href="www.twitter.com/mcgenergy">@mcgenergy</a></strong></p>
 
 </div>
 </div>
