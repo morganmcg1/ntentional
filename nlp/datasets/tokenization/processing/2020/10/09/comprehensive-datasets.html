@@ -106,7 +106,7 @@ window.onload = wrap_img;
        • <span class="read-time" title="Estimated read time">
     
     
-      14 min read
+      16 min read
     
 </span></p>
 
@@ -183,6 +183,47 @@ window.onload = wrap_img;
 </div>
 </div>
 </div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="o">!</span>transformers-cli env
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>
+Copy-and-paste the text below in your GitHub issue and FILL OUT the two last points.
+
+- `transformers` version: 3.3.1
+- Platform: Darwin-19.6.0-x86_64-i386-64bit
+- Python version: 3.7.5
+- PyTorch version (GPU?): 1.4.0 (False)
+- Tensorflow version (GPU?): not installed (NA)
+- Using GPU in script?: &lt;fill in&gt;
+- Using distributed or parallel set-up in script?: &lt;fill in&gt;
+
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <h1 id="HuggingFace-Datasets-Library">HuggingFace Datasets Library<a class="anchor-link" href="#HuggingFace-Datasets-Library"> </a></h1><h4 id="Why-Should-I-use-this-&quot;Datasets&quot;-library?">Why Should I use this "Datasets" library?<a class="anchor-link" href="#Why-Should-I-use-this-&quot;Datasets&quot;-library?"> </a></h4><p>Lets see what the docs have to say:</p>
@@ -212,7 +253,7 @@ window.onload = wrap_img;
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="o">!</span>pip install datasets
+<div class=" highlight hl-ipython3"><pre><span></span><span class="o">!</span>pip install datasets --upgrade
 </pre></div>
 
     </div>
@@ -554,7 +595,7 @@ window.onload = wrap_img;
 </div>
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="Processing-our-Data">Processing our Data<a class="anchor-link" href="#Processing-our-Data"> </a></h2><p><img src="https://media.giphy.com/media/C1nEwzSrlVW80/giphy.gif" alt="" /></p>
+<h2 id="Processing-our-Data">Processing our Data<a class="anchor-link" href="#Processing-our-Data"> </a></h2><h4 id="[UPDATE]-See-the-next-section-below-for-how-to-use-the-normalizers-from-the-HuggingFace-tokenizers-library-to-do-some-of-this-pre-processing-event-faster!">[UPDATE] See the next section below for how to use the <code>normalizers</code> from the HuggingFace <code>tokenizers</code> library to do some of this pre-processing event faster!<a class="anchor-link" href="#[UPDATE]-See-the-next-section-below-for-how-to-use-the-normalizers-from-the-HuggingFace-tokenizers-library-to-do-some-of-this-pre-processing-event-faster!"> </a></h4><p><img src="https://media.giphy.com/media/C1nEwzSrlVW80/giphy.gif" alt="" /></p>
 <p>Now we have data loaded lets take a look at some processing options. <code>.map()</code> will be the main tool we'll use to apply processing functions our text. Note here are additional modifications you can make including shuffling  and sorting with <code>.shuffle()</code> and  <code>.sort()</code> respectively, but I'll leave those to you to explore in the docs 🔎</p>
 <h4 id="The-map-Function">The <code>map</code> Function<a class="anchor-link" href="#The-map-Function"> </a></h4><p><code>map</code> applies a function to our dataset. Below you can see how to lowercase our data by passing the <code>lower_case</code> function to <code>map</code>. When applying <code>map</code> you can choose to feed your function a batch of items (with <code>batched=True</code> or a single item. You can also adjust this batch size, the default is <code>1000</code>. Feeding batches can be handy when using functions like tokenizers that can efficiently processes batches. Note that the structure of the processing</p>
 
@@ -639,7 +680,7 @@ window.onload = wrap_img;
 <span class="n">control_char_regex</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;[\r\n\t]+&#39;</span><span class="p">)</span>
 
 <span class="c1"># Get unk character from your tokenizer of choice</span>
-<span class="n">tokenizer</span> <span class="o">=</span> <span class="n">RobertaTokenizerFast</span><span class="o">.</span><span class="n">from_pretrained</span><span class="p">(</span><span class="s1">&#39;roberta-large&#39;</span><span class="p">)</span>
+<span class="n">tokenizer</span> <span class="o">=</span> <span class="n">AutoTokenizer</span><span class="o">.</span><span class="n">from_pretrained</span><span class="p">(</span><span class="s1">&#39;google/mobilebert-uncased&#39;</span><span class="p">)</span>
 <span class="n">unk</span> <span class="o">=</span> <span class="n">tokenizer</span><span class="o">.</span><span class="n">special_tokens_map</span><span class="p">[</span><span class="s1">&#39;unk_token&#39;</span><span class="p">]</span>
 
 <span class="c1"># processing functions</span>
@@ -735,7 +776,7 @@ window.onload = wrap_img;
     <span class="n">tmp_ls</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="n">example</span><span class="p">[</span><span class="s1">&#39;text&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">_listify</span><span class="p">(</span><span class="n">example</span><span class="p">[</span><span class="s1">&#39;text&#39;</span><span class="p">])</span> 
     <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">example</span><span class="p">[</span><span class="s1">&#39;text&#39;</span><span class="p">]:</span> 
-      <span class="n">tmp_ls</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">emoji</span><span class="o">.</span><span class="n">demojize</span><span class="p">(</span><span class="n">e</span><span class="p">))</span>
+        <span class="n">tmp_ls</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">emoji</span><span class="o">.</span><span class="n">demojize</span><span class="p">(</span><span class="n">e</span><span class="p">))</span>
     <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">tmp_ls</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span> <span class="k">return</span> <span class="p">{</span><span class="s1">&#39;text&#39;</span><span class="p">:</span> <span class="n">tmp_ls</span><span class="p">[</span><span class="mi">0</span><span class="p">]}</span>
     <span class="k">else</span><span class="p">:</span> <span class="k">return</span> <span class="p">{</span><span class="s1">&#39;text&#39;</span><span class="p">:</span> <span class="n">tmp_ls</span><span class="p">}</span>
 
@@ -873,7 +914,190 @@ window.onload = wrap_img;
 
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>After processing our data with all the processing function above (click the button to show all funcs used) we're now ready for tokenization!</p>
+<h3 id="[UPDATE]-Using-normalizers-from-the-tokenizers-library-for-your-preprocessing">[UPDATE] Using <code>normalizers</code> from the <code>tokenizers</code> library for your preprocessing<a class="anchor-link" href="#[UPDATE]-Using-normalizers-from-the-tokenizers-library-for-your-preprocessing"> </a></h3><p>The day I originally published this article, Sylvain Gugger at HuggingFace also tweeted that the <code>tokenizers</code> library had been updated, including <a href="https://huggingface.co/docs/tokenizers/python/latest/pipeline.html">updated docs</a>
+
+<center>
+    <div class="jekyll-twitter-plugin"><blockquote class="twitter-tweet"><p lang="en" dir="ltr">Well there go half of the processing functions I mentioned 😅 <br /><br />Stoked about the Normalizers and Pre-Tokenizers though, was one of the things I thought was missing (or maybe it was there and I missed it)<a href="https://t.co/gSheva9I2p">https://t.co/gSheva9I2p</a></p>&mdash; Morgan Wear Your Mask McGuire (@mcgenergy) <a href="https://twitter.com/mcgenergy/status/1314704571512451072?ref_src=twsrc%5Etfw">October 9, 2020</a></blockquote>
+<script async="" src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+</div>
+</center>
+
+The new docs outline a number of "<strong>normalizer</strong>" functions similar to the preprocessing functions above such as lowercasing, removing white spaces etc. Turns out they were already in the library but not documented! So here is a quick update on how to use these functions as part of your pre-processing workflow.</p>
+<p><img src="https://media.giphy.com/media/ae0xmwpjVglnG/giphy.gif" alt="" /></p>
+<h4 id="Available-Normalizers">Available Normalizers<a class="anchor-link" href="#Available-Normalizers"> </a></h4><p>As of writing the normalizers available, according to the docs, are:</p>
+<ul>
+<li><p><code>NFD</code>, <code>NFKD</code>, <code>NFC</code>: NFD, NFKD and NFC unicode normalization algorithms **</p>
+</li>
+<li><p><code>Lowercase</code>: Replaces all uppercase to lowercase</p>
+</li>
+<li><p><code>Strip</code>: Removes all whitespace characters on the specified sides (left, right or both) of the input</p>
+</li>
+<li><p><code>StripAccents</code>: Removes all accent symbols in unicode (to be used with NFD for consistency)</p>
+</li>
+<li><p><code>Replace</code>: Replaces a custom string or regexp and changes it with given content</p>
+</li>
+</ul>
+<p>** I'm not familiar with these normalizers, but if it is any help, the documentation uses <code>NFD</code> in their BERT tokenizer example</p>
+<h4 id="Applying-a-Normalizer-to-a-string">Applying a Normalizer to a string<a class="anchor-link" href="#Applying-a-Normalizer-to-a-string"> </a></h4><p>We can apply a normalizer to a string by instantiating it and then calling <code>.normalize_str</code>, like so:</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">tokenizers.normalizers</span> <span class="kn">import</span> <span class="n">Lowercase</span>
+
+<span class="n">lc</span> <span class="o">=</span> <span class="n">Lowercase</span><span class="p">()</span>
+<span class="n">lc</span><span class="o">.</span><span class="n">normalize_str</span><span class="p">(</span><span class="s1">&#39;ho wy iii KKKK&#39;</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>&#39;ho wy iii kkkk&#39;</pre>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h4 id="Applying-normalizers-to-Datasets">Applying <code>normalizers</code> to Datasets<a class="anchor-link" href="#Applying-normalizers-to-Datasets"> </a></h4><p>Applying normalizers with <code>.map</code> is also quite straightforward. Note that we do not use <code>map</code>'s batching functionality here as <code>normalize_str</code> requires that a string be passed to it.</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">tmp</span> <span class="o">=</span> <span class="n">train_ds</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">e</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;text&#39;</span> <span class="p">:</span> <span class="n">lc</span><span class="o">.</span><span class="n">normalize_str</span><span class="p">(</span><span class="n">e</span><span class="p">[</span><span class="s1">&#39;text&#39;</span><span class="p">])},</span> <span class="n">batched</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h4 id="Composing-Normalizers-and-Applying-to-Datasets">Composing Normalizers and Applying to Datasets<a class="anchor-link" href="#Composing-Normalizers-and-Applying-to-Datasets"> </a></h4><p>Below we compose multiple normalizers; NFD Unicode normalization, StripAccents and Lowercase. To do this we use simply pass a list of our normalizers to <code>tokenizers.normalizers.Sequence</code> which applies each of the given normalizers in the order given.</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">import</span> <span class="nn">tokenizers</span>
+<span class="kn">from</span> <span class="nn">tokenizers.normalizers</span> <span class="kn">import</span> <span class="n">Lowercase</span><span class="p">,</span> <span class="n">NFD</span><span class="p">,</span> <span class="n">StripAccents</span>
+
+<span class="c1"># Compose our normalizers</span>
+<span class="n">normalizer</span> <span class="o">=</span> <span class="n">tokenizers</span><span class="o">.</span><span class="n">normalizers</span><span class="o">.</span><span class="n">Sequence</span><span class="p">([</span><span class="n">Lowercase</span><span class="p">(),</span> <span class="n">NFD</span><span class="p">(),</span> <span class="n">StripAccents</span><span class="p">()])</span>
+
+<span class="c1"># Apply to string (example shamelessly copied from the tokenizers docs)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">normalizer</span><span class="o">.</span><span class="n">normalize_str</span><span class="p">(</span><span class="s2">&quot;Héllò hôw are ü?&quot;</span><span class="p">))</span>
+
+<span class="c1"># Apply to Dataset</span>
+<span class="n">tmp</span> <span class="o">=</span> <span class="n">train_ds</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">e</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;text&#39;</span> <span class="p">:</span> <span class="n">normalizer</span><span class="o">.</span><span class="n">normalize_str</span><span class="p">(</span><span class="n">e</span><span class="p">[</span><span class="s1">&#39;text&#39;</span><span class="p">])},</span> <span class="n">batched</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>hello how are u?
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>We can even then append this normalizer to our tokenzier!</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">tokenizer</span> <span class="o">=</span> <span class="n">AutoTokenizer</span><span class="o">.</span><span class="n">from_pretrained</span><span class="p">(</span><span class="s1">&#39;google/mobilebert-uncased&#39;</span><span class="p">)</span>
+
+<span class="n">tokenizer</span><span class="o">.</span><span class="n">normalizer</span> <span class="o">=</span> <span class="n">normalizer</span>
+
+<span class="n">tokenizer</span><span class="o">.</span><span class="n">normalizer</span><span class="o">.</span><span class="n">normalize_str</span><span class="p">(</span><span class="s2">&quot;Héllò hôw are ü?&quot;</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>&#39;hello how are u?&#39;</pre>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>After processing our data with all the pre-processing/normalizer function above (click the button to show all funcs used) we're now ready for tokenization!</p>
 
 </div>
 </div>
